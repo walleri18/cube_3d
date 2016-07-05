@@ -35,7 +35,14 @@ public:
 	~Cub();
 
 private:
+
+	// Создание матрицы
+	void createMatrix();
+
 	// Отрисовка куба на матрице
 	void paintCub();
+
+	// Очистка матрицы
+	void cleanMatrix();
 };
 
