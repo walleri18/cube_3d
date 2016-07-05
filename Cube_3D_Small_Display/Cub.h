@@ -1,6 +1,12 @@
 #pragma once
 
 /*
+	Основные константы экран для отображения изображения
+*/
+const int widthDisplay = 16;// столбцы матрицы (это я для себя)
+const int heightDisplay = 16;// строки (для себя =) )
+
+/*
 	Класс Куба в котором будут все свойства куба и методы для его отображения
 */
 
@@ -8,10 +14,6 @@ class Cub
 {
 // Данные
 private:
-
-	// Размеры экрана
-	int width;// Ширина (или столбцы)
-	int height;// Высота (или строки)
 
 	// Размер катета куба
 	int sizeCathetus;
@@ -26,18 +28,14 @@ private:
 	int zoom;
 
 	// Матрица отображения
-	bool **matrix;
+	bool matrix[heightDisplay][widthDisplay];
 
 // Функциональность
 public:
 	Cub();
 	Cub(int sizeCathetus, int degreenXY, int degreenXZ, int zoom);
-	~Cub();
 
 private:
-
-	// Создание матрицы
-	void createMatrix();
 
 	// Отрисовка куба на матрице
 	void paintCub();
