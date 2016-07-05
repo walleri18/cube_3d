@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Cub.h"
 
 using namespace std;
 
