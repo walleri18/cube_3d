@@ -52,13 +52,13 @@ namespace Turov_Vitaly
 	int ShiftX = 325, ShiftY = 225;
 
 	// масштабирование
-	double Scale = 2.0;
+	double Scale = 1;
 }
 
 // Очистка матрицы
 void clearMatrix()
 {
-	system("clear");
+	system("cls");
 
 	for (int i = 0; i < Turov_Vitaly::height; i++)
 		for (int j = 0; j < Turov_Vitaly::width; j++)
@@ -83,7 +83,8 @@ void line(int x0, int y0, int sX, int sY)
 
 	int f = 0;
 
-	Turov_Vitaly::matrix[y0][x0] = true;
+	if ((y0 >= 0) && (y0 < Turov_Vitaly::height) && (x0 >= 0) && (x0 < Turov_Vitaly::width))
+		Turov_Vitaly::matrix[y0][x0] = true;
 
 	int x(x0), y(y0);
 
@@ -101,7 +102,8 @@ void line(int x0, int y0, int sX, int sY)
 
 			x -= signb;
 
-			Turov_Vitaly::matrix[y][x] = true;
+			if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
+				Turov_Vitaly::matrix[y][x] = true;
 
 		} while (x != sX || y != sY);
 
@@ -119,7 +121,8 @@ void line(int x0, int y0, int sX, int sY)
 
 			y += signa;
 
-			Turov_Vitaly::matrix[y][x] = true;
+			if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
+				Turov_Vitaly::matrix[y][x] = true;
 
 		} while (x != sX || y != sY);
 }
