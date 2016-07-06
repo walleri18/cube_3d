@@ -66,9 +66,62 @@ void clearMatrix()
 }
 
 // Отрисовка линии в матрице
-void line(int x, int y, int sX, int sY)
+void line(int x0, int y0, int sX, int sY)
 {
+	int A(0), B(0), sign(0);
 
+	A = sY - y0;
+	B = x0 - sX;
+
+	(abs(A) > abs(B)) ? (sign = 1) : (sign = -1);
+
+	int signa, signb;
+
+	(A < 0) ? (signa = -1) : (signa = 1);
+
+	(B < 0) ? (signb = -1) : (signb = 1);
+
+	int f = 0;
+
+	Turov_Vitaly::matrix[y0][x0] = true;
+
+	int x(x0), y(y0);
+
+	if (sign == -1)
+		do
+		{
+
+			f += A * signa;
+
+			if (f > 0) 
+			{
+				f -= B * signb;
+				y += signa;
+			}
+
+			x -= signb;
+
+			Turov_Vitaly::matrix[y][x] = true;
+
+		} while (x != sX || y != sY);
+
+	else
+		do
+		{
+
+			f += B*signb;
+
+			if (f > 0) 
+			{
+				f -= A * signa;
+				x -= signb;
+			}
+
+			y += signa;
+
+			Turov_Vitaly::matrix[y][x] = true;
+
+		} while (x != sX || y != sY);
 }
 
 /*
@@ -157,7 +210,7 @@ void DrawPix()
 		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
 		Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
 
-		// отрсовка проекции
+		// проекционные точки
 		Perspect();
 
 		// отрисовка линии
@@ -210,6 +263,18 @@ void DrawPix()
 		Perspect();
 
 		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+	}
+
+	// Вывод на экран
+	for (int i = 0; i < Turov_Vitaly::height; i++)
+	{
+		for (int j = 0; j < Turov_Vitaly::width; j++)
+			if (Turov_Vitaly::matrix[i][j])
+				std::cout << "*";
+			else
+				std::cout << " ";
+
+		std::cout << std::endl;
 	}
 }
 
