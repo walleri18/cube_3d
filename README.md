@@ -21,3 +21,4 @@
 1. [1]: http://davaiknam.ru/text/lekciya-2-affini-6-dvumernie-geometricheskie-affinnie-preobraz-page-7 "Проекции"
 2. [2]: https://ru.wikipedia.org/wiki/%D0%98%D0%B7%D0%BE%D0%BC%D0%B5%D1%82%D1%80%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%86%D0%B8%D1%8F "Изометрическая проекция"
 3. [3]: http://graphics.distant.ru/nachgeom/11-2.html "ПРЯМОУГОЛЬНЫЕ АКСОНОМЕТРИЧЕСКИЕ ПРОЕКЦИИ"
+4. [4]: http://prog-cpp.ru/brezenham/ "Алгоритм Брезенхема для рисования наклонных отрезков"
