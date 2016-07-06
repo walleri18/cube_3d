@@ -1,10 +1,24 @@
 #pragma once
+#include <string>
 
 /*
 	Основные константы экран для отображения изображения
 */
 const int widthDisplay = 16;// столбцы матрицы (это я для себя)
 const int heightDisplay = 16;// строки (для себя =) )
+
+/*
+	Функция отображения меню (для desktop версии программы)
+*/
+enum MessageID : int
+{
+	codeHelp,
+	codeChangesObject,
+	codeExit
+};
+
+// Функция по парсингу строки и распознанию типа сообщения
+MessageID discernmentMessage(std::string);
 
 /*
 	Класс Куба в котором будут все свойства куба и методы для его отображения

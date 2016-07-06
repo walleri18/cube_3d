@@ -30,3 +30,9 @@ void Cub::cleanMatrix()
 		for (int j = 0; j < widthDisplay; j++)
 			matrix[i][j] = false;
 }
+
+// Функция по парсингу строки и распознанию типа сообщения
+MessageID discernmentMessage(std::string message)
+{
+
+}
