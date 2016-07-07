@@ -1,7 +1,5 @@
 #define _USE_MATH_DEFINES
 
-#define CEIL(X) ((int)(X + 0.5))
-
 #include <conio.h>
 #include <stdio.h>
 #include <math.h>
@@ -21,116 +19,43 @@ enum MessageID : int
 	MINUS
 };
 
-namespace Turov_Vitaly {
-	// width - СЃС‚РѕР»Р±С†С‹, С€РёСЂРёРЅР°
-	// height - СЃС‚СЂРѕРєРё, РІС‹СЃРѕС‚Р°
-	const int width = 16;
-	const int height = 16;
-
-	// РњР°С‚СЂРёС†Р° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
-	bool matrix[height][width];
-
-	// РљРѕР»РёС‡РµСЃС‚РІРѕ РІРµСЂС€РёРЅ РєСѓР±Р°
+namespace Turov_Vitaly 
+{
+	// Количество вершин куба
 	const int size = 8;
 
-	// РСЃС…РѕРґРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓР±Р°
-	const int pix[size][3] = { { -1,-1,-1 },{ 1,-1,-1 },{ 1,1,-1 },{ -1,1,-1 },
-	{ -1,-1,1 },{ 1,-1,1 },{ 1,1,1 },{ -1,1,1 } };
+	// Исходные координаты куба
+	const int pix[size][3] = { { -25,-25,-25 },{ 25,-25,-25 },{ 25,25,-25 },{ -25,25,-25 },
+	{ -25,-25,25 },{ 25,-25,25 },{ 25,25,25 },{ -25,25,25 } };
 
-	// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓР±Р°
+	// Преобразованные координаты куба
 	int newpix[size][3];
 
 	/*
-	sX, sY - СЃРїСЂРѕРµС†РёСЂРѕРІР°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
-	X, Y, Z - РґР»РёРЅР° СЃС‚РѕСЂРѕРЅ СЃРїСЂРѕРµС†РёСЂРѕРІР°РЅРЅС‹С… РЅР° РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рµ Р»РёРЅРёРё
+	sX, sY - спроецированные координаты
+	X, Y, Z - длина сторон спроецированных на координатные линии
 	*/
 	int X, Y, Z, sX, sY;
 
-	// СѓРіР»С‹ РїРѕРІРѕСЂРѕС‚Р° РїРѕ X,Y,Z РІ РіСЂР°РґСѓСЃР°С…
+	// углы поворота по X,Y,Z в градусах
 	int RotX = 0, RotY = 0, RotZ = 0;
 
-	// СЃРґРІРёРі РЅР°С‡Р°Р»Р° РєРѕРѕСЂРґРёРЅР°С‚
+	// сдвиг начала координат
 	int ShiftX = 325, ShiftY = 225;
 
-	// РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ
-	double Scale = 0.5;
+	// масштабирование
+	double Scale = 2.0;
 }
 
-// РћС‡РёСЃС‚РєР° РјР°С‚СЂРёС†С‹
-void clearMatrix()
+// Отрисовка линии в матрице
+void line(int x, int y, int sX, int sY)
 {
-	system("cls");
 
-	for (int i = 0; i < Turov_Vitaly::height; i++)
-		for (int j = 0; j < Turov_Vitaly::width; j++)
-			Turov_Vitaly::matrix[i][j] = false;
-}
-
-// РћС‚СЂРёСЃРѕРІРєР° Р»РёРЅРёРё РІ РјР°С‚СЂРёС†Рµ
-void line(int x0, int y0, int sX, int sY)
-{
-	int A(0), B(0), sign(0);
-
-	A = sY - y0;
-	B = x0 - sX;
-
-	(abs(A) > abs(B)) ? (sign = 1) : (sign = -1);
-
-	int signa, signb;
-
-	(A < 0) ? (signa = -1) : (signa = 1);
-
-	(B < 0) ? (signb = -1) : (signb = 1);
-
-	int f = 0;
-
-	if ((y0 >= 0) && (y0 < Turov_Vitaly::height) && (x0 >= 0) && (x0 < Turov_Vitaly::width))
-		Turov_Vitaly::matrix[y0][x0] = true;
-
-	int x(x0), y(y0);
-
-	if (sign == -1)
-		do
-		{
-
-			f += A * signa;
-
-			if (f > 0)
-			{
-				f -= B * signb;
-				y += signa;
-			}
-
-			x -= signb;
-
-			if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
-				Turov_Vitaly::matrix[y][x] = true;
-
-		} while (x != sX || y != sY);
-
-	else
-		do
-		{
-
-			f += B*signb;
-
-			if (f > 0)
-			{
-				f -= A * signa;
-				x -= signb;
-			}
-
-			y += signa;
-
-			if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
-				Turov_Vitaly::matrix[y][x] = true;
-
-		} while (x != sX || y != sY);
 }
 
 /*
-Р’С‹С‡РёСЃР»РµРЅРёРµ С„СЂР°РєС‚Р°Р»СЊРЅРѕР№ РіРµРѕРјРµС‚СЂРёС‡РµСЃРєРѕР№ (РёР·РѕРјРµС‚СЂРёС‡РµСЃРєРѕР№) РїСЂРѕРµРєС†РёРё
-С‚СЂРµС…РјРµСЂРЅС‹С… С‚РѕС‡РµРє РЅР° РґРІСѓРјРµСЂРЅСѓСЋ РїР»РѕСЃРєРѕСЃС‚СЊ
+Вычисление фрактальной геометрической (изометрической) проекции
+трехмерных точек на двумерную плоскость
 */
 void Perspect()
 {
@@ -138,10 +63,10 @@ void Perspect()
 	Turov_Vitaly::sY = Turov_Vitaly::Y - Turov_Vitaly::Z / 2;
 }
 
-// 3-D РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РІ 2D
+// 3-D преобразования в 2D
 void Compute()
 {
-	// РЎС‡РёС‚Р°РµРј РЅР°РїСЂР°РІР»СЏСЋС‰РёРµ СЃРёРЅСѓСЃС‹ Рё РєРѕСЃРёРЅСѓСЃС‹
+	// Считаем направляющие синусы и косинусы
 	double sinx = sin((Turov_Vitaly::RotX * M_PI) / 180.0);
 	double siny = sin((Turov_Vitaly::RotY * M_PI) / 180.0);
 	double sinz = sin((Turov_Vitaly::RotZ * M_PI) / 180.0);
@@ -149,79 +74,77 @@ void Compute()
 	double cosy = cos((Turov_Vitaly::RotY * M_PI) / 180.0);
 	double cosz = cos((Turov_Vitaly::RotZ * M_PI) / 180.0);
 
-	// РµСЃС‚СЊ СЃС‚Р°СЂС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ С‚РѕС‡РµРє ( РІ 3D ) Рё РЅСѓР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ С‚РѕС‡РµРє (РІ 2D)
+	// есть старые координаты точек ( в 3D ) и нужно получить координаты точек (в 2D)
 	double x, y, z, x1, y1, z1;
 
 	for (int i = 0; i < Turov_Vitaly::size; i++)
 	{
 
-		//РСЃС…РѕРґРЅРѕРµ РЅР°РїСЂР°РІР»РµРЅРёРµ
+		//Исходное направление
 		x = Turov_Vitaly::pix[i][0];
 		y = Turov_Vitaly::pix[i][1];
 		z = Turov_Vitaly::pix[i][2];
 
-		// РІРѕРєСЂСѓРі Z
+		// вокруг Z
 		x1 = x * cosz + y * sinz;
 		y1 = -x * sinz + y * cosz;
 		z1 = z;
 
-		// РІРѕРєСЂСѓРі X
+		// вокруг X
 		x = x1;
 		y = y1 * cosx + z1 * sinx;
 		z = -y1 * sinx + z1 * cosx;
 
-		// РІРѕРєСЂСѓРі Y
+		// вокруг Y
 		x1 = x * cosy - z * siny;
 		y1 = y;
 		z1 = x * siny + z * cosy;
 
-		// РњР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ
-		Turov_Vitaly::newpix[i][0] = CEIL(x1 * Turov_Vitaly::Scale);
-		Turov_Vitaly::newpix[i][1] = CEIL(y1 * Turov_Vitaly::Scale);
-		Turov_Vitaly::newpix[i][2] = CEIL(z1 * Turov_Vitaly::Scale);
+		// Масштабирование
+		Turov_Vitaly::newpix[i][0] = x1 * Turov_Vitaly::Scale;
+		Turov_Vitaly::newpix[i][1] = y1 * Turov_Vitaly::Scale;
+		Turov_Vitaly::newpix[i][2] = z1 * Turov_Vitaly::Scale;
 
-		// СЃРґРІРёРі РїРѕ РѕСЃСЏРј X Рё Y
+		// сдвиг по осям X и Y
 		Turov_Vitaly::newpix[i][0] += Turov_Vitaly::ShiftX;
 		Turov_Vitaly::newpix[i][1] += Turov_Vitaly::ShiftY;
 		Turov_Vitaly::newpix[i][2] += 25;
 	}
 }
 
-// Р РёСЃРѕРІР°РЅРёРµ РєСѓР±РёРєР°
+// Рисование кубика
 void DrawPix()
 {
-	//clearMatrix();
-
 	int x, y;
 
-	// РѕС‚СЂРёСЃРѕРІРєР° РїРµСЂРµРґРЅРµР№ РіСЂР°РЅРё
+	// отрисовка передней грани
 	for (int i = 0, j = 0; i < 4; i++)
 	{
-		// РёСЃС…РѕРґРЅР°СЏ С‚РѕС‡РєР°
-		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];   // РСЃС…РѕРґРЅР°СЏ С‚РѕС‡РєР°
+		// исходная точка
+		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];   // Исходная точка
 		Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
 		Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
 
-		Perspect();         // РЎС‡РёС‚Р°РµС‚ РїСЂРѕРµС†РёСЋ РЅР° РїР»РѕСЃРєРѕСЃС‚СЊ СЌРєСЂР°РЅР°
+		Perspect();         // Считает проецию на плоскость экрана
 
 		x = Turov_Vitaly::sX;
 		y = Turov_Vitaly::sY;
 
 		j = (i < 3) ? (i + 1) : 0;  // if (i < 3) j = i+1; else j = 0;
 
-									// РєРѕРЅРµС‡РЅР°СЏ С‚РѕС‡РєР°
+									// конечная точка
 		Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
 		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
 		Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
 
-		// РїСЂРѕРµРєС†РёРѕРЅРЅС‹Рµ С‚РѕС‡РєРё
+		// отрсовка проекции
 		Perspect();
 
-		// РѕС‚СЂРёСЃРѕРІРєР° Р»РёРЅРёРё
+		// отрисовка линии
 		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
 	}
 
-	// СЂРёСЃСѓРµРј РіР»Р°РІРЅСѓСЋ РіСЂР°РЅСЊ (С‡С‚Рѕ Р·РЅР°С‡РёС‚ РіР»Р°РІРЅР°СЏ РіСЂР°РЅСЊ)
+	// рисуем главную грань (что значит главная грань)
 	for (int i = 4, j = 0; i < 8; i++)
 	{
 
@@ -245,7 +168,7 @@ void DrawPix()
 		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
 	}
 
-	// РѕС‚СЂРёСЃРѕРІРєР° СЃРѕРµРґРёРЅСЏСЋС‰РµРіРѕ СЂРµР±СЂР°
+	// отрисовка соединяющего ребра
 	for (int i = 0, j = 0; i < 4; i++)
 	{
 
@@ -268,134 +191,4 @@ void DrawPix()
 
 		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
 	}
-
-	// Р’С‹РІРѕРґ РЅР° СЌРєСЂР°РЅ
-	for (int i = 0; i < Turov_Vitaly::height; i++)
-	{
-		for (int j = 0; j < Turov_Vitaly::width; j++)
-			if (Turov_Vitaly::matrix[i][j])
-				std::cout << "*";
-			else
-				std::cout << " ";
-
-		std::cout << std::endl;
-	}
-}
-
-int main(void)
-{
-	// РџСЂРѕРµС†РёСЂРѕРІР°РЅРёРµ
-	Compute();
-
-	// РІС‹РІРµСЃС‚Рё РёСЃС…РѕРґРЅСѓСЋ С„РёРіСѓСЂСѓ
-	DrawPix();
-
-	int ch(INT_MAX);   // РєРѕРґ РєР»Р°РІРёС€Рё
-	bool flag = true;  // РїСЂРёР·РЅР°Рє С‚РѕРіРѕ, С‡С‚Рѕ С„РёРіСѓСЂР° РёРјРµРµС‚СЃСЏ Рё РµРµ РЅР°РґРѕ РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ
-	char message[100] = "";
-
-	do
-	{
-		std::cin >> message;
-
-		if (!(strcmp(message, "left") || strcmp(message, "Left") || strcmp(message, "LEFT")))
-			ch = LEFT;
-
-		else if (!(strcmp(message, "right") || strcmp(message, "Right") || strcmp(message, "RIGHT")))
-			ch = RIGHT;
-
-		else if (!(strcmp(message, "up") || strcmp(message, "Up") || strcmp(message, "UP")))
-			ch = UP;
-
-		else if (!(strcmp(message, "down") || strcmp(message, "Down") || strcmp(message, "DOWN")))
-			ch = DOWN;
-
-		else if (!(strcmp(message, "plus") || strcmp(message, "Plus") || strcmp(message, "PLUS")))
-			ch = PLUS;
-
-		else if (!(strcmp(message, "minus") || strcmp(message, "Minus") || strcmp(message, "MINUS")))
-			ch = MINUS;
-
-		else if (!(strcmp(message, "rotx") || strcmp(message, "Rotx") || strcmp(message, "ROTX")))
-			ch = ROTX;
-
-		else if (!(strcmp(message, "roty") || strcmp(message, "Roty") || strcmp(message, "ROTY")))
-			ch = ROTY;
-
-		else if (!(strcmp(message, "rotz") || strcmp(message, "Rotz") || strcmp(message, "ROTZ")))
-			ch = ROTZ;
-
-		else if (!(strcmp(message, "esc") || strcmp(message, "Esc") || strcmp(message, "ESC")))
-			ch = ESC;
-
-		switch (ch)
-		{
-		case LEFT:
-		{
-			Turov_Vitaly::ShiftX -= 3;
-			break;
-		}
-		case RIGHT:
-		{
-			Turov_Vitaly::ShiftX += 3;
-			break;
-		}
-		case UP:
-		{
-			Turov_Vitaly::ShiftY -= 3;
-			break;
-		}
-		case DOWN:
-		{
-			Turov_Vitaly::ShiftY += 3;
-			break;
-		}
-		case PLUS:
-		{
-			Turov_Vitaly::Scale += 0.1;
-			break;
-		}
-		case MINUS:
-		{
-			(Turov_Vitaly::Scale > 0.0) ? (Turov_Vitaly::Scale -= 0.1) : (false);
-
-			break;
-		}
-		case ROTX:
-		{
-			// РџРѕР»РЅС‹Р№ РєСЂСѓРі РёР»Рё РЅРµС‚
-			(Turov_Vitaly::RotX < 357) ? (Turov_Vitaly::RotX += 3) : (Turov_Vitaly::RotX = 0);
-
-			break;
-		}
-		case ROTY:
-		{
-			// РџРѕР»РЅС‹Р№ РєСЂСѓРі РёР»Рё РЅРµС‚
-			(Turov_Vitaly::RotY < 357) ? (Turov_Vitaly::RotY += 3) : (Turov_Vitaly::RotY = 0);
-
-			break;
-		}
-		case ROTZ:
-		{
-			// РџРѕР»РЅС‹Р№ РєСЂСѓРі РёР»Рё РЅРµС‚
-			(Turov_Vitaly::RotZ < 357) ? (Turov_Vitaly::RotZ += 3) : (Turov_Vitaly::RotZ = 0);
-
-			break;
-		}
-		default:
-			flag = false;
-		}
-
-		if (flag)
-		{
-			Compute();    // РІС‹С‡РёСЃР»СЏРµРј РЅРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
-
-			DrawPix();    // СЂРёСЃСѓРµРј
-
-			flag = false;
-		}
-
-	} while (ch != ESC);
-
-	return 0;
 }
