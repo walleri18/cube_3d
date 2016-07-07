@@ -1,5 +1,7 @@
 #define _USE_MATH_DEFINES
 
+#define CEIL(X) ((int)(X + 0.5))
+
 #include <conio.h>
 #include <stdio.h>
 #include <math.h>
@@ -33,8 +35,8 @@ namespace Turov_Vitaly
 	const int size = 8;
 
 	// Исходные координаты куба
-	const int pix[size][3] = { { -25,-25,-25 },{ 25,-25,-25 },{ 25,25,-25 },{ -25,25,-25 },
-	{ -25,-25,25 },{ 25,-25,25 },{ 25,25,25 },{ -25,25,25 } };
+	const int pix[size][3] = { { -1,-1,-1 },{ 1,-1,-1 },{ 1,1,-1 },{ -1,1,-1 },
+	{ -1,-1,1 },{ 1,-1,1 },{ 1,1,1 },{ -1,1,1 } };
 
 	// Преобразованные координаты куба
 	int newpix[size][3];
@@ -52,7 +54,7 @@ namespace Turov_Vitaly
 	int ShiftX = 325, ShiftY = 225;
 
 	// масштабирование
-	double Scale = 1;
+	double Scale = 0.5;
 }
 
 // Очистка матрицы
@@ -128,8 +130,8 @@ void line(int x0, int y0, int sX, int sY)
 }
 
 /*
-Вычисление фрактальной геометрической (изометрической) проекции
-трехмерных точек на двумерную плоскость
+	Вычисление фрактальной геометрической (изометрической) проекции
+	трехмерных точек на двумерную плоскость
 */
 void Perspect()
 {
@@ -175,9 +177,9 @@ void Compute()
 		z1 = x * siny + z * cosy;
 
 		// Масштабирование
-		Turov_Vitaly::newpix[i][0] = x1 * Turov_Vitaly::Scale;
-		Turov_Vitaly::newpix[i][1] = y1 * Turov_Vitaly::Scale;
-		Turov_Vitaly::newpix[i][2] = z1 * Turov_Vitaly::Scale;
+		Turov_Vitaly::newpix[i][0] = CEIL(x1 * Turov_Vitaly::Scale);
+		Turov_Vitaly::newpix[i][1] = CEIL(y1 * Turov_Vitaly::Scale);
+		Turov_Vitaly::newpix[i][2] = CEIL(z1 * Turov_Vitaly::Scale);
 
 		// сдвиг по осям X и Y
 		Turov_Vitaly::newpix[i][0] += Turov_Vitaly::ShiftX;
@@ -189,7 +191,7 @@ void Compute()
 // Рисование кубика
 void DrawPix()
 {
-	clearMatrix();
+	//clearMatrix();
 
 	int x, y;
 
