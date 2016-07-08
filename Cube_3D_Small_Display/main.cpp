@@ -72,6 +72,19 @@ namespace Turov_Vitaly
 	LineSegment lineSegment[12];
 }
 
+// Сравнение слов
+bool comparison(char *str_one, char *str_two)
+{
+	// Минимальная длина 
+	int border = (strlen(str_one) < strlen(str_two)) ? (strlen(str_one)) : (strlen(str_two));
+
+	for (int i = 0; i <= border; i++)
+		if (str_one[i] != str_two[i])
+			return false;
+
+	return true;
+}
+
 // Очистка матрицы
 void clearMatrix()
 {
@@ -390,40 +403,42 @@ int main(void)
 
 	int ch(INT_MAX);   // код клавиши
 	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
-	char message[100] = "";
+	char message[100] = "\0";
 
 	do
 	{
+		(flag) ? (flag) : (flag = true);
+
 		std::cin >> message;
 
-		if (!(strcmp(message, "left") || strcmp(message, "Left") || strcmp(message, "LEFT")))
+		if ((comparison(message, "left") || comparison(message, "Left") || comparison(message, "LEFT")))
 			ch = LEFT;
 
-		else if (!(strcmp(message, "right") || strcmp(message, "Right") || strcmp(message, "RIGHT")))
+		else if ((comparison(message, "right") || comparison(message, "Right") || comparison(message, "RIGHT")))
 			ch = RIGHT;
 
-		else if (!(strcmp(message, "up") || strcmp(message, "Up") || strcmp(message, "UP")))
+		else if ((comparison(message, "up") || comparison(message, "Up") || comparison(message, "UP")))
 			ch = UP;
 
-		else if (!(strcmp(message, "down") || strcmp(message, "Down") || strcmp(message, "DOWN")))
+		else if ((comparison(message, "down") || comparison(message, "Down") || comparison(message, "DOWN")))
 			ch = DOWN;
 
-		else if (!(strcmp(message, "plus") || strcmp(message, "Plus") || strcmp(message, "PLUS")))
+		else if ((comparison(message, "plus") || comparison(message, "Plus") || comparison(message, "PLUS")))
 			ch = PLUS;
 
-		else if (!(strcmp(message, "minus") || strcmp(message, "Minus") || strcmp(message, "MINUS")))
+		else if ((comparison(message, "minus") || comparison(message, "Minus") || comparison(message, "MINUS")))
 			ch = MINUS;
 
-		else if (!(strcmp(message, "rotx") || strcmp(message, "Rotx") || strcmp(message, "ROTX")))
+		else if ((comparison(message, "rotx") || comparison(message, "Rotx") || comparison(message, "ROTX")))
 			ch = ROTX;
 
-		else if (!(strcmp(message, "roty") || strcmp(message, "Roty") || strcmp(message, "ROTY")))
+		else if ((comparison(message, "roty") || comparison(message, "Roty") || comparison(message, "ROTY")))
 			ch = ROTY;
 
-		else if (!(strcmp(message, "rotz") || strcmp(message, "Rotz") || strcmp(message, "ROTZ")))
+		else if ((comparison(message, "rotz") || comparison(message, "Rotz") || comparison(message, "ROTZ")))
 			ch = ROTZ;
 
-		else if (!(strcmp(message, "esc") || strcmp(message, "Esc") || strcmp(message, "ESC")))
+		else if ((comparison(message, "esc") || comparison(message, "Esc") || comparison(message, "ESC")))
 			ch = ESC;
 
 		switch (ch)
