@@ -35,8 +35,8 @@ namespace Turov_Vitaly
 	const int size = 8;
 
 	// Исходные координаты куба
-	const int pix[size][3] = { { -1,-1,-1 },{ 1,-1,-1 },{ 1,1,-1 },{ -1,1,-1 },
-	{ -1,-1,1 },{ 1,-1,1 },{ 1,1,1 },{ -1,1,1 } };
+	const int pix[size][3] = { { -25, -25, -25 },{ 25, -25, -25 },{ 25, 25, -25 },{ -25, 25, -25 },
+	{ -25, -25, 25 },{ 25, -25, 25 },{ 25, 25, 25 },{ -25, 25, 25 } };
 
 	// Преобразованные координаты куба
 	int newpix[size][3];
@@ -54,7 +54,7 @@ namespace Turov_Vitaly
 	int ShiftX = 325, ShiftY = 225;
 
 	// масштабирование
-	double Scale = 0.5;
+	double Scale = 2;
 
 	// Структура описывающие отрезки
 	struct LineSegment
@@ -180,19 +180,19 @@ void Compute()
 		z = Turov_Vitaly::pix[i][2];
 
 		// вокруг Z
-		x1 = x * cosz + y * sinz;
-		y1 = -x * sinz + y * cosz;
+		x1 = CEIL(x * cosz + y * sinz);
+		y1 = CEIL(-x * sinz + y * cosz);
 		z1 = z;
 
 		// вокруг X
 		x = x1;
-		y = y1 * cosx + z1 * sinx;
-		z = -y1 * sinx + z1 * cosx;
+		y = CEIL(y1 * cosx + z1 * sinx);
+		z = CEIL(-y1 * sinx + z1 * cosx);
 
 		// вокруг Y
-		x1 = x * cosy - z * siny;
+		x1 = CEIL(x * cosy - z * siny);
 		y1 = y;
-		z1 = x * siny + z * cosy;
+		z1 = CEIL(x * siny + z * cosy);
 
 		// Масштабирование
 		Turov_Vitaly::newpix[i][0] = CEIL(x1 * Turov_Vitaly::Scale);
@@ -239,8 +239,8 @@ void bringingScreenSize()
 	// Расчитаем масштабирование
 	int xK(1), yK(1);
 
-	xK = (int)((double)(xMax) / Turov_Vitaly::width);
-	yK = (int)((double)(yMax) / Turov_Vitaly::height);
+	xK = CEIL((double)(xMax) / Turov_Vitaly::width);
+	yK = CEIL((double)(yMax) / Turov_Vitaly::height);
 
 	// Максимумы мы нашли. Теперь мы подгоняем под виртуальный экран (матрицу)
 	// Примем максимальные значения за границы (правильнее примем их за 100% а остальные подгоним)
