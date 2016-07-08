@@ -21,12 +21,12 @@ enum MessageID : int
 	MINUS
 };
 
-namespace Turov_Vitaly
+namespace Turov_Vitaly 
 {
 	// width - столбцы, ширина
 	// height - строки, высота
-	const int width = 16;
-	const int height = 16;
+	const int width = 20;
+	const int height = 20;
 
 	// Матрица отображения
 	bool matrix[height][width];
@@ -42,8 +42,8 @@ namespace Turov_Vitaly
 	int newpix[size][3];
 
 	/*
-	sX, sY - спроецированные координаты
-	X, Y, Z - длина сторон спроецированных на координатные линии
+		sX, sY - спроецированные координаты
+		X, Y, Z - длина сторон спроецированных на координатные линии
 	*/
 	int X, Y, Z, sX, sY;
 
@@ -55,6 +55,21 @@ namespace Turov_Vitaly
 
 	// масштабирование
 	double Scale = 0.5;
+
+	// Структура описывающие отрезки
+	struct LineSegment
+	{
+		// Первая точка
+		int x_one;
+		int y_one;
+
+		// Вторая точка
+		int x_two;
+		int y_two;
+	};
+
+	// Массив отрезков. 12 - это количество рёбер у куба. Если легче, то столько раз вызывается функция line
+	LineSegment lineSegment[12];
 }
 
 // Очистка матрицы
@@ -96,7 +111,7 @@ void line(int x0, int y0, int sX, int sY)
 
 			f += A * signa;
 
-			if (f > 0) 
+			if (f > 0)
 			{
 				f -= B * signb;
 				y += signa;
@@ -115,7 +130,7 @@ void line(int x0, int y0, int sX, int sY)
 
 			f += B*signb;
 
-			if (f > 0) 
+			if (f > 0)
 			{
 				f -= A * signa;
 				x -= signb;
@@ -130,7 +145,7 @@ void line(int x0, int y0, int sX, int sY)
 }
 
 /*
-	Вычисление фрактальной геометрической (изометрической) проекции
+	Вычисление фронтальной геометрической (изометрической) проекции
 	трехмерных точек на двумерную плоскость
 */
 void Perspect()
@@ -139,6 +154,9 @@ void Perspect()
 	Turov_Vitaly::sY = Turov_Vitaly::Y - Turov_Vitaly::Z / 2;
 }
 
+/*
+	Чистая математика без разумных объяснений =)
+*/
 // 3-D преобразования в 2D
 void Compute()
 {
@@ -188,41 +206,99 @@ void Compute()
 	}
 }
 
+// Функция для приведения "здоровых размеров" куба к размеру нашего экрана
+void bringingScreenSize()
+{
+	// Количество вызовов функции line
+	const int countLine = 12;
+
+	// Определяем отдалённые координаты (имеется ввиду отдельно максимум по x и по y)
+
+	int xElement[countLine * 2];
+	int yElement[countLine * 2];
+
+	for (int i = 0; i < countLine; i++)
+		for (int j = 0; j < (countLine * 2); j += 2)
+		{
+			xElement[j] = Turov_Vitaly::lineSegment[i].x_one;
+			xElement[j + 1] = Turov_Vitaly::lineSegment[i].x_two;
+
+			yElement[j] = Turov_Vitaly::lineSegment[i].y_one;
+			yElement[j + 1] = Turov_Vitaly::lineSegment[i].y_two;
+		}
+
+	int xMax = xElement[0];
+	int yMax = yElement[0];
+
+	for (int i = 0; i < (countLine * 2); i++)
+	{
+		(xElement[i] > xMax) ? (xMax = xElement[i]) : (false);
+
+		(yElement[i] > yMax) ? (yMax = yElement[i]) : (false);
+	}
+
+	// Расчитаем масштабирование
+	int xK(1), yK(1);
+
+	xK = (int)((double)(xMax) / Turov_Vitaly::width);
+	yK = (int)((double)(yMax) / Turov_Vitaly::height);
+
+	// Максимумы мы нашли. Теперь мы подгоняем под виртуальный экран (матрицу)
+	// Примем максимальные значения за границы (правильнее примем их за 100% а остальные подгоним)
+	for (int i = 0; i < countLine; i++)
+	{
+		Turov_Vitaly::lineSegment[i].x_one = ((double)(Turov_Vitaly::lineSegment[i].x_one) / xK);
+		Turov_Vitaly::lineSegment[i].x_two = ((double)(Turov_Vitaly::lineSegment[i].x_two) / xK);
+
+		Turov_Vitaly::lineSegment[i].y_one = ((double)(Turov_Vitaly::lineSegment[i].y_one) / yK);
+		Turov_Vitaly::lineSegment[i].y_two = ((double)(Turov_Vitaly::lineSegment[i].y_two) / yK);
+	}
+}
+
 // Рисование кубика
 void DrawPix()
 {
-	//clearMatrix();
+	// Предварительная очистка матрицы (экрана)
+	clearMatrix();
 
-	int x, y;
+	int x(0), y(0), countLine(0);
 
 	// отрисовка передней грани
 	for (int i = 0, j = 0; i < 4; i++)
 	{
 		// исходная точка
-		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];   // Исходная точка
+		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
 		Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
 		Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
 
-		Perspect();         // Считает проецию на плоскость экрана
+		// Считает проецию на плоскость экрана
+		Perspect();
 
 		x = Turov_Vitaly::sX;
 		y = Turov_Vitaly::sY;
 
-		j = (i < 3) ? (i + 1) : 0;  // if (i < 3) j = i+1; else j = 0;
+		j = (i < 3) ? (i + 1) : 0;
 
 		// конечная точка
 		Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
 		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
 		Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
 
-		// проекционные точки
+		
 		Perspect();
 
+		Turov_Vitaly::lineSegment[countLine].x_one = x;
+		Turov_Vitaly::lineSegment[countLine].y_one = y;
+		Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
+		Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
+
+		countLine++;
+
 		// отрисовка линии
-		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+		//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
 	}
 
-	// рисуем главную грань (что значит главная грань)
+	// рисуем главную грань
 	for (int i = 4, j = 0; i < 8; i++)
 	{
 
@@ -235,7 +311,7 @@ void DrawPix()
 		x = Turov_Vitaly::sX;
 		y = Turov_Vitaly::sY;
 
-		j = (i < 7) ? (i + 1) : 4; // if (i < 7) j = i+1; else j = 4;
+		j = (i < 7) ? (i + 1) : 4;
 
 		Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
 		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
@@ -243,7 +319,14 @@ void DrawPix()
 
 		Perspect();
 
-		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+		Turov_Vitaly::lineSegment[countLine].x_one = x;
+		Turov_Vitaly::lineSegment[countLine].y_one = y;
+		Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
+		Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
+
+		countLine++;
+
+		//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
 	}
 
 	// отрисовка соединяющего ребра
@@ -267,8 +350,23 @@ void DrawPix()
 
 		Perspect();
 
-		line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+		Turov_Vitaly::lineSegment[countLine].x_one = x;
+		Turov_Vitaly::lineSegment[countLine].y_one = y;
+		Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
+		Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
+
+		countLine++;
+
+		//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
 	}
+
+	// Приводим к нашим размерам
+	bringingScreenSize();
+
+	// Отрисовываем на виртуальном экране (матрице)
+	for (int i = 0; i < countLine; i++)
+		line(Turov_Vitaly::lineSegment[i].x_one, Turov_Vitaly::lineSegment[i].y_one,
+			 Turov_Vitaly::lineSegment[i].x_two, Turov_Vitaly::lineSegment[i].y_two);
 
 	// Вывод на экран
 	for (int i = 0; i < Turov_Vitaly::height; i++)
@@ -331,60 +429,60 @@ int main(void)
 
 		switch (ch)
 		{
-			case LEFT:
-			{
-				Turov_Vitaly::ShiftX -= 3;
-				break;
-			}
-			case RIGHT:
-			{
-				Turov_Vitaly::ShiftX += 3;
-				break;
-			}
-			case UP:
-			{
-				Turov_Vitaly::ShiftY -= 3;
-				break;
-			}
-			case DOWN:
-			{
-				Turov_Vitaly::ShiftY += 3;
-				break;
-			}
-			case PLUS:
-			{
-				Turov_Vitaly::Scale += 0.1;
-				break;
-			}
-			case MINUS:
-			{
-				(Turov_Vitaly::Scale > 0.0) ? (Turov_Vitaly::Scale -= 0.1) : (false);
-				
-				break;
-			}
-			case ROTX:
-			{
-				// Полный круг или нет
-				(Turov_Vitaly::RotX < 357) ? (Turov_Vitaly::RotX += 3) : (Turov_Vitaly::RotX = 0);
-				
-				break;
-			}
-			case ROTY:
-			{
-				// Полный круг или нет
-				(Turov_Vitaly::RotY < 357) ? (Turov_Vitaly::RotY += 3) : (Turov_Vitaly::RotY = 0);
+		case LEFT:
+		{
+			Turov_Vitaly::ShiftX -= 3;
+			break;
+		}
+		case RIGHT:
+		{
+			Turov_Vitaly::ShiftX += 3;
+			break;
+		}
+		case UP:
+		{
+			Turov_Vitaly::ShiftY -= 3;
+			break;
+		}
+		case DOWN:
+		{
+			Turov_Vitaly::ShiftY += 3;
+			break;
+		}
+		case PLUS:
+		{
+			Turov_Vitaly::Scale += 0.1;
+			break;
+		}
+		case MINUS:
+		{
+			(Turov_Vitaly::Scale > 0.0) ? (Turov_Vitaly::Scale -= 0.1) : (false);
 
-				break;
-			}
-			case ROTZ:
-			{
-				// Полный круг или нет
-				(Turov_Vitaly::RotZ < 357) ? (Turov_Vitaly::RotZ += 3) : (Turov_Vitaly::RotZ = 0);
+			break;
+		}
+		case ROTX:
+		{
+			// Полный круг или нет
+			(Turov_Vitaly::RotX < 357) ? (Turov_Vitaly::RotX += 3) : (Turov_Vitaly::RotX = 0);
 
-				break;
-			}
-			default:
-				flag = false;
+			break;
+		}
+		case ROTY:
+		{
+			// Полный круг или нет
+			(Turov_Vitaly::RotY < 357) ? (Turov_Vitaly::RotY += 3) : (Turov_Vitaly::RotY = 0);
+
+			break;
+		}
+		case ROTZ:
+		{
+			// Полный круг или нет
+			(Turov_Vitaly::RotZ < 357) ? (Turov_Vitaly::RotZ += 3) : (Turov_Vitaly::RotZ = 0);
+
+			break;
+		}
+		default:
+			flag = false;
 		}
 
 		if (flag)
