@@ -217,15 +217,14 @@ void bringingScreenSize()
 	int xElement[countLine * 2];
 	int yElement[countLine * 2];
 
-	for (int i = 0; i < countLine; i++)
-		for (int j = 0; j < (countLine * 2); j += 2)
-		{
-			xElement[j] = Turov_Vitaly::lineSegment[i].x_one;
-			xElement[j + 1] = Turov_Vitaly::lineSegment[i].x_two;
+	for (int i = 0, j = 0; i < countLine; i++, j += 2)
+	{
+		xElement[j] = Turov_Vitaly::lineSegment[i].x_one;
+		xElement[j + 1] = Turov_Vitaly::lineSegment[i].x_two;
 
-			yElement[j] = Turov_Vitaly::lineSegment[i].y_one;
-			yElement[j + 1] = Turov_Vitaly::lineSegment[i].y_two;
-		}
+		yElement[j] = Turov_Vitaly::lineSegment[i].y_one;
+		yElement[j + 1] = Turov_Vitaly::lineSegment[i].y_two;
+	}
 
 	int xMax = xElement[0];
 	int yMax = yElement[0];
