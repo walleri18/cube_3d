@@ -25,8 +25,8 @@ namespace Turov_Vitaly
 {
 	// width - столбцы, ширина
 	// height - строки, высота
-	const int width = 50;
-	const int height = 50;
+	const int width = 16;
+	const int height = 16;
 
 	// Матрица отображения
 	bool matrix[height][width];
@@ -54,7 +54,7 @@ namespace Turov_Vitaly
 	int ShiftX = 325, ShiftY = 225;
 
 	// масштабирование
-	double Scale = 5;
+	double Scale = 8;
 
 	// Структура описывающие отрезки
 	struct LineSegment
