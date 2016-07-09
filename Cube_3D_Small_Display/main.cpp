@@ -16,7 +16,16 @@ enum MessageID : int
 	ROTY,
 	ROTZ,
 	PLUS,
-	MINUS
+	MINUS,
+	ROTX_INF,
+	ROTY_INF,
+	ROTZ_INF,
+	LEFT_INF,
+	RIGHT_INF,
+	UP_INF,
+	DOWN_INF,
+	PLUS_INF,
+	MINUS_INF
 };
 
 namespace Turov_Vitaly 
@@ -78,8 +87,367 @@ namespace Turov_Vitaly
 	unsigned short int bitMatrix[height] = {0};
 }
 
-namespace Commandos 
-{
+namespace GLOBAL {
+	// Перевод матрицы в удобный вид для светодиодов
+	void transformingBitMatrix()
+	{
+		// Массив единиц
+		unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
+
+		// Буферная единица
+		unsigned short int tmp_one(1);
+
+		// Преобразование булевой матрици к числовой
+		for (int i = 0; i < Turov_Vitaly::height; i++)
+			for (int j = 0; j < sizeof(short) * 8; j++)
+				if (Turov_Vitaly::matrix[i][j])
+				{
+					tmp_one = 1;
+
+					// Эта операция игнорируется - вопрос почему?
+					tmp_one << (sizeof(short) * 8 - j);
+
+					//tmp_one *= pow(2, (sizeof(short) * 8 - j));
+
+					massiv[i][j] = tmp_one;
+				}
+
+				else
+					massiv[i][j] = 0;
+
+		// Слияние столбцов
+		for (int i = 0; i < Turov_Vitaly::height; i++)
+			for (int j = 0; j < sizeof(short) * 8; j++)
+				Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
+	}
+
+	// Сравнение слов
+	bool comparison(char *str_one, char *str_two)
+	{
+		// Минимальная длина 
+		int border = (strlen(str_one) < strlen(str_two)) ? (strlen(str_one)) : (strlen(str_two));
+
+		for (int i = 0; i <= border; i++)
+		{
+			if (str_one[i] != str_two[i])
+				return false;
+		}
+
+		return true;
+	}
+
+	// Очистка матрицы
+	void clearMatrix()
+	{
+		system("cls");
+
+		for (int i = 0; i < Turov_Vitaly::height; i++)
+			for (int j = 0; j < Turov_Vitaly::width; j++)
+				Turov_Vitaly::matrix[i][j] = false;
+	}
+
+	// Отрисовка линии в матрице
+	void line(int x0, int y0, int sX, int sY)
+	{
+		int A(0), B(0), sign(0);
+
+		A = sY - y0;
+		B = x0 - sX;
+
+		(abs(A) > abs(B)) ? (sign = 1) : (sign = -1);
+
+		int signa, signb;
+
+		(A < 0) ? (signa = -1) : (signa = 1);
+
+		(B < 0) ? (signb = -1) : (signb = 1);
+
+		int f = 0;
+
+		if ((y0 >= 0) && (y0 < Turov_Vitaly::height) && (x0 >= 0) && (x0 < Turov_Vitaly::width))
+			Turov_Vitaly::matrix[y0][x0] = true;
+
+		int x(x0), y(y0);
+
+		if (sign == -1)
+			do
+			{
+
+				f += A * signa;
+
+				if (f > 0)
+				{
+					f -= B * signb;
+					y += signa;
+				}
+
+				x -= signb;
+
+				if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
+					Turov_Vitaly::matrix[y][x] = true;
+
+			} while (x != sX || y != sY);
+
+		else
+			do
+			{
+
+				f += B*signb;
+
+				if (f > 0)
+				{
+					f -= A * signa;
+					x -= signb;
+				}
+
+				y += signa;
+
+				if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
+					Turov_Vitaly::matrix[y][x] = true;
+
+			} while (x != sX || y != sY);
+	}
+
+	/*
+		Вычисление фронтальной геометрической (изометрической) проекции
+		трехмерных точек на двумерную плоскость
+	*/
+	void Perspect()
+	{
+		Turov_Vitaly::sX = Turov_Vitaly::X + Turov_Vitaly::Z / 2;
+		Turov_Vitaly::sY = Turov_Vitaly::Y - Turov_Vitaly::Z / 2;
+	}
+
+	/*
+		Чистая математика без разумных объяснений =)
+	*/
+	// 3-D преобразования в 2D
+	void Compute()
+	{
+		// Считаем направляющие синусы и косинусы
+		double sinx = sin((Turov_Vitaly::RotX * M_PI) / 180.0);
+		double siny = sin((Turov_Vitaly::RotY * M_PI) / 180.0);
+		double sinz = sin((Turov_Vitaly::RotZ * M_PI) / 180.0);
+		double cosx = cos((Turov_Vitaly::RotX * M_PI) / 180.0);
+		double cosy = cos((Turov_Vitaly::RotY * M_PI) / 180.0);
+		double cosz = cos((Turov_Vitaly::RotZ * M_PI) / 180.0);
+
+		// есть старые координаты точек ( в 3D ) и нужно получить координаты точек (в 2D)
+		double x, y, z, x1, y1, z1;
+
+		for (int i = 0; i < Turov_Vitaly::size; i++)
+		{
+
+			//Исходное направление
+			x = Turov_Vitaly::pix[i][0];
+			y = Turov_Vitaly::pix[i][1];
+			z = Turov_Vitaly::pix[i][2];
+
+			// вокруг Z
+			x1 = CEIL(x * cosz + y * sinz);
+			y1 = CEIL(-x * sinz + y * cosz);
+			z1 = z;
+
+			// вокруг X
+			x = x1;
+			y = CEIL(y1 * cosx + z1 * sinx);
+			z = CEIL(-y1 * sinx + z1 * cosx);
+
+			// вокруг Y
+			x1 = CEIL(x * cosy - z * siny);
+			y1 = y;
+			z1 = CEIL(x * siny + z * cosy);
+
+			// Масштабирование
+			Turov_Vitaly::newpix[i][0] = CEIL(x1 * Turov_Vitaly::Scale);
+			Turov_Vitaly::newpix[i][1] = CEIL(y1 * Turov_Vitaly::Scale);
+			Turov_Vitaly::newpix[i][2] = CEIL(z1 * Turov_Vitaly::Scale);
+
+			// сдвиг по осям X и Y
+			Turov_Vitaly::newpix[i][0] += Turov_Vitaly::ShiftX;
+			Turov_Vitaly::newpix[i][1] += Turov_Vitaly::ShiftY;
+			Turov_Vitaly::newpix[i][2] += 25;
+		}
+	}
+
+	// Функция для приведения "здоровых размеров" куба к размеру нашего экрана
+	void bringingScreenSize()
+	{
+		// Количество вызовов функции line
+		const int countLine = 12;
+
+		// Определяем отдалённые координаты (имеется ввиду отдельно максимум по x и по y)
+
+		int xElement[countLine * 2];
+		int yElement[countLine * 2];
+
+		for (int i = 0, j = 0; i < countLine; i++, j += 2)
+		{
+			xElement[j] = Turov_Vitaly::lineSegment[i].x_one;
+			xElement[j + 1] = Turov_Vitaly::lineSegment[i].x_two;
+
+			yElement[j] = Turov_Vitaly::lineSegment[i].y_one;
+			yElement[j + 1] = Turov_Vitaly::lineSegment[i].y_two;
+		}
+
+		int xMax = xElement[0];
+		int yMax = yElement[0];
+
+		for (int i = 0; i < (countLine * 2); i++)
+		{
+			(xElement[i] > xMax) ? (xMax = xElement[i]) : (false);
+
+			(yElement[i] > yMax) ? (yMax = yElement[i]) : (false);
+		}
+
+		// Расчитаем масштабирование
+		int xK(1), yK(1);
+
+		xK = CEIL((double)(xMax) / Turov_Vitaly::width);
+		yK = CEIL((double)(yMax) / Turov_Vitaly::height);
+
+		// Максимумы мы нашли. Теперь мы подгоняем под виртуальный экран (матрицу)
+		// Примем максимальные значения за границы (правильнее примем их за 100% а остальные подгоним)
+		for (int i = 0; i < countLine; i++)
+		{
+			Turov_Vitaly::lineSegment[i].x_one = ((double)(Turov_Vitaly::lineSegment[i].x_one) / xK);
+			Turov_Vitaly::lineSegment[i].x_two = ((double)(Turov_Vitaly::lineSegment[i].x_two) / xK);
+
+			Turov_Vitaly::lineSegment[i].y_one = ((double)(Turov_Vitaly::lineSegment[i].y_one) / yK);
+			Turov_Vitaly::lineSegment[i].y_two = ((double)(Turov_Vitaly::lineSegment[i].y_two) / yK);
+		}
+	}
+
+	// Рисование кубика
+	void DrawPix()
+	{
+		// Предварительная очистка матрицы (экрана)
+		clearMatrix();
+
+		int x(0), y(0), countLine(0);
+
+		// отрисовка передней грани
+		for (int i = 0, j = 0; i < 4; i++)
+		{
+			// исходная точка
+			Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
+			Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
+			Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
+
+			// Считает проецию на плоскость экрана
+			Perspect();
+
+			x = Turov_Vitaly::sX;
+			y = Turov_Vitaly::sY;
+
+			j = (i < 3) ? (i + 1) : 0;
+
+			// конечная точка
+			Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
+			Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
+			Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
+
+
+			Perspect();
+
+			Turov_Vitaly::lineSegment[countLine].x_one = x;
+			Turov_Vitaly::lineSegment[countLine].y_one = y;
+			Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
+			Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
+
+			countLine++;
+
+			// отрисовка линии
+			//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+		}
+
+		// рисуем главную грань
+		for (int i = 4, j = 0; i < 8; i++)
+		{
+
+			Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
+			Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
+			Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
+
+			Perspect();
+
+			x = Turov_Vitaly::sX;
+			y = Turov_Vitaly::sY;
+
+			j = (i < 7) ? (i + 1) : 4;
+
+			Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
+			Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
+			Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
+
+			Perspect();
+
+			Turov_Vitaly::lineSegment[countLine].x_one = x;
+			Turov_Vitaly::lineSegment[countLine].y_one = y;
+			Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
+			Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
+
+			countLine++;
+
+			//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+		}
+
+		// отрисовка соединяющего ребра
+		for (int i = 0, j = 0; i < 4; i++)
+		{
+
+			Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
+			Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
+			Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
+
+			Perspect();
+
+			x = Turov_Vitaly::sX;
+			y = Turov_Vitaly::sY;
+
+			j = i + 4;
+
+			Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
+			Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
+			Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
+
+			Perspect();
+
+			Turov_Vitaly::lineSegment[countLine].x_one = x;
+			Turov_Vitaly::lineSegment[countLine].y_one = y;
+			Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
+			Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
+
+			countLine++;
+
+			//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
+		}
+
+		// Приводим к нашим размерам
+		bringingScreenSize();
+
+		// Отрисовываем на виртуальном экране (матрице)
+		for (int i = 0; i < countLine; i++)
+			line(Turov_Vitaly::lineSegment[i].x_one, Turov_Vitaly::lineSegment[i].y_one,
+				 Turov_Vitaly::lineSegment[i].x_two, Turov_Vitaly::lineSegment[i].y_two);
+
+		// Вывод на экран
+		for (int i = 0; i < Turov_Vitaly::height; i++)
+		{
+			for (int j = 0; j < Turov_Vitaly::width; j++)
+				if (Turov_Vitaly::matrix[i][j])
+					std::cout << "*";
+				else
+					std::cout << " ";
+
+			std::cout << std::endl;
+		}
+
+		transformingBitMatrix();
+	}
+}
+
+namespace Commandos {
 	void LEFT()
 	{
 		Turov_Vitaly::ShiftX -= 3;
@@ -127,368 +495,118 @@ namespace Commandos
 	{
 		(Turov_Vitaly::Scale > 0.0) ? (Turov_Vitaly::Scale -= 0.1) : (false);
 	}
-}
 
-// Перевод матрицы в удобный вид для светодиодов
-void transformingBitMatrix()
-{
-	// Массив единиц
-	unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
-
-	// Буферная единица
-	unsigned short int tmp_one(1);
-
-	// Преобразование булевой матрици к числовой
-	for (int i = 0; i < Turov_Vitaly::height; i++)
+	void ROTX_INF()
 	{
-		for (int j = 0; j < sizeof(short) * 8; j++)
+		while (true)
 		{
-			if (Turov_Vitaly::matrix[i][j])
-			{
-				tmp_one = 1;
+			ROTX();
 
-				// Эта операция игнорируется - вопрос почему?
-				tmp_one << (sizeof(short) * 8 - j);
+			GLOBAL::Compute();
 
-				massiv[i][j] = tmp_one;
-			}
-
-			else
-			{
-				massiv[i][j] = 0;
-			}
+			GLOBAL::DrawPix();
 		}
 	}
 
-	// Слияние столбцов
-	for (int i = 0; i < Turov_Vitaly::height; i++)
-		for (int j = 0; j < sizeof(short) * 8; j++)
-			Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
-
-}
-
-// Сравнение слов
-bool comparison(char *str_one, char *str_two)
-{
-	// Минимальная длина 
-	int border = (strlen(str_one) < strlen(str_two)) ? (strlen(str_one)) : (strlen(str_two));
-
-	for (int i = 0; i <= border; i++)
+	void ROTY_INF()
 	{
-		if (str_one[i] != str_two[i])
-			return false;
-	}
-
-	return true;
-}
-
-// Очистка матрицы
-void clearMatrix()
-{
-	system("cls");
-
-	for (int i = 0; i < Turov_Vitaly::height; i++)
-		for (int j = 0; j < Turov_Vitaly::width; j++)
-			Turov_Vitaly::matrix[i][j] = false;
-}
-
-// Отрисовка линии в матрице
-void line(int x0, int y0, int sX, int sY)
-{
-	int A(0), B(0), sign(0);
-
-	A = sY - y0;
-	B = x0 - sX;
-
-	(abs(A) > abs(B)) ? (sign = 1) : (sign = -1);
-
-	int signa, signb;
-
-	(A < 0) ? (signa = -1) : (signa = 1);
-
-	(B < 0) ? (signb = -1) : (signb = 1);
-
-	int f = 0;
-
-	if ((y0 >= 0) && (y0 < Turov_Vitaly::height) && (x0 >= 0) && (x0 < Turov_Vitaly::width))
-		Turov_Vitaly::matrix[y0][x0] = true;
-
-	int x(x0), y(y0);
-
-	if (sign == -1)
-		do
+		while (true)
 		{
+			ROTY();
 
-			f += A * signa;
+			GLOBAL::Compute();
 
-			if (f > 0)
-			{
-				f -= B * signb;
-				y += signa;
-			}
+			GLOBAL::DrawPix();
+		}
+	}
 
-			x -= signb;
-
-			if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
-				Turov_Vitaly::matrix[y][x] = true;
-
-		} while (x != sX || y != sY);
-
-	else
-		do
+	void ROTZ_INF()
+	{
+		while (true)
 		{
+			ROTZ();
 
-			f += B*signb;
+			GLOBAL::Compute();
 
-			if (f > 0)
-			{
-				f -= A * signa;
-				x -= signb;
-			}
+			GLOBAL::DrawPix();
+		}
+	}
 
-			y += signa;
-
-			if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
-				Turov_Vitaly::matrix[y][x] = true;
-
-		} while (x != sX || y != sY);
-}
-
-/*
-	Вычисление фронтальной геометрической (изометрической) проекции
-	трехмерных точек на двумерную плоскость
-*/
-void Perspect()
-{
-	Turov_Vitaly::sX = Turov_Vitaly::X + Turov_Vitaly::Z / 2;
-	Turov_Vitaly::sY = Turov_Vitaly::Y - Turov_Vitaly::Z / 2;
-}
-
-/*
-	Чистая математика без разумных объяснений =)
-*/
-// 3-D преобразования в 2D
-void Compute()
-{
-	// Считаем направляющие синусы и косинусы
-	double sinx = sin((Turov_Vitaly::RotX * M_PI) / 180.0);
-	double siny = sin((Turov_Vitaly::RotY * M_PI) / 180.0);
-	double sinz = sin((Turov_Vitaly::RotZ * M_PI) / 180.0);
-	double cosx = cos((Turov_Vitaly::RotX * M_PI) / 180.0);
-	double cosy = cos((Turov_Vitaly::RotY * M_PI) / 180.0);
-	double cosz = cos((Turov_Vitaly::RotZ * M_PI) / 180.0);
-
-	// есть старые координаты точек ( в 3D ) и нужно получить координаты точек (в 2D)
-	double x, y, z, x1, y1, z1;
-
-	for (int i = 0; i < Turov_Vitaly::size; i++)
+	void LEFT_INF()
 	{
+		while (true)
+		{
+			LEFT();
 
-		//Исходное направление
-		x = Turov_Vitaly::pix[i][0];
-		y = Turov_Vitaly::pix[i][1];
-		z = Turov_Vitaly::pix[i][2];
+			GLOBAL::Compute();
 
-		// вокруг Z
-		x1 = CEIL(x * cosz + y * sinz);
-		y1 = CEIL(-x * sinz + y * cosz);
-		z1 = z;
+			GLOBAL::DrawPix();
+		}
+	}
 
-		// вокруг X
-		x = x1;
-		y = CEIL(y1 * cosx + z1 * sinx);
-		z = CEIL(-y1 * sinx + z1 * cosx);
+	void RIGHT_INF()
+	{
+		while (true)
+		{
+			RIGHT();
 
-		// вокруг Y
-		x1 = CEIL(x * cosy - z * siny);
-		y1 = y;
-		z1 = CEIL(x * siny + z * cosy);
 
-		// Масштабирование
-		Turov_Vitaly::newpix[i][0] = CEIL(x1 * Turov_Vitaly::Scale);
-		Turov_Vitaly::newpix[i][1] = CEIL(y1 * Turov_Vitaly::Scale);
-		Turov_Vitaly::newpix[i][2] = CEIL(z1 * Turov_Vitaly::Scale);
+			GLOBAL::Compute();
 
-		// сдвиг по осям X и Y
-		Turov_Vitaly::newpix[i][0] += Turov_Vitaly::ShiftX;
-		Turov_Vitaly::newpix[i][1] += Turov_Vitaly::ShiftY;
-		Turov_Vitaly::newpix[i][2] += 25;
+			GLOBAL::DrawPix();
+		}
+	}
+
+	void UP_INF()
+	{
+		while (true)
+		{
+			UP();
+
+			GLOBAL::Compute();
+
+			GLOBAL::DrawPix();
+		}
+	}
+
+	void DOWN_INF()
+	{
+		while (true)
+		{
+			DOWN();
+
+			GLOBAL::Compute();
+
+			GLOBAL::DrawPix();
+		}
+	}
+
+	void MINUS_INF()
+	{
+		while (true)
+		{
+			MINUS();
+
+			GLOBAL::Compute();
+
+			GLOBAL::DrawPix();
+		}
+	}
+
+	void PLUS_INF()
+	{
+		while (true)
+		{
+			PLUS();
+
+			GLOBAL::Compute();
+
+			GLOBAL::DrawPix();
+		}
 	}
 }
 
-// Функция для приведения "здоровых размеров" куба к размеру нашего экрана
-void bringingScreenSize()
-{
-	// Количество вызовов функции line
-	const int countLine = 12;
-
-	// Определяем отдалённые координаты (имеется ввиду отдельно максимум по x и по y)
-
-	int xElement[countLine * 2];
-	int yElement[countLine * 2];
-
-	for (int i = 0, j = 0; i < countLine; i++, j += 2)
-	{
-		xElement[j] = Turov_Vitaly::lineSegment[i].x_one;
-		xElement[j + 1] = Turov_Vitaly::lineSegment[i].x_two;
-
-		yElement[j] = Turov_Vitaly::lineSegment[i].y_one;
-		yElement[j + 1] = Turov_Vitaly::lineSegment[i].y_two;
-	}
-
-	int xMax = xElement[0];
-	int yMax = yElement[0];
-
-	for (int i = 0; i < (countLine * 2); i++)
-	{
-		(xElement[i] > xMax) ? (xMax = xElement[i]) : (false);
-
-		(yElement[i] > yMax) ? (yMax = yElement[i]) : (false);
-	}
-
-	// Расчитаем масштабирование
-	int xK(1), yK(1);
-
-	xK = CEIL((double)(xMax) / Turov_Vitaly::width);
-	yK = CEIL((double)(yMax) / Turov_Vitaly::height);
-
-	// Максимумы мы нашли. Теперь мы подгоняем под виртуальный экран (матрицу)
-	// Примем максимальные значения за границы (правильнее примем их за 100% а остальные подгоним)
-	for (int i = 0; i < countLine; i++)
-	{
-		Turov_Vitaly::lineSegment[i].x_one = ((double)(Turov_Vitaly::lineSegment[i].x_one) / xK);
-		Turov_Vitaly::lineSegment[i].x_two = ((double)(Turov_Vitaly::lineSegment[i].x_two) / xK);
-
-		Turov_Vitaly::lineSegment[i].y_one = ((double)(Turov_Vitaly::lineSegment[i].y_one) / yK);
-		Turov_Vitaly::lineSegment[i].y_two = ((double)(Turov_Vitaly::lineSegment[i].y_two) / yK);
-	}
-}
-
-// Рисование кубика
-void DrawPix()
-{
-	// Предварительная очистка матрицы (экрана)
-	clearMatrix();
-
-	int x(0), y(0), countLine(0);
-
-	// отрисовка передней грани
-	for (int i = 0, j = 0; i < 4; i++)
-	{
-		// исходная точка
-		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
-		Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
-		Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
-
-		// Считает проецию на плоскость экрана
-		Perspect();
-
-		x = Turov_Vitaly::sX;
-		y = Turov_Vitaly::sY;
-
-		j = (i < 3) ? (i + 1) : 0;
-
-		// конечная точка
-		Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
-		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
-		Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
-
-		
-		Perspect();
-
-		Turov_Vitaly::lineSegment[countLine].x_one = x;
-		Turov_Vitaly::lineSegment[countLine].y_one = y;
-		Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
-		Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
-
-		countLine++;
-
-		// отрисовка линии
-		//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
-	}
-
-	// рисуем главную грань
-	for (int i = 4, j = 0; i < 8; i++)
-	{
-
-		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
-		Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
-		Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
-
-		Perspect();
-
-		x = Turov_Vitaly::sX;
-		y = Turov_Vitaly::sY;
-
-		j = (i < 7) ? (i + 1) : 4;
-
-		Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
-		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
-		Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
-
-		Perspect();
-
-		Turov_Vitaly::lineSegment[countLine].x_one = x;
-		Turov_Vitaly::lineSegment[countLine].y_one = y;
-		Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
-		Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
-
-		countLine++;
-
-		//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
-	}
-
-	// отрисовка соединяющего ребра
-	for (int i = 0, j = 0; i < 4; i++)
-	{
-
-		Turov_Vitaly::X = Turov_Vitaly::newpix[i][0];
-		Turov_Vitaly::Y = Turov_Vitaly::newpix[i][1];
-		Turov_Vitaly::Z = Turov_Vitaly::newpix[i][2];
-
-		Perspect();
-
-		x = Turov_Vitaly::sX;
-		y = Turov_Vitaly::sY;
-
-		j = i + 4;
-
-		Turov_Vitaly::X = Turov_Vitaly::newpix[j][0];
-		Turov_Vitaly::Y = Turov_Vitaly::newpix[j][1];
-		Turov_Vitaly::Z = Turov_Vitaly::newpix[j][2];
-
-		Perspect();
-
-		Turov_Vitaly::lineSegment[countLine].x_one = x;
-		Turov_Vitaly::lineSegment[countLine].y_one = y;
-		Turov_Vitaly::lineSegment[countLine].x_two = Turov_Vitaly::sX;
-		Turov_Vitaly::lineSegment[countLine].y_two = Turov_Vitaly::sY;
-
-		countLine++;
-
-		//line(x, y, Turov_Vitaly::sX, Turov_Vitaly::sY);
-	}
-
-	// Приводим к нашим размерам
-	bringingScreenSize();
-
-	// Отрисовываем на виртуальном экране (матрице)
-	for (int i = 0; i < countLine; i++)
-		line(Turov_Vitaly::lineSegment[i].x_one, Turov_Vitaly::lineSegment[i].y_one,
-			 Turov_Vitaly::lineSegment[i].x_two, Turov_Vitaly::lineSegment[i].y_two);
-
-	// Вывод на экран
-	for (int i = 0; i < Turov_Vitaly::height; i++)
-	{
-		for (int j = 0; j < Turov_Vitaly::width; j++)
-			if (Turov_Vitaly::matrix[i][j])
-				std::cout << "*";
-			else
-				std::cout << " ";
-
-		std::cout << std::endl;
-	}
-}
+using namespace GLOBAL;
 
 int main(void)
 {
@@ -500,7 +618,7 @@ int main(void)
 
 	int ch(INT_MAX);   // код клавиши
 	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
-	char message[100] = "\0";
+	char message[100] = "rotx";
 
 	do
 	{
@@ -511,29 +629,56 @@ int main(void)
 		if ((comparison(message, "left") || comparison(message, "Left") || comparison(message, "LEFT")))
 			ch = LEFT;
 
+		else if ((comparison(message, "left_inf") || comparison(message, "Left_inf") || comparison(message, "LEFT_INF")))
+			ch = LEFT_INF;
+
 		else if ((comparison(message, "right") || comparison(message, "Right") || comparison(message, "RIGHT")))
 			ch = RIGHT;
+
+		else if ((comparison(message, "right_inf") || comparison(message, "Right_inf") || comparison(message, "RIGHT_INF")))
+			ch = RIGHT_INF;
 
 		else if ((comparison(message, "up") || comparison(message, "Up") || comparison(message, "UP")))
 			ch = UP;
 
+		else if ((comparison(message, "up_inf") || comparison(message, "Up_inf") || comparison(message, "UP_INF")))
+			ch = UP_INF;
+
 		else if ((comparison(message, "down") || comparison(message, "Down") || comparison(message, "DOWN")))
 			ch = DOWN;
+
+		else if ((comparison(message, "down_inf") || comparison(message, "Down_inf") || comparison(message, "DOWN_INF")))
+			ch = DOWN_INF;
 
 		else if ((comparison(message, "plus") || comparison(message, "Plus") || comparison(message, "PLUS")))
 			ch = PLUS;
 
+		else if ((comparison(message, "plus_inf") || comparison(message, "Plus_inf") || comparison(message, "PLUS_INF")))
+			ch = PLUS_INF;
+
 		else if ((comparison(message, "minus") || comparison(message, "Minus") || comparison(message, "MINUS")))
 			ch = MINUS;
+
+		else if ((comparison(message, "minus_inf") || comparison(message, "Minus_inf") || comparison(message, "MINUS_INF")))
+			ch = MINUS_INF;
 
 		else if ((comparison(message, "rotx") || comparison(message, "Rotx") || comparison(message, "ROTX")))
 			ch = ROTX;
 
+		else if ((comparison(message, "rotx_inf") || comparison(message, "Rotx_inf") || comparison(message, "ROTX_INF")))
+			ch = ROTX_INF;
+
 		else if ((comparison(message, "roty") || comparison(message, "Roty") || comparison(message, "ROTY")))
 			ch = ROTY;
 
+		else if ((comparison(message, "roty_inf") || comparison(message, "Roty_inf") || comparison(message, "ROTY_INF")))
+			ch = ROTY_INF;
+
 		else if ((comparison(message, "rotz") || comparison(message, "Rotz") || comparison(message, "ROTZ")))
 			ch = ROTZ;
+
+		else if ((comparison(message, "rotz_inf") || comparison(message, "Rotz_inf") || comparison(message, "ROTZ_INF")))
+			ch = ROTZ_INF;
 
 		else if ((comparison(message, "esc") || comparison(message, "Esc") || comparison(message, "ESC")))
 			ch = ESC;
@@ -589,6 +734,60 @@ int main(void)
 
 			break;
 		}
+		case ROTX_INF:
+		{
+			Commandos::ROTX_INF();
+
+			break;
+		}
+		case ROTY_INF:
+		{
+			Commandos::ROTY_INF();
+
+			break;
+		}
+		case ROTZ_INF:
+		{
+			Commandos::ROTZ_INF();
+
+			break;
+		}
+		case LEFT_INF:
+		{
+			Commandos::LEFT_INF();
+
+			break;
+		}
+		case RIGHT_INF:
+		{
+			Commandos::RIGHT_INF();
+
+			break;
+		}
+		case UP_INF:
+		{
+			Commandos::UP_INF();
+
+			break;
+		}
+		case DOWN_INF:
+		{
+			Commandos::DOWN_INF();
+
+			break;
+		}
+		case MINUS_INF:
+		{
+			Commandos::MINUS_INF();
+
+			break;
+		}
+		case PLUS_INF:
+		{
+			Commandos::PLUS_INF();
+
+			break;
+		}
 		default:
 			flag = false;
 		}
@@ -598,8 +797,6 @@ int main(void)
 			Compute();    // вычисляем новые координаты
 
 			DrawPix();    // рисуем
-
-			transformingBitMatrix();
 
 			flag = false;
 		}
