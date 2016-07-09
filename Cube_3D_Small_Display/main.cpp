@@ -104,12 +104,9 @@ namespace GLOBAL {
 				{
 					tmp_one = 1;
 
-					// Эта операция игнорируется - вопрос почему?
-					tmp_one << (sizeof(short) * 8 - j);
+					tmp_one = tmp_one << (sizeof(short) * 8 - j);
 
-					//tmp_one *= pow(2, (sizeof(short) * 8 - j));
-
-					massiv[i][j] = tmp_one;
+					massiv[i][j] = tmp_one;	
 				}
 
 				else
