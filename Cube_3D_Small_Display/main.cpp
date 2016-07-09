@@ -78,6 +78,57 @@ namespace Turov_Vitaly
 	unsigned short int bitMatrix[height] = {0};
 }
 
+namespace Commandos 
+{
+	void LEFT()
+	{
+		Turov_Vitaly::ShiftX -= 3;
+	}
+
+	void RIGHT()
+	{
+		Turov_Vitaly::ShiftX += 3;
+	}
+
+	void UP()
+	{
+		Turov_Vitaly::ShiftY -= 3;
+	}
+
+	void DOWN()
+	{
+		Turov_Vitaly::ShiftY += 3;
+	}
+
+	void ROTX()
+	{
+		// Полный круг или нет
+		(Turov_Vitaly::RotX < 357) ? (Turov_Vitaly::RotX += 3) : (Turov_Vitaly::RotX = 0);
+	}
+
+	void ROTY()
+	{
+		// Полный круг или нет
+		(Turov_Vitaly::RotY < 357) ? (Turov_Vitaly::RotY += 3) : (Turov_Vitaly::RotY = 0);
+	}
+
+	void ROTZ()
+	{
+		// Полный круг или нет
+		(Turov_Vitaly::RotZ < 357) ? (Turov_Vitaly::RotZ += 3) : (Turov_Vitaly::RotZ = 0);
+	}
+
+	void PLUS()
+	{
+		Turov_Vitaly::Scale += 0.1;
+	}
+
+	void MINUS()
+	{
+		(Turov_Vitaly::Scale > 0.0) ? (Turov_Vitaly::Scale -= 0.1) : (false);
+	}
+}
+
 // Перевод матрицы в удобный вид для светодиодов
 void transformingBitMatrix()
 {
@@ -449,7 +500,7 @@ int main(void)
 
 	int ch(INT_MAX);   // код клавиши
 	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
-	char message[5] = "\0";
+	char message[100] = "\0";
 
 	do
 	{
@@ -491,53 +542,50 @@ int main(void)
 		{
 		case LEFT:
 		{
-			Turov_Vitaly::ShiftX -= 3;
+			Commandos::LEFT();
 			break;
 		}
 		case RIGHT:
 		{
-			Turov_Vitaly::ShiftX += 3;
+			Commandos::RIGHT();
 			break;
 		}
 		case UP:
 		{
-			Turov_Vitaly::ShiftY -= 3;
+			Commandos::UP();
 			break;
 		}
 		case DOWN:
 		{
-			Turov_Vitaly::ShiftY += 3;
+			Commandos::DOWN();
 			break;
 		}
 		case PLUS:
 		{
-			Turov_Vitaly::Scale += 0.1;
+			Commandos::PLUS();
 			break;
 		}
 		case MINUS:
 		{
-			(Turov_Vitaly::Scale > 0.0) ? (Turov_Vitaly::Scale -= 0.1) : (false);
+			Commandos::MINUS();
 
 			break;
 		}
 		case ROTX:
 		{
-			// Полный круг или нет
-			(Turov_Vitaly::RotX < 357) ? (Turov_Vitaly::RotX += 3) : (Turov_Vitaly::RotX = 0);
+			Commandos::ROTX();
 
 			break;
 		}
 		case ROTY:
 		{
-			// Полный круг или нет
-			(Turov_Vitaly::RotY < 357) ? (Turov_Vitaly::RotY += 3) : (Turov_Vitaly::RotY = 0);
+			Commandos::ROTY();
 
 			break;
 		}
 		case ROTZ:
 		{
-			// Полный круг или нет
-			(Turov_Vitaly::RotZ < 357) ? (Turov_Vitaly::RotZ += 3) : (Turov_Vitaly::RotZ = 0);
+			Commandos::ROTZ();
 
 			break;
 		}
