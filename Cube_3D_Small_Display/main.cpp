@@ -2,8 +2,6 @@
 
 #define CEIL(X) ((int)(X + 0.5))
 
-#include <conio.h>
-#include <stdio.h>
 #include <math.h>
 #include <iostream>
 
@@ -70,6 +68,52 @@ namespace Turov_Vitaly
 
 	// Массив отрезков. 12 - это количество рёбер у куба. Если легче, то столько раз вызывается функция line
 	LineSegment lineSegment[12];
+
+	// Битовая матрица для отрисовки на светодиодной матрице
+	/*
+		Количество строк - это высота нашего виртуального экрана
+		Количество столбцов - это количество бит в числе
+		У нас 2 экрана в ширину по 8 светодиотов, а short == 2 байта
+	*/
+	unsigned short int bitMatrix[height] = {0};
+}
+
+// Перевод матрицы в удобный вид для светодиодов
+void transformingBitMatrix()
+{
+	// Массив единиц
+	unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
+
+	// Буферная единица
+	unsigned short int tmp_one(1);
+
+	// Преобразование булевой матрици к числовой
+	for (int i = 0; i < Turov_Vitaly::height; i++)
+	{
+		for (int j = 0; j < sizeof(short) * 8; j++)
+		{
+			if (Turov_Vitaly::matrix[i][j])
+			{
+				tmp_one = 1;
+
+				// Эта операция игнорируется - вопрос почему?
+				tmp_one << (sizeof(short) * 8 - j);
+
+				massiv[i][j] = tmp_one;
+			}
+
+			else
+			{
+				massiv[i][j] = 0;
+			}
+		}
+	}
+
+	// Слияние столбцов
+	for (int i = 0; i < Turov_Vitaly::height; i++)
+		for (int j = 0; j < sizeof(short) * 8; j++)
+			Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
+
 }
 
 // Сравнение слов
@@ -79,8 +123,10 @@ bool comparison(char *str_one, char *str_two)
 	int border = (strlen(str_one) < strlen(str_two)) ? (strlen(str_one)) : (strlen(str_two));
 
 	for (int i = 0; i <= border; i++)
+	{
 		if (str_one[i] != str_two[i])
 			return false;
+	}
 
 	return true;
 }
@@ -403,7 +449,7 @@ int main(void)
 
 	int ch(INT_MAX);   // код клавиши
 	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
-	char message[100] = "\0";
+	char message[5] = "\0";
 
 	do
 	{
@@ -504,6 +550,8 @@ int main(void)
 			Compute();    // вычисляем новые координаты
 
 			DrawPix();    // рисуем
+
+			transformingBitMatrix();
 
 			flag = false;
 		}
