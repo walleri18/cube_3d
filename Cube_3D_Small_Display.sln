@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube_3D_Small_Display", "Cube_3D_Small_Display\Cube_3D_Small_Display.vcxproj", "{65E86204-CAF6-4710-895A-D7E79FF3C48A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinuxRaspberryCube", "LinuxRaspberryCube\LinuxRaspberryCube.vcxproj", "{40E294F9-FCE4-4F7D-81A9-60350B2527AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{65E86204-CAF6-4710-895A-D7E79FF3C48A}.Release|x64.Build.0 = Release|x64
 		{65E86204-CAF6-4710-895A-D7E79FF3C48A}.Release|x86.ActiveCfg = Release|Win32
 		{65E86204-CAF6-4710-895A-D7E79FF3C48A}.Release|x86.Build.0 = Release|Win32
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Debug|x64.ActiveCfg = Debug|x64
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Debug|x64.Build.0 = Debug|x64
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Debug|x86.ActiveCfg = Debug|Win32
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Debug|x86.Build.0 = Debug|Win32
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Release|x64.ActiveCfg = Release|x64
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Release|x64.Build.0 = Release|x64
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Release|x86.ActiveCfg = Release|Win32
+		{40E294F9-FCE4-4F7D-81A9-60350B2527AE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
