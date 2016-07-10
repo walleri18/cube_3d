@@ -82,40 +82,104 @@ namespace Turov_Vitaly
 	/*
 		Количество строк - это высота нашего виртуального экрана
 		Количество столбцов - это количество бит в числе
-		У нас 2 экрана в ширину по 8 светодиотов, а short == 2 байта
+		У нас 2 экрана в ширину и 2 в высоту по 8 светодиодов, а char == 1 байт
+		В конечном итого 4 матрицы
+
+		Расположение дисплеев
+		1 | 2
+		3 | 4
 	*/
-	unsigned short int bitMatrix[height] = {0};
+	struct FourMatrixLED
+	{
+		unsigned char one_matrix[sizeof(char) * 8];
+		unsigned char two_matrix[sizeof(char) * 8];
+		unsigned char three_matrix[sizeof(char) * 8];
+		unsigned char four_matrix[sizeof(char) * 8];
+	};
+
+	FourMatrixLED LED;
 }
 
-namespace GLOBAL {
+namespace GLOBAL 
+{
 	// Перевод матрицы в удобный вид для светодиодов
 	void transformingBitMatrix()
 	{
-		// Массив единиц
-		unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
+		// Массивы единиц
+		unsigned char massiv_one[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		unsigned char massiv_two[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		unsigned char massiv_three[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		unsigned char massiv_four[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
 
 		// Буферная единица
-		unsigned short int tmp_one(1);
+		unsigned char tmp_one(1);
 
-		// Преобразование булевой матрици к числовой
-		for (int i = 0; i < Turov_Vitaly::height; i++)
-			for (int j = 0; j < sizeof(short) * 8; j++)
+		// Преобразование булевой матрицы к числовым
+		for (int i = 0; i < (Turov_Vitaly::height / 2); i++)
+			for (int j = 0; j < ((sizeof(short) * 8) / 2); j++)
+			{
+				// Первый дисплей
 				if (Turov_Vitaly::matrix[i][j])
 				{
 					tmp_one = 1;
 
-					tmp_one = tmp_one << (sizeof(short) * 8 - j);
+					tmp_one = tmp_one << (sizeof(char) * 8 - j);
 
-					massiv[i][j] = tmp_one;	
+					massiv_one[i][j] = tmp_one;
 				}
 
 				else
-					massiv[i][j] = 0;
+					massiv_one[i][j] = 0;
+
+				// Второй дисплей
+				if (Turov_Vitaly::matrix[i][j + sizeof(char) * 8])
+				{
+					tmp_one = 1;
+
+					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+
+					massiv_two[i][j] = tmp_one;
+				}
+
+				else
+					massiv_two[i][j] = 0;
+
+				// Третий дисплей
+				if (Turov_Vitaly::matrix[i + sizeof(char) * 8][j])
+				{
+					tmp_one = 1;
+
+					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+
+					massiv_three[i][j] = tmp_one;
+				}
+
+				else
+					massiv_three[i][j] = 0;
+
+				// Четвёртый дисплей
+				if (Turov_Vitaly::matrix[i + sizeof(char) * 8][j + sizeof(char) * 8])
+				{
+					tmp_one = 1;
+
+					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+
+					massiv_four[i][j] = tmp_one;
+				}
+
+				else
+					massiv_four[i][j] = 0;
+			}
 
 		// Слияние столбцов
-		for (int i = 0; i < Turov_Vitaly::height; i++)
-			for (int j = 0; j < sizeof(short) * 8; j++)
-				Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
+		for (int i = 0; i < (Turov_Vitaly::height / 2); i++)
+			for (int j = 0; j < ((sizeof(short) * 8) / 2); j++)
+			{
+				Turov_Vitaly::LED.one_matrix[i] |= massiv_one[i][j];
+				Turov_Vitaly::LED.two_matrix[i] |= massiv_two[i][j];
+				Turov_Vitaly::LED.three_matrix[i] |= massiv_three[i][j];
+				Turov_Vitaly::LED.four_matrix[i] |= massiv_four[i][j];
+			}
 	}
 
 	// Сравнение слов
