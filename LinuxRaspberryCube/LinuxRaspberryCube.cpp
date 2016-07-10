@@ -849,7 +849,7 @@ namespace GLOBAL {
 			line(Turov_Vitaly::lineSegment[i].x_one, Turov_Vitaly::lineSegment[i].y_one,
 				 Turov_Vitaly::lineSegment[i].x_two, Turov_Vitaly::lineSegment[i].y_two);
 
-		// Вывод на экран
+		// Вывод на экран консоли
 		for (int i = 0; i < Turov_Vitaly::height; i++)
 		{
 			for (int j = 0; j < Turov_Vitaly::width; j++)
@@ -861,7 +861,25 @@ namespace GLOBAL {
 			std::cout << std::endl;
 		}
 
+		// Перевод матрицы для отображения на светодиодов
 		transformingBitMatrix();
+
+		// Вывод матрицы на светодиоды
+		for (int i = 1; i <= 4; i++)
+			for (int j = 0; j < (sizeof(char) * 8); j++)
+			{
+				// Первый экран
+				SetData(Digit[j], Turov_Vitaly::LED.one_matrix[j], i);
+
+				// Второй экран
+				SetData(Digit[j], Turov_Vitaly::LED.two_matrix[j], i);
+
+				// Третий экран
+				SetData(Digit[j], Turov_Vitaly::LED.three_matrix[j], i);
+
+				// Четвёртый экран
+				SetData(Digit[j], Turov_Vitaly::LED.four_matrix[j], i);
+			}
 	}
 }
 
@@ -1031,7 +1049,6 @@ using namespace GLOBAL;
 
 void loop()
 {
-
 	// Проецирование
 	Compute();
 
