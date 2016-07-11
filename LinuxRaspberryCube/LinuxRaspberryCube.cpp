@@ -455,6 +455,9 @@ namespace Turov_Vitaly {
 	1 | 2
 	3 | 4
 	*/
+
+	//unsigned short int bitMatrix[height] = { 0 };
+
 	struct FourMatrixLED
 	{
 		unsigned char one_matrix[sizeof(char) * 8];
@@ -545,6 +548,39 @@ namespace GLOBAL {
 				Turov_Vitaly::LED.three_matrix[i] |= massiv_three[i][j];
 				Turov_Vitaly::LED.four_matrix[i] |= massiv_four[i][j];
 			}
+
+
+		//// Массив единиц
+		//unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
+
+		//// Буферная единица
+		//unsigned short int tmp_one(1);
+
+		//// Преобразование булевой матрици к числовой
+		//for (int i = 0; i < Turov_Vitaly::height; i++)
+		//{
+		//	for (int j = 0; j < sizeof(short) * 8; j++)
+		//	{
+		//		if (Turov_Vitaly::matrix[i][j])
+		//		{
+		//			tmp_one = 1;
+
+		//			tmp_one = tmp_one << (sizeof(short) * 8 - j);
+
+		//			massiv[i][j] = tmp_one;
+		//		}
+
+		//		else
+		//		{
+		//			massiv[i][j] = 0;
+		//		}
+		//	}
+		//}
+
+		//// Слияние столбцов
+		//for (int i = 0; i < Turov_Vitaly::height; i++)
+		//	for (int j = 0; j < sizeof(short) * 8; j++)
+		//		Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
 	}
 
 	// Сравнение слов
