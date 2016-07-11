@@ -17,6 +17,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <cstring>
 //#include "max7219.h"
@@ -869,16 +870,16 @@ namespace GLOBAL {
 			for (int j = 0; j < (sizeof(char) * 8); j++)
 			{
 				// Первый экран
-				SetData(Digit[j], Turov_Vitaly::LED.one_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.one_matrix[j], i);
 
 				// Второй экран
-				SetData(Digit[j], Turov_Vitaly::LED.two_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.two_matrix[j], i);
 
 				// Третий экран
-				SetData(Digit[j], Turov_Vitaly::LED.three_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.three_matrix[j], i);
 
 				// Четвёртый экран
-				SetData(Digit[j], Turov_Vitaly::LED.four_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.four_matrix[j], i);
 			}
 	}
 }
@@ -1055,7 +1056,7 @@ void loop()
 	// вывести исходную фигуру
 	DrawPix();
 
-	int ch(INT_MAX);   // код клавиши
+	int ch;   // код клавиши
 	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
 	char message[100] = "\0";
 
