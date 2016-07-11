@@ -456,7 +456,8 @@ namespace Turov_Vitaly {
 	3 | 4
 	*/
 
-	//unsigned short int bitMatrix[height] = { 0 };
+	// Матрица для составного экрана
+	unsigned short int bitMatrix[height] = { 0 };
 
 	struct FourMatrixLED
 	{
@@ -550,37 +551,37 @@ namespace GLOBAL {
 			}
 
 
-		//// Массив единиц
-		//unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
+		// Массив единиц
+		unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
 
-		//// Буферная единица
-		//unsigned short int tmp_one(1);
+		// Буферная единица
+		unsigned short int tmp_one(1);
 
-		//// Преобразование булевой матрици к числовой
-		//for (int i = 0; i < Turov_Vitaly::height; i++)
-		//{
-		//	for (int j = 0; j < sizeof(short) * 8; j++)
-		//	{
-		//		if (Turov_Vitaly::matrix[i][j])
-		//		{
-		//			tmp_one = 1;
+		// Преобразование булевой матрици к числовой
+		for (int i = 0; i < Turov_Vitaly::height; i++)
+		{
+			for (int j = 0; j < sizeof(short) * 8; j++)
+			{
+				if (Turov_Vitaly::matrix[i][j])
+				{
+					tmp_one = 1;
 
-		//			tmp_one = tmp_one << (sizeof(short) * 8 - j);
+					tmp_one = tmp_one << (sizeof(short) * 8 - j);
 
-		//			massiv[i][j] = tmp_one;
-		//		}
+					massiv[i][j] = tmp_one;
+				}
 
-		//		else
-		//		{
-		//			massiv[i][j] = 0;
-		//		}
-		//	}
-		//}
+				else
+				{
+					massiv[i][j] = 0;
+				}
+			}
+		}
 
-		//// Слияние столбцов
-		//for (int i = 0; i < Turov_Vitaly::height; i++)
-		//	for (int j = 0; j < sizeof(short) * 8; j++)
-		//		Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
+		// Слияние столбцов
+		for (int i = 0; i < Turov_Vitaly::height; i++)
+			for (int j = 0; j < sizeof(short) * 8; j++)
+				Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
 	}
 
 	// Сравнение слов
@@ -905,6 +906,10 @@ namespace GLOBAL {
 		for (int i = 1; i <= 4; i++)
 			for (int j = 0; j < (sizeof(char) * 8); j++)
 			{
+				/*
+					Первый параметр функции SetData - это строка битовой матрицы нужного экрана или как?
+				*/
+
 				// Первый экран
 				SetData(j+1, Turov_Vitaly::LED.one_matrix[j], i);
 
@@ -1089,232 +1094,226 @@ void loop()
 	// Проецирование
 	Compute();
 
-	// вывести исходную фигуру
+	// Вывести исходную фигуру
 	DrawPix();
 
-	int ch;   // код клавиши
-	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
-	char message[100] = "\0";
+	//int ch;   // код клавиши
+	//bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
+	//char message[100] = "\0";
 
-	do
-	{
-		(flag) ? (flag) : (flag = true);
-
-		std::cin >> message;
-
-		if ((comparison(message, "left") || comparison(message, "Left") || comparison(message, "LEFT")))
-			ch = LEFT;
-
-		else if ((comparison(message, "left_inf") || comparison(message, "Left_inf") || comparison(message, "LEFT_INF")))
-			ch = LEFT_INF;
-
-		else if ((comparison(message, "right") || comparison(message, "Right") || comparison(message, "RIGHT")))
-			ch = RIGHT;
-
-		else if ((comparison(message, "right_inf") || comparison(message, "Right_inf") || comparison(message, "RIGHT_INF")))
-			ch = RIGHT_INF;
-
-		else if ((comparison(message, "up") || comparison(message, "Up") || comparison(message, "UP")))
-			ch = UP;
-
-		else if ((comparison(message, "up_inf") || comparison(message, "Up_inf") || comparison(message, "UP_INF")))
-			ch = UP_INF;
-
-		else if ((comparison(message, "down") || comparison(message, "Down") || comparison(message, "DOWN")))
-			ch = DOWN;
-
-		else if ((comparison(message, "down_inf") || comparison(message, "Down_inf") || comparison(message, "DOWN_INF")))
-			ch = DOWN_INF;
-
-		else if ((comparison(message, "plus") || comparison(message, "Plus") || comparison(message, "PLUS")))
-			ch = PLUS;
-
-		else if ((comparison(message, "plus_inf") || comparison(message, "Plus_inf") || comparison(message, "PLUS_INF")))
-			ch = PLUS_INF;
-
-		else if ((comparison(message, "minus") || comparison(message, "Minus") || comparison(message, "MINUS")))
-			ch = MINUS;
-
-		else if ((comparison(message, "minus_inf") || comparison(message, "Minus_inf") || comparison(message, "MINUS_INF")))
-			ch = MINUS_INF;
-
-		else if ((comparison(message, "rotx") || comparison(message, "Rotx") || comparison(message, "ROTX")))
-			ch = ROTX;
-
-		else if ((comparison(message, "rotx_inf") || comparison(message, "Rotx_inf") || comparison(message, "ROTX_INF")))
-			ch = ROTX_INF;
-
-		else if ((comparison(message, "roty") || comparison(message, "Roty") || comparison(message, "ROTY")))
-			ch = ROTY;
-
-		else if ((comparison(message, "roty_inf") || comparison(message, "Roty_inf") || comparison(message, "ROTY_INF")))
-			ch = ROTY_INF;
-
-		else if ((comparison(message, "rotz") || comparison(message, "Rotz") || comparison(message, "ROTZ")))
-			ch = ROTZ;
-
-		else if ((comparison(message, "rotz_inf") || comparison(message, "Rotz_inf") || comparison(message, "ROTZ_INF")))
-			ch = ROTZ_INF;
-
-		else if ((comparison(message, "esc") || comparison(message, "Esc") || comparison(message, "ESC")))
-			ch = ESC;
-
-		switch (ch)
-		{
-		case LEFT:
-		{
-			Commandos::LEFT();
-			break;
-		}
-		case RIGHT:
-		{
-			Commandos::RIGHT();
-			break;
-		}
-		case UP:
-		{
-			Commandos::UP();
-			break;
-		}
-		case DOWN:
-		{
-			Commandos::DOWN();
-			break;
-		}
-		case PLUS:
-		{
-			Commandos::PLUS();
-			break;
-		}
-		case MINUS:
-		{
-			Commandos::MINUS();
-
-			break;
-		}
-		case ROTX:
-		{
-			Commandos::ROTX();
-
-			break;
-		}
-		case ROTY:
-		{
-			Commandos::ROTY();
-
-			break;
-		}
-		case ROTZ:
-		{
-			Commandos::ROTZ();
-
-			break;
-		}
-		case ROTX_INF:
-		{
-			Commandos::ROTX_INF();
-
-			break;
-		}
-		case ROTY_INF:
-		{
-			Commandos::ROTY_INF();
-
-			break;
-		}
-		case ROTZ_INF:
-		{
-			Commandos::ROTZ_INF();
-
-			break;
-		}
-		case LEFT_INF:
-		{
-			Commandos::LEFT_INF();
-
-			break;
-		}
-		case RIGHT_INF:
-		{
-			Commandos::RIGHT_INF();
-
-			break;
-		}
-		case UP_INF:
-		{
-			Commandos::UP_INF();
-
-			break;
-		}
-		case DOWN_INF:
-		{
-			Commandos::DOWN_INF();
-
-			break;
-		}
-		case MINUS_INF:
-		{
-			Commandos::MINUS_INF();
-
-			break;
-		}
-		case PLUS_INF:
-		{
-			Commandos::PLUS_INF();
-
-			break;
-		}
-		default:
-			flag = false;
-		}
-
-		if (flag)
-		{
-			Compute();    // вычисляем новые координаты
-
-			DrawPix();    // рисуем
-
-			flag = false;
-		}
-
-	} while (ch != ESC);
-
-	////you may know this from space invaders
-	//unsigned int rowBuffer[] =
+	//do
 	//{
-	//	0b0010000010000000,
-	//	0b0001000100000000,
-	//	0b0011111110000000,
-	//	0b0110111011000000,
-	//	0b1111111111100000,
-	//	0b1011111110100000,
-	//	0b1010000010100000,
-	//	0b0001101100000000
-	//};
+	//	(flag) ? (flag) : (flag = true);
+
+	//	std::cin >> message;
+
+	//	if ((comparison(message, "left") || comparison(message, "Left") || comparison(message, "LEFT")))
+	//		ch = LEFT;
+
+	//	else if ((comparison(message, "left_inf") || comparison(message, "Left_inf") || comparison(message, "LEFT_INF")))
+	//		ch = LEFT_INF;
+
+	//	else if ((comparison(message, "right") || comparison(message, "Right") || comparison(message, "RIGHT")))
+	//		ch = RIGHT;
+
+	//	else if ((comparison(message, "right_inf") || comparison(message, "Right_inf") || comparison(message, "RIGHT_INF")))
+	//		ch = RIGHT_INF;
+
+	//	else if ((comparison(message, "up") || comparison(message, "Up") || comparison(message, "UP")))
+	//		ch = UP;
+
+	//	else if ((comparison(message, "up_inf") || comparison(message, "Up_inf") || comparison(message, "UP_INF")))
+	//		ch = UP_INF;
+
+	//	else if ((comparison(message, "down") || comparison(message, "Down") || comparison(message, "DOWN")))
+	//		ch = DOWN;
+
+	//	else if ((comparison(message, "down_inf") || comparison(message, "Down_inf") || comparison(message, "DOWN_INF")))
+	//		ch = DOWN_INF;
+
+	//	else if ((comparison(message, "plus") || comparison(message, "Plus") || comparison(message, "PLUS")))
+	//		ch = PLUS;
+
+	//	else if ((comparison(message, "plus_inf") || comparison(message, "Plus_inf") || comparison(message, "PLUS_INF")))
+	//		ch = PLUS_INF;
+
+	//	else if ((comparison(message, "minus") || comparison(message, "Minus") || comparison(message, "MINUS")))
+	//		ch = MINUS;
+
+	//	else if ((comparison(message, "minus_inf") || comparison(message, "Minus_inf") || comparison(message, "MINUS_INF")))
+	//		ch = MINUS_INF;
+
+	//	else if ((comparison(message, "rotx") || comparison(message, "Rotx") || comparison(message, "ROTX")))
+	//		ch = ROTX;
+
+	//	else if ((comparison(message, "rotx_inf") || comparison(message, "Rotx_inf") || comparison(message, "ROTX_INF")))
+	//		ch = ROTX_INF;
+
+	//	else if ((comparison(message, "roty") || comparison(message, "Roty") || comparison(message, "ROTY")))
+	//		ch = ROTY;
+
+	//	else if ((comparison(message, "roty_inf") || comparison(message, "Roty_inf") || comparison(message, "ROTY_INF")))
+	//		ch = ROTY_INF;
+
+	//	else if ((comparison(message, "rotz") || comparison(message, "Rotz") || comparison(message, "ROTZ")))
+	//		ch = ROTZ;
+
+	//	else if ((comparison(message, "rotz_inf") || comparison(message, "Rotz_inf") || comparison(message, "ROTZ_INF")))
+	//		ch = ROTZ_INF;
+
+	//	else if ((comparison(message, "esc") || comparison(message, "Esc") || comparison(message, "ESC")))
+	//		ch = ESC;
+
+	//	switch (ch)
+	//	{
+	//	case LEFT:
+	//	{
+	//		Commandos::LEFT();
+	//		break;
+	//	}
+	//	case RIGHT:
+	//	{
+	//		Commandos::RIGHT();
+	//		break;
+	//	}
+	//	case UP:
+	//	{
+	//		Commandos::UP();
+	//		break;
+	//	}
+	//	case DOWN:
+	//	{
+	//		Commandos::DOWN();
+	//		break;
+	//	}
+	//	case PLUS:
+	//	{
+	//		Commandos::PLUS();
+	//		break;
+	//	}
+	//	case MINUS:
+	//	{
+	//		Commandos::MINUS();
+
+	//		break;
+	//	}
+	//	case ROTX:
+	//	{
+	//		Commandos::ROTX();
+
+	//		break;
+	//	}
+	//	case ROTY:
+	//	{
+	//		Commandos::ROTY();
+
+	//		break;
+	//	}
+	//	case ROTZ:
+	//	{
+	//		Commandos::ROTZ();
+
+	//		break;
+	//	}
+	//	case ROTX_INF:
+	//	{
+	//		Commandos::ROTX_INF();
+
+	//		break;
+	//	}
+	//	case ROTY_INF:
+	//	{
+	//		Commandos::ROTY_INF();
+
+	//		break;
+	//	}
+	//	case ROTZ_INF:
+	//	{
+	//		Commandos::ROTZ_INF();
+
+	//		break;
+	//	}
+	//	case LEFT_INF:
+	//	{
+	//		Commandos::LEFT_INF();
+
+	//		break;
+	//	}
+	//	case RIGHT_INF:
+	//	{
+	//		Commandos::RIGHT_INF();
+
+	//		break;
+	//	}
+	//	case UP_INF:
+	//	{
+	//		Commandos::UP_INF();
+
+	//		break;
+	//	}
+	//	case DOWN_INF:
+	//	{
+	//		Commandos::DOWN_INF();
+
+	//		break;
+	//	}
+	//	case MINUS_INF:
+	//	{
+	//		Commandos::MINUS_INF();
+
+	//		break;
+	//	}
+	//	case PLUS_INF:
+	//	{
+	//		Commandos::PLUS_INF();
+
+	//		break;
+	//	}
+	//	default:
+	//		flag = false;
+	//	}
+
+	//	if (flag)
+	//	{
+	//		Compute();    // вычисляем новые координаты
+
+	//		DrawPix();    // рисуем
+
+	//		flag = false;
+	//	}
+
+	//} while (ch != ESC);
+
+
+
+	//you may know this from space invaders
+	unsigned int rowBuffer[Turov_Vitaly::height];
+
+	// Копирование из bitMatrix в rowBuffer
+	for (int i = 0; i < Turov_Vitaly::height; i++)
+		rowBuffer[i] = Turov_Vitaly::bitMatrix[i];
 
 	if (DEBUG_ACTIVE > 0) {
 		cout << "Start with space invader animation" << endl;
 	}
 
+	while (1)
+	{
+		for (int shiftCounter = 0; 31 >= shiftCounter; shiftCounter++)
+		{
+			for (int rowCounter = 0; 7 >= rowCounter; rowCounter++)
+			{
+				// roll the 16bits...
+				// The information how to roll is from http://arduino.cc/forum/index.php?topic=124188.0 
+				rowBuffer[rowCounter] = ((rowBuffer[rowCounter] & 0x8000) ? 0x01 : 0x00) | (rowBuffer[rowCounter] << 1);
 
-
-	//while (1)
-	//{
-	//	for (int shiftCounter = 0; 31 >= shiftCounter; shiftCounter++)
-	//	{
-	//		for (int rowCounter = 0; 7 >= rowCounter; rowCounter++)
-	//		{
-	//			// roll the 16bits...
-	//			// The information how to roll is from http://arduino.cc/forum/index.php?topic=124188.0 
-	//			rowBuffer[rowCounter] = ((rowBuffer[rowCounter] & 0x8000) ? 0x01 : 0x00) | (rowBuffer[rowCounter] << 1);
-
-	//			// ...and then write them to the two devices
-	//			SetData(rowCounter + 1, char(rowBuffer[rowCounter]), 1);
-	//			SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 8), 2);
-	//			SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 16), 3);
-	//			SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 24), 4);
-	//		}
-	//		delay(100);
-	//	}
-	//}
+				// ...and then write them to the two devices
+				SetData(rowCounter + 1, char(rowBuffer[rowCounter]), 1);
+				SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 8), 2);
+				SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 16), 3);
+				SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 24), 4);
+			}
+			delay(100);
+		}
+	}
 }
