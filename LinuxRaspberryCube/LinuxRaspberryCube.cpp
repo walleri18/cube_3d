@@ -723,7 +723,7 @@ namespace GLOBAL {
 		{
 			(xElement[i] > xMax) ? (xMax = xElement[i]) : (false);
 
-			(yElement[i] > yMax) ? (yMax = yEalement[i]) : (false);
+			(yElement[i] > yMax) ? (yMax = yElement[i]) : (false);
 		}
 
 		// Расчитаем масштабирование
@@ -870,16 +870,16 @@ namespace GLOBAL {
 			for (int j = 0; j < (sizeof(char) * 8); j++)
 			{
 				// Первый экран
-				SetData(Digit[j], Turov_Vitaly::LED.one_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.one_matrix[j], i);
 
 				// Второй экран
-				SetData(Digit[j], Turov_Vitaly::LED.two_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.two_matrix[j], i);
 
 				// Третий экран
-				SetData(Digit[j], Turov_Vitaly::LED.three_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.three_matrix[j], i);
 
 				// Четвёртый экран
-				SetData(Digit[j], Turov_Vitaly::LED.four_matrix[j], i);
+				SetData(j+1, Turov_Vitaly::LED.four_matrix[j], i);
 			}
 	}
 }
