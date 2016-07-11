@@ -17,6 +17,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <cstring>
 //#include "max7219.h"
@@ -44,7 +45,7 @@ const char Digit[sizeof(char) * 8] = {	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
 //const char Digit2 = 0x03;
 //const char Digit3 = 0x04;
 //const char Digit4 = 0x05;
-//const char Digit5 = 0x06;
+//const char Digit5 = 0x06;LinuxRaspberryCube.cpp
 //const char Digit6 = 0x07;
 //const char Digit7 = 0x08;
 
@@ -1055,7 +1056,7 @@ void loop()
 	// вывести исходную фигуру
 	DrawPix();
 
-	int ch(INT_MAX);   // код клавиши
+	int ch;   // код клавиши
 	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
 	char message[100] = "\0";
 
