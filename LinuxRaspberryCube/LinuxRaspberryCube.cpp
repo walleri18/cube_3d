@@ -45,7 +45,7 @@ const char Digit[sizeof(char) * 8] = {	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
 //const char Digit2 = 0x03;
 //const char Digit3 = 0x04;
 //const char Digit4 = 0x05;
-//const char Digit5 = 0x06;LinuxRaspberryCube.cpp
+//const char Digit5 = 0x06;
 //const char Digit6 = 0x07;
 //const char Digit7 = 0x08;
 
@@ -723,7 +723,7 @@ namespace GLOBAL {
 		{
 			(xElement[i] > xMax) ? (xMax = xElement[i]) : (false);
 
-			(yElement[i] > yMax) ? (yMax = yElement[i]) : (false);
+			(yElement[i] > yMax) ? (yMax = yEalement[i]) : (false);
 		}
 
 		// Расчитаем масштабирование
