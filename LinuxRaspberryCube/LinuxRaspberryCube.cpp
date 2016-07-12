@@ -25,6 +25,12 @@
 #include <wiringPiSPI.h>
 #include <unistd.h>
 
+// Для работы с джостиком рассчитанный на 8 клавиш
+#include "joystick.hh"
+
+Joystick joystick("/dev/input/js0");
+JoystickEvent event;
+
 using namespace std;
 
 int DEBUG_ACTIVE = 0; // Global debug variable
@@ -37,17 +43,14 @@ int DEBUG_ACTIVE = 0; // Global debug variable
 // See Table 2 on page 7 in the Datasheet
 const char NoOp = 0x00;
 
-// Так удобнее. Можно работать прям в циле, а не в ручную
-const char Digit[sizeof(char) * 8] = {	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
-
-//const char Digit0 = 0x01;
-//const char Digit1 = 0x02;
-//const char Digit2 = 0x03;
-//const char Digit3 = 0x04;
-//const char Digit4 = 0x05;
-//const char Digit5 = 0x06;
-//const char Digit6 = 0x07;
-//const char Digit7 = 0x08;
+const char Digit0 = 0x01;
+const char Digit1 = 0x02;
+const char Digit2 = 0x03;
+const char Digit3 = 0x04;
+const char Digit4 = 0x05;
+const char Digit5 = 0x06;
+const char Digit6 = 0x07;
+const char Digit7 = 0x08;
 
 const char DecodeMode = 0x09;
 const char Intensity = 0x0A;
@@ -313,45 +316,45 @@ void setup()
 	/*
 		Видимо это для первого дисплея
 	*/
-	SetData(Digit[0], 0b10000000, 1);
-	SetData(Digit[1], 0b01000000, 1);
-	SetData(Digit[2], 0b00100000, 1);
-	SetData(Digit[3], 0b00010000, 1);
-	SetData(Digit[4], 0b00001000, 1);
-	SetData(Digit[5], 0b00000100, 1);
-	SetData(Digit[6], 0b00000010, 1);
-	SetData(Digit[7], 0b00000001, 1);
+	SetData(Digit0, 0b10000000, 1);
+	SetData(Digit1, 0b01000000, 1);
+	SetData(Digit2, 0b00100000, 1);
+	SetData(Digit3, 0b00010000, 1);
+	SetData(Digit4, 0b00001000, 1);
+	SetData(Digit5, 0b00000100, 1);
+	SetData(Digit6, 0b00000010, 1);
+	SetData(Digit7, 0b00000001, 1);
 
 	/*
 		А это для второго и так далее
 	*/
 
-	SetData(Digit[0], 0b00000001, 2);
-	SetData(Digit[1], 0b00000010, 2);
-	SetData(Digit[2], 0b00000100, 2);
-	SetData(Digit[3], 0b00001000, 2);
-	SetData(Digit[4], 0b00010000, 2);
-	SetData(Digit[5], 0b00100000, 2);
-	SetData(Digit[6], 0b01000000, 2);
-	SetData(Digit[7], 0b10000000, 2);
+	SetData(Digit0, 0b00000001, 2);
+	SetData(Digit1, 0b00000010, 2);
+	SetData(Digit2, 0b00000100, 2);
+	SetData(Digit3, 0b00001000, 2);
+	SetData(Digit4, 0b00010000, 2);
+	SetData(Digit5, 0b00100000, 2);
+	SetData(Digit6, 0b01000000, 2);
+	SetData(Digit7, 0b10000000, 2);
 
-	SetData(Digit[0], 0b10000000, 3);
-	SetData(Digit[1], 0b01000000, 3);
-	SetData(Digit[2], 0b00100000, 3);
-	SetData(Digit[3], 0b00010000, 3);
-	SetData(Digit[4], 0b00001000, 3);
-	SetData(Digit[5], 0b00000100, 3);
-	SetData(Digit[6], 0b00000010, 3);
-	SetData(Digit[7], 0b00000001, 3);
+	SetData(Digit0, 0b10000000, 3);
+	SetData(Digit1, 0b01000000, 3);
+	SetData(Digit2, 0b00100000, 3);
+	SetData(Digit3, 0b00010000, 3);
+	SetData(Digit4, 0b00001000, 3);
+	SetData(Digit5, 0b00000100, 3);
+	SetData(Digit6, 0b00000010, 3);
+	SetData(Digit7, 0b00000001, 3);
 
-	SetData(Digit[0], 0b10000000, 4);
-	SetData(Digit[1], 0b01000000, 4);
-	SetData(Digit[2], 0b00100000, 4);
-	SetData(Digit[3], 0b00010000, 4);
-	SetData(Digit[4], 0b00001000, 4);
-	SetData(Digit[5], 0b00000100, 4);
-	SetData(Digit[6], 0b00000010, 4);
-	SetData(Digit[7], 0b00000001, 4);
+	SetData(Digit0, 0b10000000, 4);
+	SetData(Digit1, 0b01000000, 4);
+	SetData(Digit2, 0b00100000, 4);
+	SetData(Digit3, 0b00010000, 4);
+	SetData(Digit4, 0b00001000, 4);
+	SetData(Digit5, 0b00000100, 4);
+	SetData(Digit6, 0b00000010, 4);
+	SetData(Digit7, 0b00000001, 4);
 
 	/*
 		Они ведь так располагаются?
@@ -362,16 +365,58 @@ void setup()
 
 	if (DEBUG_ACTIVE > 0) 
 	{
-		cout << "Delay 1000" << endl;
+		cout << "Delay 500" << endl;
 	}
 
-	delay(1000);
+	delay(500);
 
 }
 
 /******************************************************************************
 ***   Моя программа                                                         ***
 ******************************************************************************/
+// simplified display where 1 is lit and 0 is not lit
+// x,y
+char display[16][16];
+
+void clean() {
+	for (int i = 0;i<16;i++) {
+		for (int j = 0;j<16;j++) {
+			display[i][j] = 0;
+		}
+	}
+}
+
+void show() {
+	// we have 4 displays, this is row buffer for each cycle
+	char row[4];
+	// cycle through rows
+	for (int rowCounter = 0; rowCounter<8; ++rowCounter)
+	{
+		row[0] = row[1] = row[2] = row[3] = 0;
+
+		for (int i = 0; i<8; ++i)
+		{
+			row[0] = row[0] << 1;
+			row[0] |= display[i][rowCounter];
+
+			row[1] = row[1] << 1;
+			row[1] |= display[i + 8][rowCounter];
+
+			row[2] = row[2] << 1;
+			row[2] |= display[i + 8][rowCounter + 8];
+
+			row[3] = row[3] << 1;
+			row[3] |= display[i][rowCounter + 8];
+		}
+
+		SetData(rowCounter + 1, row[0], 1);
+		SetData(rowCounter + 1, row[1], 2);
+		SetData(rowCounter + 1, row[2], 3);
+		SetData(rowCounter + 1, row[3], 4);
+	}
+}
+
 enum MessageID : int
 {
 	ESC,
@@ -474,114 +519,121 @@ namespace GLOBAL {
 	// Перевод матрицы в удобный вид для светодиодов
 	void transformingBitMatrix()
 	{
-		// Массивы единиц
-		unsigned char massiv_one[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
-		unsigned char massiv_two[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
-		unsigned char massiv_three[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
-		unsigned char massiv_four[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		//// Массивы единиц
+		//unsigned char massiv_one[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		//unsigned char massiv_two[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		//unsigned char massiv_three[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
+		//unsigned char massiv_four[(int)(Turov_Vitaly::height / 2.0)][(sizeof(short) * 8) / 2];
 
-		// Буферная единица
-		unsigned char tmp_one(1);
+		//// Буферная единица
+		//unsigned char tmp_one(1);
 
-		// Преобразование булевой матрицы к числовым
-		for (int i = 0; i < (Turov_Vitaly::height / 2); i++)
-			for (int j = 0; j < ((sizeof(short) * 8) / 2); j++)
-			{
-				// Первый дисплей
-				if (Turov_Vitaly::matrix[i][j])
-				{
-					tmp_one = 1;
+		//// Преобразование булевой матрицы к числовым
+		//for (int i = 0; i < (Turov_Vitaly::height / 2); i++)
+		//	for (int j = 0; j < ((sizeof(short) * 8) / 2); j++)
+		//	{
+		//		// Первый дисплей
+		//		if (Turov_Vitaly::matrix[i][j])
+		//		{
+		//			tmp_one = 1;
 
-					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+		//			tmp_one = tmp_one << (sizeof(char) * 8 - j);
 
-					massiv_one[i][j] = tmp_one;
-				}
+		//			massiv_one[i][j] = tmp_one;
+		//		}
 
-				else
-					massiv_one[i][j] = 0;
+		//		else
+		//			massiv_one[i][j] = 0;
 
-				// Второй дисплей
-				if (Turov_Vitaly::matrix[i][j + sizeof(char) * 8])
-				{
-					tmp_one = 1;
+		//		// Второй дисплей
+		//		if (Turov_Vitaly::matrix[i][j + sizeof(char) * 8])
+		//		{
+		//			tmp_one = 1;
 
-					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+		//			tmp_one = tmp_one << (sizeof(char) * 8 - j);
 
-					massiv_two[i][j] = tmp_one;
-				}
+		//			massiv_two[i][j] = tmp_one;
+		//		}
 
-				else
-					massiv_two[i][j] = 0;
+		//		else
+		//			massiv_two[i][j] = 0;
 
-				// Третий дисплей
-				if (Turov_Vitaly::matrix[i + sizeof(char) * 8][j])
-				{
-					tmp_one = 1;
+		//		// Третий дисплей
+		//		if (Turov_Vitaly::matrix[i + sizeof(char) * 8][j])
+		//		{
+		//			tmp_one = 1;
 
-					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+		//			tmp_one = tmp_one << (sizeof(char) * 8 - j);
 
-					massiv_three[i][j] = tmp_one;
-				}
+		//			massiv_three[i][j] = tmp_one;
+		//		}
 
-				else
-					massiv_three[i][j] = 0;
+		//		else
+		//			massiv_three[i][j] = 0;
 
-				// Четвёртый дисплей
-				if (Turov_Vitaly::matrix[i + sizeof(char) * 8][j + sizeof(char) * 8])
-				{
-					tmp_one = 1;
+		//		// Четвёртый дисплей
+		//		if (Turov_Vitaly::matrix[i + sizeof(char) * 8][j + sizeof(char) * 8])
+		//		{
+		//			tmp_one = 1;
 
-					tmp_one = tmp_one << (sizeof(char) * 8 - j);
+		//			tmp_one = tmp_one << (sizeof(char) * 8 - j);
 
-					massiv_four[i][j] = tmp_one;
-				}
+		//			massiv_four[i][j] = tmp_one;
+		//		}
 
-				else
-					massiv_four[i][j] = 0;
-			}
+		//		else
+		//			massiv_four[i][j] = 0;
+		//	}
 
-		// Слияние столбцов
-		for (int i = 0; i < (Turov_Vitaly::height / 2); i++)
-			for (int j = 0; j < ((sizeof(short) * 8) / 2); j++)
-			{
-				Turov_Vitaly::LED.one_matrix[i] |= massiv_one[i][j];
-				Turov_Vitaly::LED.two_matrix[i] |= massiv_two[i][j];
-				Turov_Vitaly::LED.three_matrix[i] |= massiv_three[i][j];
-				Turov_Vitaly::LED.four_matrix[i] |= massiv_four[i][j];
-			}
+		//// Слияние столбцов
+		//for (int i = 0; i < (Turov_Vitaly::height / 2); i++)
+		//	for (int j = 0; j < ((sizeof(short) * 8) / 2); j++)
+		//	{
+		//		Turov_Vitaly::LED.one_matrix[i] |= massiv_one[i][j];
+		//		Turov_Vitaly::LED.two_matrix[i] |= massiv_two[i][j];
+		//		Turov_Vitaly::LED.three_matrix[i] |= massiv_three[i][j];
+		//		Turov_Vitaly::LED.four_matrix[i] |= massiv_four[i][j];
+		//	}
 
 
-		// Массив единиц
-		unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
+		//// Массив единиц
+		//unsigned short int massiv[Turov_Vitaly::height][sizeof(short) * 8];
 
-		// Буферная единица
-		unsigned short int tmp_one(1);
+		//// Буферная единица
+		//unsigned short int tmp_one(1);
 
-		// Преобразование булевой матрици к числовой
-		for (int i = 0; i < Turov_Vitaly::height; i++)
-		{
-			for (int j = 0; j < sizeof(short) * 8; j++)
-			{
-				if (Turov_Vitaly::matrix[i][j])
-				{
-					tmp_one = 1;
+		//// Преобразование булевой матрици к числовой
+		//for (int i = 0; i < Turov_Vitaly::height; i++)
+		//{
+		//	for (int j = 0; j < sizeof(short) * 8; j++)
+		//	{
+		//		if (Turov_Vitaly::matrix[i][j])
+		//		{
+		//			tmp_one = 1;
 
-					tmp_one = tmp_one << (sizeof(short) * 8 - j);
+		//			tmp_one = tmp_one << (sizeof(short) * 8 - j);
 
-					massiv[i][j] = tmp_one;
-				}
+		//			massiv[i][j] = tmp_one;
+		//		}
 
-				else
-				{
-					massiv[i][j] = 0;
-				}
-			}
-		}
+		//		else
+		//		{
+		//			massiv[i][j] = 0;
+		//		}
+		//	}
+		//}
 
-		// Слияние столбцов
-		for (int i = 0; i < Turov_Vitaly::height; i++)
-			for (int j = 0; j < sizeof(short) * 8; j++)
-				Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
+		//// Слияние столбцов
+		//for (int i = 0; i < Turov_Vitaly::height; i++)
+		//	for (int j = 0; j < sizeof(short) * 8; j++)
+		//		Turov_Vitaly::bitMatrix[i] |= massiv[i][j];
+
+		/*
+			Попробуем отрисовать
+		*/
+		for (int i = 0; i < 16; i++)
+			for (int j = 0; j < 16; j++)
+				display[i][j] = (char)(Turov_Vitaly::matrix[i][j]);
 	}
 
 	// Сравнение слов
@@ -1091,229 +1143,217 @@ using namespace GLOBAL;
 
 void loop()
 {
+	/*
+		Пока без джостика.
+		Пусть хотя бы корректно отображается
+	*/
+
+	// Clear display buffer
+	clean();
+
+	// Начало наших вычсилений
+
 	// Проецирование
 	Compute();
 
 	// Вывести исходную фигуру
 	DrawPix();
 
-	//int ch;   // код клавиши
-	//bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
-	//char message[100] = "\0";
+	int ch;   // код клавиши
+	bool flag = true;  // признак того, что фигура имеется и ее надо перерисовать
+	char message[100] = "\0";
 
-	//do
-	//{
-	//	(flag) ? (flag) : (flag = true);
+	do
+	{
+		(flag) ? (flag) : (flag = true);
 
-	//	std::cin >> message;
+		std::cin >> message;
 
-	//	if ((comparison(message, "left") || comparison(message, "Left") || comparison(message, "LEFT")))
-	//		ch = LEFT;
+		if ((comparison(message, "left") || comparison(message, "Left") || comparison(message, "LEFT")))
+			ch = LEFT;
 
-	//	else if ((comparison(message, "left_inf") || comparison(message, "Left_inf") || comparison(message, "LEFT_INF")))
-	//		ch = LEFT_INF;
+		else if ((comparison(message, "left_inf") || comparison(message, "Left_inf") || comparison(message, "LEFT_INF")))
+			ch = LEFT_INF;
 
-	//	else if ((comparison(message, "right") || comparison(message, "Right") || comparison(message, "RIGHT")))
-	//		ch = RIGHT;
+		else if ((comparison(message, "right") || comparison(message, "Right") || comparison(message, "RIGHT")))
+			ch = RIGHT;
 
-	//	else if ((comparison(message, "right_inf") || comparison(message, "Right_inf") || comparison(message, "RIGHT_INF")))
-	//		ch = RIGHT_INF;
+		else if ((comparison(message, "right_inf") || comparison(message, "Right_inf") || comparison(message, "RIGHT_INF")))
+			ch = RIGHT_INF;
 
-	//	else if ((comparison(message, "up") || comparison(message, "Up") || comparison(message, "UP")))
-	//		ch = UP;
+		else if ((comparison(message, "up") || comparison(message, "Up") || comparison(message, "UP")))
+			ch = UP;
 
-	//	else if ((comparison(message, "up_inf") || comparison(message, "Up_inf") || comparison(message, "UP_INF")))
-	//		ch = UP_INF;
+		else if ((comparison(message, "up_inf") || comparison(message, "Up_inf") || comparison(message, "UP_INF")))
+			ch = UP_INF;
 
-	//	else if ((comparison(message, "down") || comparison(message, "Down") || comparison(message, "DOWN")))
-	//		ch = DOWN;
+		else if ((comparison(message, "down") || comparison(message, "Down") || comparison(message, "DOWN")))
+			ch = DOWN;
 
-	//	else if ((comparison(message, "down_inf") || comparison(message, "Down_inf") || comparison(message, "DOWN_INF")))
-	//		ch = DOWN_INF;
+		else if ((comparison(message, "down_inf") || comparison(message, "Down_inf") || comparison(message, "DOWN_INF")))
+			ch = DOWN_INF;
 
-	//	else if ((comparison(message, "plus") || comparison(message, "Plus") || comparison(message, "PLUS")))
-	//		ch = PLUS;
+		else if ((comparison(message, "plus") || comparison(message, "Plus") || comparison(message, "PLUS")))
+			ch = PLUS;
 
-	//	else if ((comparison(message, "plus_inf") || comparison(message, "Plus_inf") || comparison(message, "PLUS_INF")))
-	//		ch = PLUS_INF;
+		else if ((comparison(message, "plus_inf") || comparison(message, "Plus_inf") || comparison(message, "PLUS_INF")))
+			ch = PLUS_INF;
 
-	//	else if ((comparison(message, "minus") || comparison(message, "Minus") || comparison(message, "MINUS")))
-	//		ch = MINUS;
+		else if ((comparison(message, "minus") || comparison(message, "Minus") || comparison(message, "MINUS")))
+			ch = MINUS;
 
-	//	else if ((comparison(message, "minus_inf") || comparison(message, "Minus_inf") || comparison(message, "MINUS_INF")))
-	//		ch = MINUS_INF;
+		else if ((comparison(message, "minus_inf") || comparison(message, "Minus_inf") || comparison(message, "MINUS_INF")))
+			ch = MINUS_INF;
 
-	//	else if ((comparison(message, "rotx") || comparison(message, "Rotx") || comparison(message, "ROTX")))
-	//		ch = ROTX;
+		else if ((comparison(message, "rotx") || comparison(message, "Rotx") || comparison(message, "ROTX")))
+			ch = ROTX;
 
-	//	else if ((comparison(message, "rotx_inf") || comparison(message, "Rotx_inf") || comparison(message, "ROTX_INF")))
-	//		ch = ROTX_INF;
+		else if ((comparison(message, "rotx_inf") || comparison(message, "Rotx_inf") || comparison(message, "ROTX_INF")))
+			ch = ROTX_INF;
 
-	//	else if ((comparison(message, "roty") || comparison(message, "Roty") || comparison(message, "ROTY")))
-	//		ch = ROTY;
+		else if ((comparison(message, "roty") || comparison(message, "Roty") || comparison(message, "ROTY")))
+			ch = ROTY;
 
-	//	else if ((comparison(message, "roty_inf") || comparison(message, "Roty_inf") || comparison(message, "ROTY_INF")))
-	//		ch = ROTY_INF;
+		else if ((comparison(message, "roty_inf") || comparison(message, "Roty_inf") || comparison(message, "ROTY_INF")))
+			ch = ROTY_INF;
 
-	//	else if ((comparison(message, "rotz") || comparison(message, "Rotz") || comparison(message, "ROTZ")))
-	//		ch = ROTZ;
+		else if ((comparison(message, "rotz") || comparison(message, "Rotz") || comparison(message, "ROTZ")))
+			ch = ROTZ;
 
-	//	else if ((comparison(message, "rotz_inf") || comparison(message, "Rotz_inf") || comparison(message, "ROTZ_INF")))
-	//		ch = ROTZ_INF;
+		else if ((comparison(message, "rotz_inf") || comparison(message, "Rotz_inf") || comparison(message, "ROTZ_INF")))
+			ch = ROTZ_INF;
 
-	//	else if ((comparison(message, "esc") || comparison(message, "Esc") || comparison(message, "ESC")))
-	//		ch = ESC;
+		else if ((comparison(message, "esc") || comparison(message, "Esc") || comparison(message, "ESC")))
+			ch = ESC;
 
-	//	switch (ch)
-	//	{
-	//	case LEFT:
-	//	{
-	//		Commandos::LEFT();
-	//		break;
-	//	}
-	//	case RIGHT:
-	//	{
-	//		Commandos::RIGHT();
-	//		break;
-	//	}
-	//	case UP:
-	//	{
-	//		Commandos::UP();
-	//		break;
-	//	}
-	//	case DOWN:
-	//	{
-	//		Commandos::DOWN();
-	//		break;
-	//	}
-	//	case PLUS:
-	//	{
-	//		Commandos::PLUS();
-	//		break;
-	//	}
-	//	case MINUS:
-	//	{
-	//		Commandos::MINUS();
+		switch (ch)
+		{
+		case LEFT:
+		{
+			Commandos::LEFT();
+			break;
+		}
+		case RIGHT:
+		{
+			Commandos::RIGHT();
+			break;
+		}
+		case UP:
+		{
+			Commandos::UP();
+			break;
+		}
+		case DOWN:
+		{
+			Commandos::DOWN();
+			break;
+		}
+		case PLUS:
+		{
+			Commandos::PLUS();
+			break;
+		}
+		case MINUS:
+		{
+			Commandos::MINUS();
 
-	//		break;
-	//	}
-	//	case ROTX:
-	//	{
-	//		Commandos::ROTX();
+			break;
+		}
+		case ROTX:
+		{
+			Commandos::ROTX();
 
-	//		break;
-	//	}
-	//	case ROTY:
-	//	{
-	//		Commandos::ROTY();
+			break;
+		}
+		case ROTY:
+		{
+			Commandos::ROTY();
 
-	//		break;
-	//	}
-	//	case ROTZ:
-	//	{
-	//		Commandos::ROTZ();
+			break;
+		}
+		case ROTZ:
+		{
+			Commandos::ROTZ();
 
-	//		break;
-	//	}
-	//	case ROTX_INF:
-	//	{
-	//		Commandos::ROTX_INF();
+			break;
+		}
+		case ROTX_INF:
+		{
+			Commandos::ROTX_INF();
 
-	//		break;
-	//	}
-	//	case ROTY_INF:
-	//	{
-	//		Commandos::ROTY_INF();
+			break;
+		}
+		case ROTY_INF:
+		{
+			Commandos::ROTY_INF();
 
-	//		break;
-	//	}
-	//	case ROTZ_INF:
-	//	{
-	//		Commandos::ROTZ_INF();
+			break;
+		}
+		case ROTZ_INF:
+		{
+			Commandos::ROTZ_INF();
 
-	//		break;
-	//	}
-	//	case LEFT_INF:
-	//	{
-	//		Commandos::LEFT_INF();
+			break;
+		}
+		case LEFT_INF:
+		{
+			Commandos::LEFT_INF();
 
-	//		break;
-	//	}
-	//	case RIGHT_INF:
-	//	{
-	//		Commandos::RIGHT_INF();
+			break;
+		}
+		case RIGHT_INF:
+		{
+			Commandos::RIGHT_INF();
 
-	//		break;
-	//	}
-	//	case UP_INF:
-	//	{
-	//		Commandos::UP_INF();
+			break;
+		}
+		case UP_INF:
+		{
+			Commandos::UP_INF();
 
-	//		break;
-	//	}
-	//	case DOWN_INF:
-	//	{
-	//		Commandos::DOWN_INF();
+			break;
+		}
+		case DOWN_INF:
+		{
+			Commandos::DOWN_INF();
 
-	//		break;
-	//	}
-	//	case MINUS_INF:
-	//	{
-	//		Commandos::MINUS_INF();
+			break;
+		}
+		case MINUS_INF:
+		{
+			Commandos::MINUS_INF();
 
-	//		break;
-	//	}
-	//	case PLUS_INF:
-	//	{
-	//		Commandos::PLUS_INF();
+			break;
+		}
+		case PLUS_INF:
+		{
+			Commandos::PLUS_INF();
 
-	//		break;
-	//	}
-	//	default:
-	//		flag = false;
-	//	}
+			break;
+		}
+		default:
+			flag = false;
+		}
 
-	//	if (flag)
-	//	{
-	//		Compute();    // вычисляем новые координаты
+		if (flag)
+		{
+			Compute();    // вычисляем новые координаты
 
-	//		DrawPix();    // рисуем
+			DrawPix();    // рисуем
 
-	//		flag = false;
-	//	}
+			// Show results for some time
+			show();
+			delay(100);
 
-	//} while (ch != ESC);
+			flag = false;
+		}
 
-
-
-	//you may know this from space invaders
-	unsigned int rowBuffer[Turov_Vitaly::height];
-
-	// Копирование из bitMatrix в rowBuffer
-	for (int i = 0; i < Turov_Vitaly::height; i++)
-		rowBuffer[i] = Turov_Vitaly::bitMatrix[i];
+	} while (ch != ESC);
 
 	if (DEBUG_ACTIVE > 0) {
 		cout << "Start with space invader animation" << endl;
 	}
 
-	while (1)
-	{
-		for (int shiftCounter = 0; 31 >= shiftCounter; shiftCounter++)
-		{
-			for (int rowCounter = 0; 7 >= rowCounter; rowCounter++)
-			{
-				// roll the 16bits...
-				// The information how to roll is from http://arduino.cc/forum/index.php?topic=124188.0 
-				rowBuffer[rowCounter] = ((rowBuffer[rowCounter] & 0x8000) ? 0x01 : 0x00) | (rowBuffer[rowCounter] << 1);
-
-				// ...and then write them to the two devices
-				SetData(rowCounter + 1, char(rowBuffer[rowCounter]), 1);
-				SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 8), 2);
-				SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 16), 3);
-				SetData(rowCounter + 1, char(rowBuffer[rowCounter] >> 24), 4);
-			}
-			delay(100);
-		}
+	
 	}
 }
