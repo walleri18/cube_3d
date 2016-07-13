@@ -655,6 +655,8 @@ namespace GLOBAL {
 	void clearMatrix()
 	{
 		system("clear");
+		
+		::clear();
 
 		for (int i = 0; i < Turov_Vitaly::height; i++)
 			for (int j = 0; j < Turov_Vitaly::width; j++)
@@ -836,7 +838,7 @@ namespace GLOBAL {
 	// Рисование кубика
 	void DrawPix()
 	{
-		// Предварительная очистка матрицы (экрана)
+	// Предварительная очистка матрицы (экрана)
 		clearMatrix();
 
 		int x(0), y(0), countLine(0);
@@ -955,7 +957,7 @@ namespace GLOBAL {
 		transformingBitMatrix();
 
 		// Вывод матрицы на светодиоды
-		for (int i = 1; i <= 4; i++)
+		/*for (int i = 1; i <= 4; i++)
 			for (int j = 0; j < (sizeof(char) * 8); j++)
 			{
 				/*
@@ -974,6 +976,11 @@ namespace GLOBAL {
 				// Четвёртый экран
 				SetData(j+1, Turov_Vitaly::LED.four_matrix[j], i);
 			}
+		*/
+		
+		// Show results for some time
+		::show();
+		delay(100);	
 	}
 }
 
@@ -1340,10 +1347,6 @@ void loop()
 			Compute();    // вычисляем новые координаты
 
 			DrawPix();    // рисуем
-
-			// Show results for some time
-			show();
-			delay(100);
 
 			flag = false;
 		}
