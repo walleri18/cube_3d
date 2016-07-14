@@ -1,15 +1,23 @@
 #include "Core.h"
-#include <cstring>
-#include <cmath>
+#include <math.h>
 
 // Глобальное пространство имён со всеми функциями построения
 namespace GLOBAL 
 {
+        int len(char *str)
+        {
+            int line(0);
+            
+            for (; str[line] != '\0'; line++);
+            
+            return line;
+        }
+
 	// Сравнение слов (так как не корректно работает strcmp)
 	bool comparison(char *str_one, char *str_two)
 	{
 		// Минимальная длина 
-		int border = (strlen(str_one) < strlen(str_two)) ? (strlen(str_one)) : (strlen(str_two));
+		int border = (len(str_one) < len(str_two)) ? (len(str_one)) : (len(str_two));
 
 		for (int i = 0; i <= border; i++)
 		{
@@ -36,7 +44,7 @@ namespace GLOBAL
 		A = sY - y0;
 		B = x0 - sX;
 
-		(abs(A) > abs(B)) ? (sign = 1) : (sign = -1);
+		(ABS(A) > ABS(B)) ? (sign = 1) : (sign = -1);
 
 		int signa, signb;
 

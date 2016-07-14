@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 	for (int i = 0;i<argc;i++)
 	{
 
-		if (strcmp(argv[i], "-init") == 0)
+		if (GLOBAL::comparison(argv[i], (char*)"-init") == 0)
 		{
 			initOnly = 1;
 		}
@@ -320,13 +320,15 @@ void show()
 	}
 }
 
+using namespace GLOBAL;
+
 void loop()
 {
 	// Расчёт для отображения
-	GLOBAL::Compute();
+	Compute();
 
 	// Отрисовка куба на виртуальном экране
-	GLOBAL::DrawPix();
+	DrawPix();
 
 	// Заполнение матрицы для вывода на светодиоды
 	SetMatrix();
@@ -348,63 +350,63 @@ void loop()
 		Пока с джостиком не разберусь.
 	*/
 	// Получаем команду с консоли
-	std::cin >> message;
+	cin >> message;
 
-	if ((GLOBAL::comparison(message, "left") || GLOBAL::comparison(message, "Left") || GLOBAL::comparison(message, "LEFT")))
+	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")))
 		ch = LEFT;
 
-	else if ((GLOBAL::comparison(message, "left_inf") || GLOBAL::comparison(message, "Left_inf") || GLOBAL::comparison(message, "LEFT_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"left_inf") || GLOBAL::comparison(message, (char*)"Left_inf") || GLOBAL::comparison(message, (char*)"LEFT_INF")))
 		ch = LEFT_INF;
 
-	else if ((GLOBAL::comparison(message, "right") || GLOBAL::comparison(message, "Right") || GLOBAL::comparison(message, "RIGHT")))
+	else if ((GLOBAL::comparison(message, (char*)"right") || GLOBAL::comparison(message, (char*)"Right") || GLOBAL::comparison(message, (char*)"RIGHT")))
 		ch = RIGHT;
 
-	else if ((GLOBAL::comparison(message, "right_inf") || GLOBAL::comparison(message, "Right_inf") || GLOBAL::comparison(message, "RIGHT_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"right_inf") || GLOBAL::comparison(message, (char*)"Right_inf") || GLOBAL::comparison(message, (char*)"RIGHT_INF")))
 		ch = RIGHT_INF;
 
-	else if ((GLOBAL::comparison(message, "up") || GLOBAL::comparison(message, "Up") || GLOBAL::comparison(message, "UP")))
+	else if ((GLOBAL::comparison(message, (char*)"up") || GLOBAL::comparison(message, (char*)"Up") || GLOBAL::comparison(message, (char*)"UP")))
 		ch = UP;
 
-	else if ((GLOBAL::comparison(message, "up_inf") || GLOBAL::comparison(message, "Up_inf") || GLOBAL::comparison(message, "UP_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"up_inf") || GLOBAL::comparison(message, (char*)"Up_inf") || GLOBAL::comparison(message, (char*)"UP_INF")))
 		ch = UP_INF;
 
-	else if ((GLOBAL::comparison(message, "down") || GLOBAL::comparison(message, "Down") || GLOBAL::comparison(message, "DOWN")))
+	else if ((GLOBAL::comparison(message, (char*)"down") || GLOBAL::comparison(message, (char*)"Down") || GLOBAL::comparison(message, (char*)"DOWN")))
 		ch = DOWN;
 
-	else if ((GLOBAL::comparison(message, "down_inf") || GLOBAL::comparison(message, "Down_inf") || GLOBAL::comparison(message, "DOWN_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"down_inf") || GLOBAL::comparison(message, (char*)"Down_inf") || GLOBAL::comparison(message, (char*)"DOWN_INF")))
 		ch = DOWN_INF;
 
-	else if ((GLOBAL::comparison(message, "plus") || GLOBAL::comparison(message, "Plus") || GLOBAL::comparison(message, "PLUS")))
+	else if ((GLOBAL::comparison(message, (char*)"plus") || GLOBAL::comparison(message, (char*)"Plus") || GLOBAL::comparison(message, (char*)"PLUS")))
 		ch = PLUS;
 
-	else if ((GLOBAL::comparison(message, "plus_inf") || GLOBAL::comparison(message, "Plus_inf") || GLOBAL::comparison(message, "PLUS_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"plus_inf") || GLOBAL::comparison(message, (char*)"Plus_inf") || GLOBAL::comparison(message, (char*)"PLUS_INF")))
 		ch = PLUS_INF;
 
-	else if ((GLOBAL::comparison(message, "minus") || GLOBAL::comparison(message, "Minus") || GLOBAL::comparison(message, "MINUS")))
+	else if ((GLOBAL::comparison(message, (char*)"minus") || GLOBAL::comparison(message, (char*)"Minus") || GLOBAL::comparison(message, (char*)"MINUS")))
 		ch = MINUS;
 
-	else if ((GLOBAL::comparison(message, "minus_inf") || GLOBAL::comparison(message, "Minus_inf") || GLOBAL::comparison(message, "MINUS_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"minus_inf") || GLOBAL::comparison(message, (char*)"Minus_inf") || GLOBAL::comparison(message, (char*)"MINUS_INF")))
 		ch = MINUS_INF;
 
-	else if ((GLOBAL::comparison(message, "rotx") || GLOBAL::comparison(message, "Rotx") || GLOBAL::comparison(message, "ROTX")))
+	else if ((GLOBAL::comparison(message, (char*)"rotx") || GLOBAL::comparison(message, (char*)"Rotx") || GLOBAL::comparison(message, (char*)"ROTX")))
 		ch = ROTX;
 
-	else if ((GLOBAL::comparison(message, "rotx_inf") || GLOBAL::comparison(message, "Rotx_inf") || GLOBAL::comparison(message, "ROTX_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"rotx_inf") || GLOBAL::comparison(message, (char*)"Rotx_inf") || GLOBAL::comparison(message, (char*)"ROTX_INF")))
 		ch = ROTX_INF;
 
-	else if ((GLOBAL::comparison(message, "roty") || GLOBAL::comparison(message, "Roty") || GLOBAL::comparison(message, "ROTY")))
+	else if ((GLOBAL::comparison(message, (char*)"roty") || GLOBAL::comparison(message, (char*)"Roty") || GLOBAL::comparison(message, (char*)"ROTY")))
 		ch = ROTY;
 
-	else if ((GLOBAL::comparison(message, "roty_inf") || GLOBAL::comparison(message, "Roty_inf") || GLOBAL::comparison(message, "ROTY_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"roty_inf") || GLOBAL::comparison(message, (char*)"Roty_inf") || GLOBAL::comparison(message, (char*)"ROTY_INF")))
 		ch = ROTY_INF;
 
-	else if ((GLOBAL::comparison(message, "rotz") || GLOBAL::comparison(message, "Rotz") || GLOBAL::comparison(message, "ROTZ")))
+	else if ((GLOBAL::comparison(message, (char*)"rotz") || GLOBAL::comparison(message, (char*)"Rotz") || GLOBAL::comparison(message, (char*)"ROTZ")))
 		ch = ROTZ;
 
-	else if ((GLOBAL::comparison(message, "rotz_inf") || GLOBAL::comparison(message, "Rotz_inf") || GLOBAL::comparison(message, "ROTZ_INF")))
+	else if ((GLOBAL::comparison(message, (char*)"rotz_inf") || GLOBAL::comparison(message, (char*)"Rotz_inf") || GLOBAL::comparison(message, (char*)"ROTZ_INF")))
 		ch = ROTZ_INF;
 
-	else if ((GLOBAL::comparison(message, "esc") || GLOBAL::comparison(message, "Esc") || GLOBAL::comparison(message, "ESC")))
+	else if ((GLOBAL::comparison(message, (char*)"esc") || GLOBAL::comparison(message, (char*)"Esc") || GLOBAL::comparison(message, (char*)"ESC")))
 		ch = ESC;
 
 	switch (ch)

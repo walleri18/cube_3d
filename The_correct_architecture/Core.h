@@ -1,19 +1,12 @@
-#pragma once
+#ifndef _CORE_H_
+
+#define _CORE_H_
+
 #define _USE_MATH_DEFINES
 // Математическое округление
 // Просто было лень искать где-то чужое
 #define CEIL(X) ((int)(X + 0.5))
-
-// Прототип функции поиска размера строки
-size_t strlen(char*);
-
-// Прототип нахождение модуля числа
-int abs(int);
-long abs(long);
-long long abs(long long);
-double abs(double);
-long double abs(long double);
-float abs(float);
+#define ABS(X) (((X) > 0) ? ((X)) : (-(X)))
 
 // Перечисление с доступными типами команд
 enum MessageID
@@ -94,6 +87,8 @@ namespace Turov_Vitaly
 // Глобальное пространство имён со всеми функциями построения
 namespace GLOBAL 
 {
+        int len(char*);
+
 	// Сравнение слов (так как не корректно работает strcmp)
 	bool comparison(char*, char *);
 
@@ -189,3 +184,5 @@ namespace Commandos
 	// Функция бесконечного увеличения масштаба
 	void PLUS_INF();
 }
+
+#endif
