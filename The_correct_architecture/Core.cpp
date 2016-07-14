@@ -1,5 +1,47 @@
-#include "Core.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
+#include <string.h>
+#include "Core.h"
+
+// width - столбцы, ширина
+// height - строки, высота
+#define width 16
+#define height 16
+
+// Матрица отображения
+bool matrix[16][16];
+
+// Пространство имён с главными глобальными "объектами"
+namespace Turov_Vitaly 
+{
+	// Количество вершин куба
+	const int size = 8;
+
+	// Исходные координаты куба
+	const int pix[size][3] = { { -25, -25, -25 },{ 25, -25, -25 },{ 25, 25, -25 },{ -25, 25, -25 },
+	{ -25, -25, 25 },{ 25, -25, 25 },{ 25, 25, 25 },{ -25, 25, 25 } };
+
+	// Преобразованные координаты куба
+	int newpix[size][3];
+
+	/*
+		sX, sY - спроецированные координаты
+		X, Y, Z - длина сторон спроецированных на координатные линии
+	*/
+	int X, Y, Z, sX, sY;
+
+	// Углы поворота по X,Y,Z в градусах
+	int RotX = 0, RotY = 0, RotZ = 0;
+
+	// сдвиг начала координат
+	int ShiftX = 325, ShiftY = 225;
+
+	// масштабирование
+	double Scale = 8;
+        
+        // Массив отрезков. 12 - это количество рёбер у куба. Если легче, то столько раз вызывается функция line
+	LineSegment lineSegment[12];
+}
 
 // Глобальное пространство имён со всеми функциями построения
 namespace GLOBAL 
@@ -17,7 +59,7 @@ namespace GLOBAL
 	bool comparison(char *str_one, char *str_two)
 	{
 		// Минимальная длина 
-		int border = (len(str_one) < len(str_two)) ? (len(str_one)) : (len(str_two));
+		int border = (strlen(str_one) < strlen(str_two)) ? (strlen(str_one)) : (strlen(str_two));
 
 		for (int i = 0; i <= border; i++)
 		{
@@ -31,9 +73,9 @@ namespace GLOBAL
 	// Очистка матрицы отображения
 	void clearMatrix()
 	{
-		for (int i = 0; i < Turov_Vitaly::height; i++)
-			for (int j = 0; j < Turov_Vitaly::width; j++)
-				Turov_Vitaly::matrix[i][j] = false;
+		for (int i = 0; i < 16; i++)
+			for (int j = 0; j < 16; j++)
+				matrix[i][j] = false;
 	}
 
 	// Отрисовка линии в матрице
@@ -54,8 +96,8 @@ namespace GLOBAL
 
 		int f = 0;
 
-		if ((y0 >= 0) && (y0 < Turov_Vitaly::height) && (x0 >= 0) && (x0 < Turov_Vitaly::width))
-			Turov_Vitaly::matrix[y0][x0] = true;
+		if ((y0 >= 0) && (y0 < 16) && (x0 >= 0) && (x0 < 16))
+			matrix[y0][x0] = true;
 
 		int x(x0), y(y0);
 
@@ -73,8 +115,8 @@ namespace GLOBAL
 
 				x -= signb;
 
-				if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
-					Turov_Vitaly::matrix[y][x] = true;
+				if ((y >= 0) && (y < 16) && (x >= 0) && (x < 16))
+					matrix[y][x] = true;
 
 			} while (x != sX || y != sY);
 
@@ -92,8 +134,8 @@ namespace GLOBAL
 
 				y += signa;
 
-				if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
-					Turov_Vitaly::matrix[y][x] = true;
+				if ((y >= 0) && (y < 16) && (x >= 0) && (x < 16))
+					matrix[y][x] = true;
 
 			} while (x != sX || y != sY);
 	}
@@ -197,8 +239,8 @@ namespace GLOBAL
 		// Расчитаем масштабирование
 		int xK(1), yK(1);
 
-		xK = CEIL((double)(xMax) / Turov_Vitaly::width);
-		yK = CEIL((double)(yMax) / Turov_Vitaly::height);
+		xK = CEIL((double)(xMax) / 16);
+		yK = CEIL((double)(yMax) / 16);
 
 		// Максимумы мы нашли. Теперь мы подгоняем под виртуальный экран (матрицу)
 		// Примем максимальные значения за границы (правильнее примем их за 100% а остальные подгоним)

@@ -10,9 +10,6 @@
 /******************************************************************************
 ***   Include                                                               ***
 ******************************************************************************/
-
-#include "Core.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -23,6 +20,8 @@
 #include <unistd.h>
 
 #include "joystick.hh"
+
+#include "Core.h"
 
 Joystick joystick("/dev/input/js0");
 JoystickEvent event;
@@ -284,7 +283,7 @@ void SetMatrix()
 
 	for (int i = 0; i < 16; i++)
 		for (int j = 0; j < 16; j++)
-			display[i][j] = (int)(Turov_Vitaly::matrix[i][j]);
+			display[i][j] = (int)(matrix[i][j]);
 }
 
 // Вывод на экран
@@ -318,6 +317,18 @@ void show()
 		SetData(rowCounter + 1, row[2], 3);
 		SetData(rowCounter + 1, row[3], 4);
 	}
+        
+        // Show console
+        for (int i = 0; i < 16; i++)
+        {
+            for (int j = 0; j < 16; j++)
+                if (matrix[i][j])
+                    cout << "*";
+                else
+                    cout << " ";
+                    
+            cout << endl;
+        }
 }
 
 using namespace GLOBAL;
@@ -332,6 +343,8 @@ void loop()
 
 	// Заполнение матрицы для вывода на светодиоды
 	SetMatrix();
+        
+        //cout << "Debug: 335 str" << endl;
 
 	// Вывод на светодиоды
 	show();
@@ -343,14 +356,16 @@ void loop()
 	//}
 
 	int ch;   // код клавиши
-	char message[100] = "\0";
+	char message[100] = "roty";
+        //cout << "Debug: 348 str" << endl;
 
 	/*
 		Это временно.
 		Пока с джостиком не разберусь.
 	*/
 	// Получаем команду с консоли
-	cin >> message;
+	//cin >> message;
+        //cout << "Debug: 356 str" << endl;
 
 	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")))
 		ch = LEFT;
