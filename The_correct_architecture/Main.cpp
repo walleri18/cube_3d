@@ -6,7 +6,6 @@
 * Автор программы КУБ: Туров Виталий
 */
 
-
 /******************************************************************************
 ***   Include                                                               ***
 ******************************************************************************/
@@ -75,7 +74,8 @@ public:
 
 	void begin() {
 		begin(0, 1000000);
-	} // default use channel 0 and 1MHz clock speed
+	} 
+	// default use channel 0 and 1MHz clock speed
 	void begin(int, int);
 
 	void transfer(char);
@@ -289,46 +289,92 @@ void SetMatrix()
 // Вывод на экран
 void show() 
 {
-	// we have 4 displays, this is row buffer for each cycle
-	char row[4];
+	//// we have 4 displays, this is row buffer for each cycle
+	//char row[4];
 
-	// cycle through rows
-	for (int rowCounter = 0; rowCounter < 8; ++rowCounter) 
-	{
-		row[0] = row[1] = row[2] = row[3] = 0;
+	//// cycle through rows
+	//for (int rowCounter = 0; rowCounter < 8; ++rowCounter) 
+	//{
+	//	row[0] = row[1] = row[2] = row[3] = 0;
 
-		for (int i = 0; i < 8; ++i) 
+	//	for (int i = 0; i < 8; ++i) 
+	//	{
+	//		row[0] = row[0] << 1;
+	//		row[0] |= display[i][rowCounter];
+
+	//		row[1] = row[1] << 1;
+	//		row[1] |= display[i + 8][rowCounter];
+
+	//		row[2] = row[2] << 1;
+	//		row[2] |= display[i + 8][rowCounter + 8];
+
+	//		row[3] = row[3] << 1;
+	//		row[3] |= display[i][rowCounter + 8];
+	//	}
+
+	//	SetData(rowCounter + 1, row[0], 1);
+	//	SetData(rowCounter + 1, row[1], 2);
+	//	SetData(rowCounter + 1, row[2], 3);
+	//	SetData(rowCounter + 1, row[3], 4);
+	//}
+    
+	// Матрица общего виртуального экрана
+	unsigned short bitMatrix[16];
+
+	// Массив единиц
+	unsigned short int massiv[16][16];
+
+	// Матрицы отображения
+	unsigned char one_screen[8] = {0};
+	unsigned char two_screen[8] = {0};
+	unsigned char three_screen[8] = {0};
+	unsigned char four_screen[8] = {0};
+
+	// Буферная единица
+	unsigned short int tmp_one(1);
+
+	// Преобразование булевой матрици к числовой
+	for (int i = 0; i < 16; i++)
+		for (int j = 0; j < 16; j++)
+			if (matrix[i][j])
+			{
+				tmp_one = 1;
+
+				tmp_one = tmp_one << (16 - j);
+
+				massiv[i][j] = tmp_one;
+			}
+
+			else
+				massiv[i][j] = 0;
+
+	// Слияние столбцов
+	for (int i = 0; i < 16; i++)
+		for (int j = 0; j < 16; j++)
+			bitMatrix[i] |= massiv[i][j];
+
+	// Маска
+	unsigned short maska = 255;
+
+	// Разделение и вывод на светодиоды
+	for (int i = 0; i < 16; i++)
+		for (int j = 0; j < 16; j++)
 		{
-			row[0] = row[0] << 1;
-			row[0] |= display[i][rowCounter];
+			// Первый экран
 
-			row[1] = row[1] << 1;
-			row[1] |= display[i + 8][rowCounter];
-
-			row[2] = row[2] << 1;
-			row[2] |= display[i + 8][rowCounter + 8];
-
-			row[3] = row[3] << 1;
-			row[3] |= display[i][rowCounter + 8];
 		}
 
-		SetData(rowCounter + 1, row[0], 1);
-		SetData(rowCounter + 1, row[1], 2);
-		SetData(rowCounter + 1, row[2], 3);
-		SetData(rowCounter + 1, row[3], 4);
-	}
-        
-        // Show console
-        for (int i = 0; i < 16; i++)
-        {
-            for (int j = 0; j < 16; j++)
-                if (matrix[i][j])
-                    cout << "*";
-                else
-                    cout << " ";
+    // Show console
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+            if (matrix[i][j])
+                cout << "*";
+            else
+                cout << " ";
                     
-            cout << endl;
-        }
+        cout << endl;
+    }
 }
 
 using namespace GLOBAL;
