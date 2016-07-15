@@ -268,7 +268,7 @@ char display[16][16];
 // ÐÑÐ¸ÑÑÐºÐ° ÑÐºÑÐ°Ð½Ð° Ð¸ ÐºÐ¾Ð½ÑÐ¾Ð»Ð¸
 void clean() 
 {
-	system("clear");
+	//system("clear");
 
 	for (int i = 0; i < 16; i++)
 		for (int j = 0; j < 16; j++)
@@ -358,8 +358,8 @@ void loop()
 
             else if (event.isAxis()) 
                 printf("Axis %u is at position %d\n", event.number, event.value);
-	}
-        */
+	}*/
+        
         
         
         // Button and Axis
@@ -376,17 +376,19 @@ void loop()
         
         
         if(joystick.sample(&event))
-          if ((event.isButton() || event.isAxis()) || left || right || up || down || rotx || roty || rotz || plus || minus)
+          if ((event.isButton() || event.isAxis()) && (event.value!=0))
+          {
+          printf("Number %u is at Value %d\n", event.number, event.value);
             if (event.number == 0)
             {
-                if (event.value == -32767)
+                if (event.value == 0)
+                    left = right = rotx = 0;
+                else if (event.value == -32767)
                     left = true;
                 else if (event.value == 32767)
                     right = true;
                 else if (event.value == 1)
                     rotx = true;
-                else
-                    left = right = rotx = false;
             }
             else if (event.number == 1)
             {
@@ -420,7 +422,23 @@ void loop()
                 else
                     plus = false;
             }
+            }
+            else
+            {
+            printf("Number %u is at Value %d\n", event.number, event.value);
 
+                left = false;
+                right=false;
+                up=false;
+                down=false;
+                rotx=false;
+                roty=false;
+                rotz=false;
+                plus=false;
+                minus=false;
+        
+            }
+            
 	int ch;   // ÐºÐ¾Ð´ ÐºÐ»Ð°Ð²Ð¸ÑÐ¸
 	char message[100] = "\0";
         //cout << "Debug: 348 str" << endl;
@@ -489,6 +507,7 @@ void loop()
 
 	else if ((GLOBAL::comparison(message, (char*)"esc") || GLOBAL::comparison(message, (char*)"Esc") || GLOBAL::comparison(message, (char*)"ESC")))
 		ch = ESC;
+        else ch=-1;
 
 	switch (ch)
 	{
