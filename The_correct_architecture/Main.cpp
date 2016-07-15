@@ -357,11 +357,20 @@ void show()
 	unsigned short maska = 255;
 
 	// Разделение и вывод на светодиоды
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 8; j++)
 		{
 			// Первый экран
+			SetData(j + 1, ((char)(((maska << 8) & bitMatrix[i]) >> 8)), 1);
 
+			// Второй экран
+			SetData(j + 1, ((char)(maska & bitMatrix[i])), 2);
+
+			// Третий экран
+			SetData(j + 1, ((char)(maska & bitMatrix[i + 8])), 3);
+
+			// Четвёртый экран
+			SetData(j + 1, ((char)(((maska << 8) & bitMatrix[i + 8]) >> 8)), 4);
 		}
 
     // Show console
