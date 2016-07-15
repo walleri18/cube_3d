@@ -1,10 +1,11 @@
 /*
 * max7219.cpp
-* Author: Thomas Müller
-* Copyright 2013 Thomas Müller <tmuel at gmx.net>
+* Author: Thomas MÃ¼ller
+* Copyright 2013 Thomas MÃ¼ller <tmuel at gmx.net>
 * $Id$
-* Автор программы КУБ: Туров Виталий
+* ÐÐ²ÑÐ¾Ñ Ð¿ÑÐ¾Ð³ÑÐ°Ð¼Ð¼Ñ ÐÐ£Ð: Ð¢ÑÑÐ¾Ð² ÐÐ¸ÑÐ°Ð»Ð¸Ð¹
 */
+
 
 /******************************************************************************
 ***   Include                                                               ***
@@ -74,8 +75,7 @@ public:
 
 	void begin() {
 		begin(0, 1000000);
-	} 
-	// default use channel 0 and 1MHz clock speed
+	} // default use channel 0 and 1MHz clock speed
 	void begin(int, int);
 
 	void transfer(char);
@@ -248,13 +248,13 @@ void setup()
 	SetData(Digit7, 0b11111111, 4);
 
 	/*
-		Расположение дисплеев
+		Ð Ð°ÑÐ¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð´Ð¸ÑÐ¿Ð»ÐµÐµÐ²
 		1 | 2
 		4 | 3
 	*/
 
-	// Ожидание в 10000 микросекунд
-	delay(10000);
+	// ÐÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð² 1000 Ð¼Ð¸ÐºÑÐ¾ÑÐµÐºÑÐ½Ð´
+	delay(1000);
 
 }
 /******************************************************************************
@@ -265,7 +265,7 @@ void setup()
 // x,y
 char display[16][16];
 
-// Очистка экрана и консоли
+// ÐÑÐ¸ÑÑÐºÐ° ÑÐºÑÐ°Ð½Ð° Ð¸ ÐºÐ¾Ð½ÑÐ¾Ð»Ð¸
 void clean() 
 {
 	system("clear");
@@ -275,10 +275,10 @@ void clean()
 			display[i][j] = 0;
 }
 
-// Заполнение данными матрицу
+// ÐÐ°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½ÑÐ¼Ð¸ Ð¼Ð°ÑÑÐ¸ÑÑ
 void SetMatrix()
 {
-	// Очистка
+	// ÐÑÐ¸ÑÑÐºÐ°
 	clean();
 
 	for (int i = 0; i < 16; i++)
@@ -286,191 +286,202 @@ void SetMatrix()
 			display[i][j] = (int)(matrix[i][j]);
 }
 
-// Вывод на экран
+// ÐÑÐ²Ð¾Ð´ Ð½Ð° ÑÐºÑÐ°Ð½
 void show() 
 {
-	//// we have 4 displays, this is row buffer for each cycle
-	//char row[4];
+	// we have 4 displays, this is row buffer for each cycle
+	char row[4];
 
-	//// cycle through rows
-	//for (int rowCounter = 0; rowCounter < 8; ++rowCounter) 
-	//{
-	//	row[0] = row[1] = row[2] = row[3] = 0;
+	// cycle through rows
+	for (int rowCounter = 0; rowCounter < 8; ++rowCounter) 
+	{
+		row[0] = row[1] = row[2] = row[3] = 0;
 
-	//	for (int i = 0; i < 8; ++i) 
-	//	{
-	//		row[0] = row[0] << 1;
-	//		row[0] |= display[i][rowCounter];
-
-	//		row[1] = row[1] << 1;
-	//		row[1] |= display[i + 8][rowCounter];
-
-	//		row[2] = row[2] << 1;
-	//		row[2] |= display[i + 8][rowCounter + 8];
-
-	//		row[3] = row[3] << 1;
-	//		row[3] |= display[i][rowCounter + 8];
-	//	}
-
-	//	SetData(rowCounter + 1, row[0], 1);
-	//	SetData(rowCounter + 1, row[1], 2);
-	//	SetData(rowCounter + 1, row[2], 3);
-	//	SetData(rowCounter + 1, row[3], 4);
-	//}
-    
-	// Матрица общего виртуального экрана
-	unsigned short bitMatrix[16];
-
-	// Массив единиц
-	unsigned short int massiv[16][16];
-
-	// Матрицы отображения
-	unsigned char one_screen[8] = {0};
-	unsigned char two_screen[8] = {0};
-	unsigned char three_screen[8] = {0};
-	unsigned char four_screen[8] = {0};
-
-	// Буферная единица
-	unsigned short int tmp_one(1);
-
-	// Преобразование булевой матрици к числовой
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
-			if (matrix[i][j])
-			{
-				tmp_one = 1;
-
-				tmp_one = tmp_one << (16 - j);
-
-				massiv[i][j] = tmp_one;
-			}
-
-			else
-				massiv[i][j] = 0;
-
-	// Слияние столбцов
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
-			bitMatrix[i] |= massiv[i][j];
-
-	// Маска
-	unsigned short maska = 255;
-
-	// Разделение и вывод на светодиоды
-	for (int i = 0; i < 8; i++)
-		for (int j = 0; j < 8; j++)
+		for (int i = 0; i < 8; ++i) 
 		{
-			// Первый экран
-			SetData(j + 1, ((char)(((maska << 8) & bitMatrix[i]) >> 8)), 1);
+			row[0] = row[0] << 1;
+			row[0] |= display[i][rowCounter];
 
-			// Второй экран
-			SetData(j + 1, ((char)(maska & bitMatrix[i])), 2);
+			row[1] = row[1] << 1;
+			row[1] |= display[i + 8][rowCounter];
 
-			// Третий экран
-			SetData(j + 1, ((char)(maska & bitMatrix[i + 8])), 3);
+			row[2] = row[2] << 1;
+			row[2] |= display[i + 8][rowCounter + 8];
 
-			// Четвёртый экран
-			SetData(j + 1, ((char)(((maska << 8) & bitMatrix[i + 8]) >> 8)), 4);
+			row[3] = row[3] << 1;
+			row[3] |= display[i][rowCounter + 8];
 		}
 
-    // Show console
-    for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 16; j++)
-            if (matrix[i][j])
-                cout << "*";
-            else
-                cout << " ";
+		SetData(rowCounter + 1, row[0], 1);
+		SetData(rowCounter + 1, row[1], 2);
+		SetData(rowCounter + 1, row[2], 3);
+		SetData(rowCounter + 1, row[3], 4);
+	}
+        /*
+        // Show console
+        for (int i = 0; i < 16; i++)
+        {
+            for (int j = 0; j < 16; j++)
+                if (matrix[i][j])
+                    cout << "*";
+                else
+                    cout << " ";
                     
-        cout << endl;
-    }
+            cout << endl;
+        }*/
 }
 
 using namespace GLOBAL;
 
 void loop()
 {
-	// Расчёт для отображения
+	// Ð Ð°ÑÑÑÑ Ð´Ð»Ñ Ð¾ÑÐ¾Ð±ÑÐ°Ð¶ÐµÐ½Ð¸Ñ
 	Compute();
 
-	// Отрисовка куба на виртуальном экране
+	// ÐÑÑÐ¸ÑÐ¾Ð²ÐºÐ° ÐºÑÐ±Ð° Ð½Ð° Ð²Ð¸ÑÑÑÐ°Ð»ÑÐ½Ð¾Ð¼ ÑÐºÑÐ°Ð½Ðµ
 	DrawPix();
 
-	// Заполнение матрицы для вывода на светодиоды
+	// ÐÐ°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð¼Ð°ÑÑÐ¸ÑÑ Ð´Ð»Ñ Ð²ÑÐ²Ð¾Ð´Ð° Ð½Ð° ÑÐ²ÐµÑÐ¾Ð´Ð¸Ð¾Ð´Ñ
 	SetMatrix();
         
         //cout << "Debug: 335 str" << endl;
 
-	// Вывод на светодиоды
+	// ÐÑÐ²Ð¾Ð´ Ð½Ð° ÑÐ²ÐµÑÐ¾Ð´Ð¸Ð¾Ð´Ñ
 	show();
+        
+        /*
+	// Ð Ð°Ð±Ð¾ÑÐ° Ñ Ð´Ð¶Ð¾ÑÑÐ¸ÐºÐ¾Ð¼
+	if (joystick.sample(&event)) 
+	{
+	    if (event.isButton())
+                printf("Button %u is %s(%u)\n", event.number, event.value == 0 ? "up" : "down", event.value);
 
-	//// Работа с джостиком
-	//if (joystick.sample(&event)) 
-	//{
-	//	
-	//}
+            else if (event.isAxis()) 
+                printf("Axis %u is at position %d\n", event.number, event.value);
+	}
+        */
+        
+        
+        // Button and Axis
+        // botton joystick
+        static bool left(false);
+        static bool right(false);
+        static bool up(false);
+        static bool down(false);
+        static bool rotx(false);
+        static bool roty(false);
+        static bool rotz(false);
+        static bool plus(false);
+        static bool minus(false);
+        
+        
+        if(joystick.sample(&event))
+          if ((event.isButton() || event.isAxis()) || left || right || up || down || rotx || roty || rotz || plus || minus)
+            if (event.number == 0)
+            {
+                if (event.value == -32767)
+                    left = true;
+                else if (event.value == 32767)
+                    right = true;
+                else if (event.value == 1)
+                    rotx = true;
+                else
+                    left = right = rotx = false;
+            }
+            else if (event.number == 1)
+            {
+                if (event.value == -32767)
+                    up = true;
+                else if (event.value == 32767)
+                    down = true;
+                else if (event.value == 1)
+                    rotz = true;
+                else
+                    up = down = rotz = false;
+            }
+            else if (event.number == 3)
+            {
+                if (event.value == 1)
+                    roty = true;
+                else
+                    roty = false;
+            }
+            else if (event.number == 4)
+            {
+                if (event.value == 1)
+                    minus = true;
+                else
+                    minus = false;
+            }
+            else if (event.number == 5)
+            {
+                if (event.value == 1)
+                    plus = true;
+                else
+                    plus = false;
+            }
 
-	int ch;   // код клавиши
-	char message[100] = "roty";
+	int ch;   // ÐºÐ¾Ð´ ÐºÐ»Ð°Ð²Ð¸ÑÐ¸
+	char message[100] = "\0";
         //cout << "Debug: 348 str" << endl;
 
 	/*
-		Это временно.
-		Пока с джостиком не разберусь.
+		Ð­ÑÐ¾ Ð²ÑÐµÐ¼ÐµÐ½Ð½Ð¾.
+		ÐÐ¾ÐºÐ° Ñ Ð´Ð¶Ð¾ÑÑÐ¸ÐºÐ¾Ð¼ Ð½Ðµ ÑÐ°Ð·Ð±ÐµÑÑÑÑ.
 	*/
-	// Получаем команду с консоли
+	// ÐÐ¾Ð»ÑÑÐ°ÐµÐ¼ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ Ñ ÐºÐ¾Ð½ÑÐ¾Ð»Ð¸
 	//cin >> message;
         //cout << "Debug: 356 str" << endl;
 
-	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")))
+	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")) || left)
 		ch = LEFT;
 
 	else if ((GLOBAL::comparison(message, (char*)"left_inf") || GLOBAL::comparison(message, (char*)"Left_inf") || GLOBAL::comparison(message, (char*)"LEFT_INF")))
 		ch = LEFT_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"right") || GLOBAL::comparison(message, (char*)"Right") || GLOBAL::comparison(message, (char*)"RIGHT")))
+	else if ((GLOBAL::comparison(message, (char*)"right") || GLOBAL::comparison(message, (char*)"Right") || GLOBAL::comparison(message, (char*)"RIGHT")) || right)
 		ch = RIGHT;
 
 	else if ((GLOBAL::comparison(message, (char*)"right_inf") || GLOBAL::comparison(message, (char*)"Right_inf") || GLOBAL::comparison(message, (char*)"RIGHT_INF")))
 		ch = RIGHT_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"up") || GLOBAL::comparison(message, (char*)"Up") || GLOBAL::comparison(message, (char*)"UP")))
+	else if ((GLOBAL::comparison(message, (char*)"up") || GLOBAL::comparison(message, (char*)"Up") || GLOBAL::comparison(message, (char*)"UP")) || up)
 		ch = UP;
 
 	else if ((GLOBAL::comparison(message, (char*)"up_inf") || GLOBAL::comparison(message, (char*)"Up_inf") || GLOBAL::comparison(message, (char*)"UP_INF")))
 		ch = UP_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"down") || GLOBAL::comparison(message, (char*)"Down") || GLOBAL::comparison(message, (char*)"DOWN")))
+	else if ((GLOBAL::comparison(message, (char*)"down") || GLOBAL::comparison(message, (char*)"Down") || GLOBAL::comparison(message, (char*)"DOWN")) || down)
 		ch = DOWN;
 
 	else if ((GLOBAL::comparison(message, (char*)"down_inf") || GLOBAL::comparison(message, (char*)"Down_inf") || GLOBAL::comparison(message, (char*)"DOWN_INF")))
 		ch = DOWN_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"plus") || GLOBAL::comparison(message, (char*)"Plus") || GLOBAL::comparison(message, (char*)"PLUS")))
+	else if ((GLOBAL::comparison(message, (char*)"plus") || GLOBAL::comparison(message, (char*)"Plus") || GLOBAL::comparison(message, (char*)"PLUS")) || plus)
 		ch = PLUS;
 
 	else if ((GLOBAL::comparison(message, (char*)"plus_inf") || GLOBAL::comparison(message, (char*)"Plus_inf") || GLOBAL::comparison(message, (char*)"PLUS_INF")))
 		ch = PLUS_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"minus") || GLOBAL::comparison(message, (char*)"Minus") || GLOBAL::comparison(message, (char*)"MINUS")))
+	else if ((GLOBAL::comparison(message, (char*)"minus") || GLOBAL::comparison(message, (char*)"Minus") || GLOBAL::comparison(message, (char*)"MINUS")) || minus)
 		ch = MINUS;
 
 	else if ((GLOBAL::comparison(message, (char*)"minus_inf") || GLOBAL::comparison(message, (char*)"Minus_inf") || GLOBAL::comparison(message, (char*)"MINUS_INF")))
 		ch = MINUS_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"rotx") || GLOBAL::comparison(message, (char*)"Rotx") || GLOBAL::comparison(message, (char*)"ROTX")))
+	else if ((GLOBAL::comparison(message, (char*)"rotx") || GLOBAL::comparison(message, (char*)"Rotx") || GLOBAL::comparison(message, (char*)"ROTX")) || rotx)
 		ch = ROTX;
 
 	else if ((GLOBAL::comparison(message, (char*)"rotx_inf") || GLOBAL::comparison(message, (char*)"Rotx_inf") || GLOBAL::comparison(message, (char*)"ROTX_INF")))
 		ch = ROTX_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"roty") || GLOBAL::comparison(message, (char*)"Roty") || GLOBAL::comparison(message, (char*)"ROTY")))
+	else if ((GLOBAL::comparison(message, (char*)"roty") || GLOBAL::comparison(message, (char*)"Roty") || GLOBAL::comparison(message, (char*)"ROTY")) || roty)
 		ch = ROTY;
 
 	else if ((GLOBAL::comparison(message, (char*)"roty_inf") || GLOBAL::comparison(message, (char*)"Roty_inf") || GLOBAL::comparison(message, (char*)"ROTY_INF")))
 		ch = ROTY_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"rotz") || GLOBAL::comparison(message, (char*)"Rotz") || GLOBAL::comparison(message, (char*)"ROTZ")))
+	else if ((GLOBAL::comparison(message, (char*)"rotz") || GLOBAL::comparison(message, (char*)"Rotz") || GLOBAL::comparison(message, (char*)"ROTZ")) || rotz)
 		ch = ROTZ;
 
 	else if ((GLOBAL::comparison(message, (char*)"rotz_inf") || GLOBAL::comparison(message, (char*)"Rotz_inf") || GLOBAL::comparison(message, (char*)"ROTZ_INF")))
@@ -483,22 +494,22 @@ void loop()
 	{
 		case LEFT:
 		{
-			Commandos::LEFT();
+			Commandos::UP();
 			break;
 		}
 		case RIGHT:
 		{
-			Commandos::RIGHT();
+			Commandos::DOWN();
 			break;
 		}
 		case UP:
 		{
-			Commandos::UP();
+			Commandos::LEFT();
 			break;
 		}
 		case DOWN:
 		{
-			Commandos::DOWN();
+			Commandos::RIGHT();
 			break;
 		}
 		case PLUS:
@@ -532,55 +543,154 @@ void loop()
 		}
 		case ROTX_INF:
 		{
-			Commandos::ROTX_INF();
+			while(true)
+			{
+				Commandos::ROTX();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case ROTY_INF:
 		{
-			Commandos::ROTY_INF();
+			while(true)
+			{
+				Commandos::ROTY();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case ROTZ_INF:
 		{
-			Commandos::ROTZ_INF();
+			while(true)
+			{
+				Commandos::ROTZ();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case LEFT_INF:
 		{
-			Commandos::LEFT_INF();
+			while(true)
+			{
+				Commandos::UP();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case RIGHT_INF:
 		{
-			Commandos::RIGHT_INF();
+			while(true)
+			{
+				Commandos::DOWN();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case UP_INF:
 		{
-			Commandos::UP_INF();
+			while(true)
+			{
+				Commandos::LEFT();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case DOWN_INF:
 		{
-			Commandos::DOWN_INF();
+			while(true)
+			{
+				Commandos::RIGHT();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case MINUS_INF:
 		{
-			Commandos::MINUS_INF();
+			while(true)
+			{
+				Commandos::MINUS();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
 		case PLUS_INF:
 		{
-			Commandos::PLUS_INF();
+			while(true)
+			{
+				Commandos::PLUS();
+				
+				Compute();
+				
+				DrawPix();
+				
+				SetMatrix();
+				
+				show();
+			}
 
 			break;
 		}
