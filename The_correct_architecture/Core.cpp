@@ -9,7 +9,7 @@
 #define height 16
 
 // Матрица отображения
-bool matrix[16][16];
+bool matrix[height][width];
 
 // Пространство имён с главными глобальными "объектами"
 namespace Turov_Vitaly 
@@ -96,7 +96,7 @@ namespace GLOBAL
 
 		int f = 0;
 
-		if ((y0 >= 0) && (y0 < 16) && (x0 >= 0) && (x0 < 16))
+		if ((y0 >= 0) && (y0 < height) && (x0 >= 0) && (x0 < width))
 			matrix[y0][x0] = true;
 
 		int x(x0), y(y0);
@@ -115,7 +115,7 @@ namespace GLOBAL
 
 				x -= signb;
 
-				if ((y >= 0) && (y < 16) && (x >= 0) && (x < 16))
+				if ((y >= 0) && (y < height) && (x >= 0) && (x < width))
 					matrix[y][x] = true;
 
 			} while (x != sX || y != sY);
@@ -134,7 +134,7 @@ namespace GLOBAL
 
 				y += signa;
 
-				if ((y >= 0) && (y < 16) && (x >= 0) && (x < 16))
+				if ((y >= 0) && (y < height) && (x >= 0) && (x < width))
 					matrix[y][x] = true;
 
 			} while (x != sX || y != sY);

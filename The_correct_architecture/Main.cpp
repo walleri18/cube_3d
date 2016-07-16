@@ -260,16 +260,21 @@ void setup()
 ***   Loop                                                                  ***
 ******************************************************************************/
 
+// width - столбцы, ширина
+// height - строки, высота
+#define width 16
+#define height 16
+
 // дисплей для дальнейшего отображения
-char display[16][16];
+char display[height][width];
 
 // Очистка экрана
 void clean() 
 {
 	system("clear");
 
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
 			display[i][j] = 0;
 }
 
@@ -279,8 +284,8 @@ void SetMatrix()
 	// Предварительная очистка виртуального экрана
 	clean();
 
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
 			display[i][j] = (int)(matrix[i][j]);
 }
 
@@ -317,9 +322,9 @@ void show()
 	}
     
     // Show console
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < 16; j++)
+        for (int j = 0; j < width; j++)
             if (matrix[i][j])
                 cout << "*";
             else
@@ -361,52 +366,63 @@ void loop()
 	if(joystick.sample(&event))
 		if ((event.isButton() || event.isAxis()) && (event.value!=0))
 			{
-				printf("Number %u is at Value %d\n", event.number, event.value);
-				if (event.number == 0)
+				switch (event.number)
 				{
-					if (event.value == -32767)
-						left = true;
-					else if (event.value == 32767)
-						right = true;
-					else if (event.value == 1)
-						rotx = true;
+					case 0:
+					{
+						switch (event.value)
+						{
+							case -32767:
+								left = true;
+								break;
+							case 32767:
+								right = true;
+								break;
+							case 1:
+								rotx = true;
+						}
+					}
+
+					case 1:
+					{
+						switch (event.value)
+						{
+						case -32767:
+							up = true;
+							break;
+						case 32767:
+							down = true;
+							break;
+						case 1:
+							rotz = true;
+						}
+					}
+
+					case 3:
+					{
+						if (event.value == 1)
+							roty = true;
+					}
+
+					case 4:
+					{
+						if (event.value == 1)
+							minus = true;
+					}
+
+					case 5:
+					{
+						if (event.value == 1)
+							plus = true;
+					}
 				}
+				
+		}
 
-				else if (event.number == 1)
-				{
-					if (event.value == -32767)
-						up = true;
-					else if (event.value == 32767)
-						down = true;
-					else if (event.value == 1)
-						rotz = true;
-				}
-
-				else if (event.number == 3)
-					if (event.value == 1)
-						roty = true;
-
-				else if (event.number == 4)
-					if (event.value == 1)
-						minus = true;
-
-				else if (event.number == 5)
-					if (event.value == 1)
-						plus = true;
-			}
-
-        else
-        {
-            left = false;
-            right=false;
-            up=false;
-            down=false;
-            rotx=false;
-            roty=false;
-            rotz=false;
-            plus=false;
-            minus=false;
-        }
+		else
+		{
+			left = right = up = down = rotx = roty = rotz = plus = minus = false;
+		}
             
 	int ch;
 	char message[100] = "\0";
