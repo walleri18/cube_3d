@@ -3,6 +3,14 @@
 
 * * *
 
+Проект на RasberriPI (*http://meraschool.noip.me/Vitaly-Turov/cube_3d/tree/master/The_correct_architecture)
+
+Проект на консоле Windows:
+1. http://meraschool.noip.me/Vitaly-Turov/cube_3d/tree/master/Cube_3D_Small_Display
+2. http://meraschool.noip.me/Vitaly-Turov/cube_3d/tree/master/Module_Code
+
+* * *
+
 Суть проекта в том, чтобы каким-то образом трёхмерный объект отобразить в двумерном пространстве, то есть на проскости.
 1. Для начала нужно понять что нам известо и что известо из древних игр и не только.
     + Аксонометрические проекции
