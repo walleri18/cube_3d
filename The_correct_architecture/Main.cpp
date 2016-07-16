@@ -271,7 +271,7 @@ char display[height][width];
 // Очистка экрана
 void clean() 
 {
-	//system("clear");
+	system("clear");
 
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
@@ -282,7 +282,7 @@ void clean()
 void SetMatrix()
 {
 	// Предварительная очистка виртуального экрана
-	clean();
+	//clean();
 
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
@@ -333,6 +333,7 @@ void show()
         cout << endl;
     }
     */
+    
 }
 
 using namespace GLOBAL;
@@ -362,11 +363,13 @@ void loop()
     static bool rotz(false);
     static bool plus(false);
     static bool minus(false);
-        
-        
+    static bool start(false);
+    
 	if(joystick.sample(&event))
 		if ((event.isButton() || event.isAxis()) && (event.value!=0))
 			{
+                        cout << "Number: " << event.number << " is value: " << event.value << endl;
+                        
 				switch (event.number)
 				{
 					case 0:
@@ -515,7 +518,8 @@ void loop()
 
 	else if ((GLOBAL::comparison(message, (char*)"esc") || GLOBAL::comparison(message, (char*)"Esc") || GLOBAL::comparison(message, (char*)"ESC")))
 		ch = ESC;
-    else ch=-1;
+    else 
+        ch = -1;
 
 	switch (ch)
 	{
