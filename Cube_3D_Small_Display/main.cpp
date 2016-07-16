@@ -5,7 +5,7 @@
 #include <math.h>
 #include <iostream>
 
-enum MessageID : int
+enum MessageID
 {
 	ESC,
 	LEFT,

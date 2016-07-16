@@ -52,7 +52,7 @@ extern bool matrix[16][16];
 // Глобальное пространство имён со всеми функциями построения
 namespace GLOBAL 
 {
-        int len(char*);
+    int len(char*);
 
 	// Сравнение слов (так как не корректно работает strcmp)
 	bool comparison(char*, char *);

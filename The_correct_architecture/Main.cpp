@@ -1,9 +1,7 @@
-/*
+﻿/*
 * max7219.cpp
-* Author: Thomas MÃ¼ller
-* Copyright 2013 Thomas MÃ¼ller <tmuel at gmx.net>
-* $Id$
-* ÐÐ²ÑÐ¾Ñ Ð¿ÑÐ¾Ð³ÑÐ°Ð¼Ð¼Ñ ÐÐ£Ð: Ð¢ÑÑÐ¾Ð² ÐÐ¸ÑÐ°Ð»Ð¸Ð¹
+* Author: Thomas 
+* Copyright 2013 Thomas
 */
 
 
@@ -75,7 +73,8 @@ public:
 
 	void begin() {
 		begin(0, 1000000);
-	} // default use channel 0 and 1MHz clock speed
+	} 
+	// default use channel 0 and 1MHz clock speed
 	void begin(int, int);
 
 	void transfer(char);
@@ -248,12 +247,12 @@ void setup()
 	SetData(Digit7, 0b11111111, 4);
 
 	/*
-		Ð Ð°ÑÐ¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð´Ð¸ÑÐ¿Ð»ÐµÐµÐ²
+		Расположение дисплеев
 		1 | 2
 		4 | 3
 	*/
 
-	// ÐÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð² 1000 Ð¼Ð¸ÐºÑÐ¾ÑÐµÐºÑÐ½Ð´
+	// Ожидание 1000 мс
 	delay(1000);
 
 }
@@ -261,24 +260,23 @@ void setup()
 ***   Loop                                                                  ***
 ******************************************************************************/
 
-// simplified display where 1 is lit and 0 is not lit
-// x,y
+// дисплей для дальнейшего отображения
 char display[16][16];
 
-// ÐÑÐ¸ÑÑÐºÐ° ÑÐºÑÐ°Ð½Ð° Ð¸ ÐºÐ¾Ð½ÑÐ¾Ð»Ð¸
+// Очистка экрана
 void clean() 
 {
-	//system("clear");
+	system("clear");
 
 	for (int i = 0; i < 16; i++)
 		for (int j = 0; j < 16; j++)
 			display[i][j] = 0;
 }
 
-// ÐÐ°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½ÑÐ¼Ð¸ Ð¼Ð°ÑÑÐ¸ÑÑ
+// Функция заполнения матрицы
 void SetMatrix()
 {
-	// ÐÑÐ¸ÑÑÐºÐ°
+	// Предварительная очистка виртуального экрана
 	clean();
 
 	for (int i = 0; i < 16; i++)
@@ -286,7 +284,7 @@ void SetMatrix()
 			display[i][j] = (int)(matrix[i][j]);
 }
 
-// ÐÑÐ²Ð¾Ð´ Ð½Ð° ÑÐºÑÐ°Ð½
+// Функция вывода
 void show() 
 {
 	// we have 4 displays, this is row buffer for each cycle
@@ -317,139 +315,103 @@ void show()
 		SetData(rowCounter + 1, row[2], 3);
 		SetData(rowCounter + 1, row[3], 4);
 	}
-        /*
-        // Show console
-        for (int i = 0; i < 16; i++)
-        {
-            for (int j = 0; j < 16; j++)
-                if (matrix[i][j])
-                    cout << "*";
-                else
-                    cout << " ";
+    
+    // Show console
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+            if (matrix[i][j])
+                cout << "*";
+            else
+                cout << " ";
                     
-            cout << endl;
-        }*/
+        cout << endl;
+    }
 }
 
 using namespace GLOBAL;
 
 void loop()
 {
-	// Ð Ð°ÑÑÑÑ Ð´Ð»Ñ Ð¾ÑÐ¾Ð±ÑÐ°Ð¶ÐµÐ½Ð¸Ñ
+	// Преобразования куба
 	Compute();
 
-	// ÐÑÑÐ¸ÑÐ¾Ð²ÐºÐ° ÐºÑÐ±Ð° Ð½Ð° Ð²Ð¸ÑÑÑÐ°Ð»ÑÐ½Ð¾Ð¼ ÑÐºÑÐ°Ð½Ðµ
+	// Отрисовка куба
 	DrawPix();
 
-	// ÐÐ°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð¼Ð°ÑÑÐ¸ÑÑ Ð´Ð»Ñ Ð²ÑÐ²Ð¾Ð´Ð° Ð½Ð° ÑÐ²ÐµÑÐ¾Ð´Ð¸Ð¾Ð´Ñ
+	// Заполнение виртуальной матрицы
 	SetMatrix();
-        
-        //cout << "Debug: 335 str" << endl;
 
-	// ÐÑÐ²Ð¾Ð´ Ð½Ð° ÑÐ²ÐµÑÐ¾Ð´Ð¸Ð¾Ð´Ñ
+	// Вывод виртуального экранчика на светодиоды
 	show();
         
-        /*
-	// Ð Ð°Ð±Ð¾ÑÐ° Ñ Ð´Ð¶Ð¾ÑÑÐ¸ÐºÐ¾Ð¼
-	if (joystick.sample(&event)) 
-	{
-	    if (event.isButton())
-                printf("Button %u is %s(%u)\n", event.number, event.value == 0 ? "up" : "down", event.value);
+    // Button and Axis
+    // botton joystick
+    static bool left(false);
+    static bool right(false);
+    static bool up(false);
+    static bool down(false);
+    static bool rotx(false);
+    static bool roty(false);
+    static bool rotz(false);
+    static bool plus(false);
+    static bool minus(false);
+        
+        
+	if(joystick.sample(&event))
+		if ((event.isButton() || event.isAxis()) && (event.value!=0))
+			{
+				printf("Number %u is at Value %d\n", event.number, event.value);
+				if (event.number == 0)
+				{
+					if (event.value == -32767)
+						left = true;
+					else if (event.value == 32767)
+						right = true;
+					else if (event.value == 1)
+						rotx = true;
+				}
 
-            else if (event.isAxis()) 
-                printf("Axis %u is at position %d\n", event.number, event.value);
-	}*/
-        
-        
-        
-        // Button and Axis
-        // botton joystick
-        static bool left(false);
-        static bool right(false);
-        static bool up(false);
-        static bool down(false);
-        static bool rotx(false);
-        static bool roty(false);
-        static bool rotz(false);
-        static bool plus(false);
-        static bool minus(false);
-        
-        
-        if(joystick.sample(&event))
-          if ((event.isButton() || event.isAxis()) && (event.value!=0))
-          {
-          printf("Number %u is at Value %d\n", event.number, event.value);
-            if (event.number == 0)
-            {
-                if (event.value == 0)
-                    left = right = rotx = 0;
-                else if (event.value == -32767)
-                    left = true;
-                else if (event.value == 32767)
-                    right = true;
-                else if (event.value == 1)
-                    rotx = true;
-            }
-            else if (event.number == 1)
-            {
-                if (event.value == -32767)
-                    up = true;
-                else if (event.value == 32767)
-                    down = true;
-                else if (event.value == 1)
-                    rotz = true;
-                else
-                    up = down = rotz = false;
-            }
-            else if (event.number == 3)
-            {
-                if (event.value == 1)
-                    roty = true;
-                else
-                    roty = false;
-            }
-            else if (event.number == 4)
-            {
-                if (event.value == 1)
-                    minus = true;
-                else
-                    minus = false;
-            }
-            else if (event.number == 5)
-            {
-                if (event.value == 1)
-                    plus = true;
-                else
-                    plus = false;
-            }
-            }
-            else
-            {
-            printf("Number %u is at Value %d\n", event.number, event.value);
+				else if (event.number == 1)
+				{
+					if (event.value == -32767)
+						up = true;
+					else if (event.value == 32767)
+						down = true;
+					else if (event.value == 1)
+						rotz = true;
+				}
 
-                left = false;
-                right=false;
-                up=false;
-                down=false;
-                rotx=false;
-                roty=false;
-                rotz=false;
-                plus=false;
-                minus=false;
-        
-            }
+				else if (event.number == 3)
+					if (event.value == 1)
+						roty = true;
+
+				else if (event.number == 4)
+					if (event.value == 1)
+						minus = true;
+
+				else if (event.number == 5)
+					if (event.value == 1)
+						plus = true;
+			}
+
+        else
+        {
+            left = false;
+            right=false;
+            up=false;
+            down=false;
+            rotx=false;
+            roty=false;
+            rotz=false;
+            plus=false;
+            minus=false;
+        }
             
-	int ch;   // ÐºÐ¾Ð´ ÐºÐ»Ð°Ð²Ð¸ÑÐ¸
+	int ch;
 	char message[100] = "\0";
-        //cout << "Debug: 348 str" << endl;
-
-	/*
-		Ð­ÑÐ¾ Ð²ÑÐµÐ¼ÐµÐ½Ð½Ð¾.
-		ÐÐ¾ÐºÐ° Ñ Ð´Ð¶Ð¾ÑÑÐ¸ÐºÐ¾Ð¼ Ð½Ðµ ÑÐ°Ð·Ð±ÐµÑÑÑÑ.
-	*/
-	// ÐÐ¾Ð»ÑÑÐ°ÐµÐ¼ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ Ñ ÐºÐ¾Ð½ÑÐ¾Ð»Ð¸
+    
 	//cin >> message;
-        //cout << "Debug: 356 str" << endl;
 
 	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")) || left)
 		ch = LEFT;
@@ -507,7 +469,7 @@ void loop()
 
 	else if ((GLOBAL::comparison(message, (char*)"esc") || GLOBAL::comparison(message, (char*)"Esc") || GLOBAL::comparison(message, (char*)"ESC")))
 		ch = ESC;
-        else ch=-1;
+    else ch=-1;
 
 	switch (ch)
 	{
