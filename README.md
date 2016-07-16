@@ -3,7 +3,7 @@
 
 * * *
 
-Проект на RasberriPI (*http://meraschool.noip.me/Vitaly-Turov/cube_3d/tree/master/The_correct_architecture)
+Проект на RasberriPI (http://meraschool.noip.me/Vitaly-Turov/cube_3d/tree/master/The_correct_architecture)
 
 Проект на консоле Windows:
 1. http://meraschool.noip.me/Vitaly-Turov/cube_3d/tree/master/Cube_3D_Small_Display
