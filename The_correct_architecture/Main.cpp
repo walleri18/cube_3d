@@ -271,7 +271,7 @@ char display[height][width];
 // Очистка экрана
 void clean() 
 {
-	system("clear");
+	//system("clear");
 
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
@@ -320,7 +320,7 @@ void show()
 		SetData(rowCounter + 1, row[2], 3);
 		SetData(rowCounter + 1, row[3], 4);
 	}
-    
+    /*
     // Show console
     for (int i = 0; i < height; i++)
     {
@@ -332,6 +332,7 @@ void show()
                     
         cout << endl;
     }
+    */
 }
 
 using namespace GLOBAL;
@@ -370,50 +371,78 @@ void loop()
 				{
 					case 0:
 					{
+                                        cout << "Number 0 ";
 						switch (event.value)
 						{
 							case -32767:
+                                                        {
 								left = true;
+                                                                cout << "is value -32767" << endl;
 								break;
+                                                        }
 							case 32767:
+                                                        {
 								right = true;
+                                                                cout << "is value 32767" << endl;
 								break;
+                                                        }
 							case 1:
+                                                        {
 								rotx = true;
+                                                                cout << "is value 1" << endl;
+                                                        }
 						}
+                                                break;
 					}
 
 					case 1:
 					{
+                                        cout << "Number 1 ";
 						switch (event.value)
 						{
 						case -32767:
+                                                {
 							up = true;
+                                                        cout << "is value -32767" << endl;
 							break;
+                                                }
 						case 32767:
+                                                {
 							down = true;
+                                                        cout << "is value 32767" << endl;
 							break;
+                                                }
 						case 1:
+                                                {
 							rotz = true;
+                                                        cout << "is value 1" << endl;
 						}
+                                                }
+                                                break;
 					}
 
 					case 3:
 					{
+                                        cout << "Number 3 ";
 						if (event.value == 1)
-							roty = true;
+							{roty = true; cout << "is value 1" << endl;}
+                                        break;
 					}
 
 					case 4:
 					{
+                                        cout << "Number 4 ";
 						if (event.value == 1)
-							minus = true;
+							{minus = true; cout << "is value 1" << endl;}
+                                        break;
 					}
 
 					case 5:
 					{
+                                        cout << "Number 5 ";
 						if (event.value == 1)
-							plus = true;
+							{plus = true; cout << "is value 1" << endl;}
+                                        break;
 					}
 				}
 				
@@ -421,6 +450,7 @@ void loop()
 
 		else
 		{
+                cout << "Value 0" << endl;
 			left = right = up = down = rotx = roty = rotz = plus = minus = false;
 		}
             
