@@ -31,13 +31,13 @@ namespace Turov_Vitaly
 	int X, Y, Z, sX, sY;
 
 	// Углы поворота по X,Y,Z в градусах
-	int RotX = 0, RotY = 0, RotZ = 0;
+	int RotX(0), RotY(0), RotZ(0);
 
 	// сдвиг начала координат
-	int ShiftX = 325, ShiftY = 225;
+	int ShiftX(325), ShiftY(225);
 
 	// масштабирование
-	double Scale = 8;
+	double Scale(8);
         
         // Массив отрезков. 12 - это количество рёбер у куба. Если легче, то столько раз вызывается функция line
 	LineSegment lineSegment[12];
@@ -46,6 +46,16 @@ namespace Turov_Vitaly
 // Глобальное пространство имён со всеми функциями построения
 namespace GLOBAL 
 {
+		void restart()
+		{
+			Turov_Vitaly::RotX = Turov_Vitaly::RotY = Turov_Vitaly::RotZ = 0;
+
+			Turov_Vitaly::ShiftX = 325;
+			Turov_Vitaly::ShiftY = 225;
+
+			Turov_Vitaly::Scale = 8;
+		}
+		
         int len(char *str)
         {
             int line(0);
@@ -101,6 +111,9 @@ namespace GLOBAL
 
 		int x(x0), y(y0);
 
+		// Счётчики ограничители
+		long visitor_one(0), visitor_two(0);
+
 		if (sign == -1)
 			do
 			{
@@ -117,6 +130,12 @@ namespace GLOBAL
 
 				if ((y >= 0) && (y < height) && (x >= 0) && (x < width))
 					matrix[y][x] = true;
+
+				// Если мы превысили разрешённый предел, то выкидываем исключение
+				if (visitor_one > sqrt(pow(height, 2) + pow(width, 2)))
+					throw 1;
+
+				visitor_one++;
 
 			} while (x != sX || y != sY);
 
@@ -136,6 +155,12 @@ namespace GLOBAL
 
 				if ((y >= 0) && (y < height) && (x >= 0) && (x < width))
 					matrix[y][x] = true;
+
+				// Если мы превысили разрешённый предел, то выкидываем исключение
+				if (visitor_two > sqrt(pow(height, 2) + pow(width, 2)))
+					throw 1;
+
+				visitor_two++;
 
 			} while (x != sX || y != sY);
 	}
@@ -358,10 +383,17 @@ namespace GLOBAL
 		// Приводим к нашим размерам
 		bringingScreenSize();
 
-		// Отрисовываем на виртуальном экране (матрице)
-		for (int i = 0; i < countLine; i++)
-			line(Turov_Vitaly::lineSegment[i].x_one, Turov_Vitaly::lineSegment[i].y_one,
-				 Turov_Vitaly::lineSegment[i].x_two, Turov_Vitaly::lineSegment[i].y_two);
+		try
+		{
+			// Отрисовываем на виртуальном экране (матрице)
+			for (int i = 0; i < countLine; i++)
+				line(Turov_Vitaly::lineSegment[i].x_one, Turov_Vitaly::lineSegment[i].y_one,
+					 Turov_Vitaly::lineSegment[i].x_two, Turov_Vitaly::lineSegment[i].y_two);
+		}
+		catch (...)
+		{
+			throw 1;
+		}
 	}
 }
 

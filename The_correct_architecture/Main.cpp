@@ -452,7 +452,7 @@ void setup()
 	// Ожидание 1000 мс
 	delay(1000);
         
-        animation();
+    animation();
 
 }
 /******************************************************************************
@@ -515,42 +515,42 @@ void show()
 		SetData(rowCounter + 1, row[1], 2);
 		SetData(rowCounter + 1, row[2], 3);
 		SetData(rowCounter + 1, row[3], 4);
-	}
-
-    /*
-    // Show console
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-            if (matrix[i][j])
-                cout << "*";
-            else
-                cout << " ";
-                    
-        cout << endl;
-    }
-    */
-    
+	}    
 }
 
 using namespace GLOBAL;
 
-void loop()
-{        
-    // Button and Axis
-    // botton joystick
-    static bool left(false);// Сдвиг куба влево
-    static bool right(false);// Сдвиг куба вправо
-    static bool up(false);// Сдвиг куба вверх
-    static bool down(false);// Сдвиг куба вниз
-    static bool rotx(false);// Поворот вокруг оси X
-    static bool roty(false);// Поворот вокруг оси Y
-    static bool rotz(false);// Поворот воруг оси Z
-    static bool plus(false);// Увеличение масштаба
-    static bool minus(false);// Уменьшение масштаба
-    static bool select(false);// Смена режима ввода комманд
-    static bool start(false);// Начать "игру"
+namespace GLOBAL
+{
+	// Button and Axis
+	// botton joystick
+	bool left(false);// Сдвиг куба влево
+	bool right(false);// Сдвиг куба вправо
+	bool up(false);// Сдвиг куба вверх
+	bool down(false);// Сдвиг куба вниз
+	bool rotx(false);// Поворот вокруг оси X
+	bool roty(false);// Поворот вокруг оси Y
+	bool rotz(false);// Поворот воруг оси Z
+	bool plus(false);// Увеличение масштаба
+	bool minus(false);// Уменьшение масштаба
+	bool select(false);// Смена режима ввода комманд
+	bool start(false);// Начать "игру"
 
+	void restart()
+	{
+		start = false;
+
+		setup();
+
+		system("clear");
+
+		// Возврат к первоначальным параметрам
+		GLOBAL::restart();
+	}
+}
+
+void loop()
+{
     do
     {
 	if(joystick.sample(&event))
@@ -564,17 +564,17 @@ void loop()
 						{
 							case -32767:
                             {
-								left = true;
+								GLOBAL::left = true;
 								break;
                             }
 							case 32767:
                             {
-								right = true;
+								GLOBAL::right = true;
 								break;
                             }
 							case 1:
                             {
-								rotx = true;
+								GLOBAL::rotx = true;
                             }
 						}
 
@@ -587,17 +587,17 @@ void loop()
 						{
 							case -32767:
 							{
-								up = true;
+								GLOBAL::up = true;
 								break;
 							}
 							case 32767:
 							{
-								down = true;
+								GLOBAL::down = true;
 								break;
 							}
 							case 1:
 							{
-								rotz = true;
+								GLOBAL::rotz = true;
 							}
                         }
 
@@ -607,7 +607,7 @@ void loop()
 					case 3:
 					{
 						if (event.value == 1)
-							roty = true;
+							GLOBAL::roty = true;
                         
 						break;
 					}
@@ -615,7 +615,7 @@ void loop()
 					case 4:
 					{
 						if (event.value == 1)
-							minus = true;
+							GLOBAL::minus = true;
 
                         break;
 					}
@@ -623,44 +623,53 @@ void loop()
 					case 5:
 					{
 						if (event.value == 1)
-							plus = true;
+							GLOBAL::plus = true;
 
                         break;
 					}
                                         
-                                        case 8:
-                                        {
-                                            if (event.value == 1)
-                                            {
-                                                (select) ? (select = false) : (select = true);
+                    case 8:
+                    {
+                        if (event.value == 1)
+                        {
+                            (GLOBAL::select) ? (GLOBAL::select = false) : (GLOBAL::select = true);
                                                 
-                                                cout << endl << "Activate console" << endl;
-                                            }
+                            cout << endl << "Activate console" << endl;
+                        }
                                             
-                                            break;
-                                        }
+                        break;
+                    }
                                         
-                                        case 9:
-                                        {
-                                            if (event.value == 1 && !start)
-                                               start = true;
-                                        }
+                    case 9:
+                    {
+                        if (event.value == 1 && !GLOBAL::start)
+							GLOBAL::start = true;
+                    }
 				}
 				
 		}
 
 		else
 		{
-			left = right = up = down = rotx = roty = rotz = plus = minus = false;
+			GLOBAL::left = GLOBAL::right = GLOBAL::up = GLOBAL::down = GLOBAL::rotx = GLOBAL::roty = GLOBAL::rotz = GLOBAL::plus = GLOBAL::minus = false;
 		}
         
-        } while(!start);
+        } while(!GLOBAL::start);
         
 	// Преобразования куба
 	Compute();
 
 	// Отрисовка куба
-	DrawPix();
+	try
+	{
+		DrawPix();
+	}
+	catch (...)
+	{
+		restart();
+
+		return;
+	}
 
 	// Заполнение виртуальной матрицы
 	SetMatrix();
@@ -669,64 +678,64 @@ void loop()
 	show();
             
 	int ch;
-        static const int sizeMessage = 100;
+    static const int sizeMessage = 100;
 	char message[sizeMessage] = "\0";
     
-	if (select)
+	if (GLOBAL::select)
         {
-                cout << endl << "Enter command: ";
-		cin >> message;
+			cout << endl << "Enter command: ";
+			cin >> message;
         }
         
-	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")) || left)
+	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")) || GLOBAL::left)
 		ch = LEFT;
 
 	else if ((GLOBAL::comparison(message, (char*)"left_inf") || GLOBAL::comparison(message, (char*)"Left_inf") || GLOBAL::comparison(message, (char*)"LEFT_INF")))
 		ch = LEFT_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"right") || GLOBAL::comparison(message, (char*)"Right") || GLOBAL::comparison(message, (char*)"RIGHT")) || right)
+	else if ((GLOBAL::comparison(message, (char*)"right") || GLOBAL::comparison(message, (char*)"Right") || GLOBAL::comparison(message, (char*)"RIGHT")) || GLOBAL::right)
 		ch = RIGHT;
 
 	else if ((GLOBAL::comparison(message, (char*)"right_inf") || GLOBAL::comparison(message, (char*)"Right_inf") || GLOBAL::comparison(message, (char*)"RIGHT_INF")))
 		ch = RIGHT_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"up") || GLOBAL::comparison(message, (char*)"Up") || GLOBAL::comparison(message, (char*)"UP")) || up)
+	else if ((GLOBAL::comparison(message, (char*)"up") || GLOBAL::comparison(message, (char*)"Up") || GLOBAL::comparison(message, (char*)"UP")) || GLOBAL::up)
 		ch = UP;
 
 	else if ((GLOBAL::comparison(message, (char*)"up_inf") || GLOBAL::comparison(message, (char*)"Up_inf") || GLOBAL::comparison(message, (char*)"UP_INF")))
 		ch = UP_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"down") || GLOBAL::comparison(message, (char*)"Down") || GLOBAL::comparison(message, (char*)"DOWN")) || down)
+	else if ((GLOBAL::comparison(message, (char*)"down") || GLOBAL::comparison(message, (char*)"Down") || GLOBAL::comparison(message, (char*)"DOWN")) || GLOBAL::down)
 		ch = DOWN;
 
 	else if ((GLOBAL::comparison(message, (char*)"down_inf") || GLOBAL::comparison(message, (char*)"Down_inf") || GLOBAL::comparison(message, (char*)"DOWN_INF")))
 		ch = DOWN_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"plus") || GLOBAL::comparison(message, (char*)"Plus") || GLOBAL::comparison(message, (char*)"PLUS")) || plus)
+	else if ((GLOBAL::comparison(message, (char*)"plus") || GLOBAL::comparison(message, (char*)"Plus") || GLOBAL::comparison(message, (char*)"PLUS")) || GLOBAL::plus)
 		ch = PLUS;
 
 	else if ((GLOBAL::comparison(message, (char*)"plus_inf") || GLOBAL::comparison(message, (char*)"Plus_inf") || GLOBAL::comparison(message, (char*)"PLUS_INF")))
 		ch = PLUS_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"minus") || GLOBAL::comparison(message, (char*)"Minus") || GLOBAL::comparison(message, (char*)"MINUS")) || minus)
+	else if ((GLOBAL::comparison(message, (char*)"minus") || GLOBAL::comparison(message, (char*)"Minus") || GLOBAL::comparison(message, (char*)"MINUS")) || GLOBAL::minus)
 		ch = MINUS;
 
 	else if ((GLOBAL::comparison(message, (char*)"minus_inf") || GLOBAL::comparison(message, (char*)"Minus_inf") || GLOBAL::comparison(message, (char*)"MINUS_INF")))
 		ch = MINUS_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"rotx") || GLOBAL::comparison(message, (char*)"Rotx") || GLOBAL::comparison(message, (char*)"ROTX")) || rotx)
+	else if ((GLOBAL::comparison(message, (char*)"rotx") || GLOBAL::comparison(message, (char*)"Rotx") || GLOBAL::comparison(message, (char*)"ROTX")) || GLOBAL::rotx)
 		ch = ROTX;
 
 	else if ((GLOBAL::comparison(message, (char*)"rotx_inf") || GLOBAL::comparison(message, (char*)"Rotx_inf") || GLOBAL::comparison(message, (char*)"ROTX_INF")))
 		ch = ROTX_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"roty") || GLOBAL::comparison(message, (char*)"Roty") || GLOBAL::comparison(message, (char*)"ROTY")) || roty)
+	else if ((GLOBAL::comparison(message, (char*)"roty") || GLOBAL::comparison(message, (char*)"Roty") || GLOBAL::comparison(message, (char*)"ROTY")) || GLOBAL::roty)
 		ch = ROTY;
 
 	else if ((GLOBAL::comparison(message, (char*)"roty_inf") || GLOBAL::comparison(message, (char*)"Roty_inf") || GLOBAL::comparison(message, (char*)"ROTY_INF")))
 		ch = ROTY_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"rotz") || GLOBAL::comparison(message, (char*)"Rotz") || GLOBAL::comparison(message, (char*)"ROTZ")) || rotz)
+	else if ((GLOBAL::comparison(message, (char*)"rotz") || GLOBAL::comparison(message, (char*)"Rotz") || GLOBAL::comparison(message, (char*)"ROTZ")) || GLOBAL::rotz)
 		ch = ROTZ;
 
 	else if ((GLOBAL::comparison(message, (char*)"rotz_inf") || GLOBAL::comparison(message, (char*)"Rotz_inf") || GLOBAL::comparison(message, (char*)"ROTZ_INF")))
@@ -799,8 +808,17 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
-				
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
+
 				SetMatrix();
 				
 				show();
@@ -816,7 +834,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -833,7 +860,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -850,7 +886,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -867,7 +912,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -884,7 +938,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -901,7 +964,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -918,7 +990,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -935,7 +1016,16 @@ void loop()
 				
 				Compute();
 				
-				DrawPix();
+				try
+				{
+					DrawPix();
+				}
+				catch (...)
+				{
+					restart();
+
+					return;
+				}
 				
 				SetMatrix();
 				
@@ -945,24 +1035,20 @@ void loop()
 			break;
 		}
                 
-                case ESC:
-                {
-                    select = false;
+        case ESC:
+        {
+            select = false;
                     
-                    cout << endl << "Activate joystick" << endl;
+            cout << endl << "Activate joystick" << endl;
                     
-                    break;
-                }
+            break;
+        }
                 
-                case 100:
-                {
-                    start = false;
+        case 100:
+        {
+			restart();
                     
-                    setup();
-                    
-                    system("clear");
-                    
-                    break;
-                }
+            break;
+        }
 	}
 }
