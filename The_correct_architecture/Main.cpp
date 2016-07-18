@@ -191,75 +191,6 @@ void SetDecodeMode(char Mode) {
 /******************************************************************************
 ***   Setup                                                                 ***
 ******************************************************************************/
-
-void setup()
-{
-	// The MAX7219 has officially no SPI / Microwire support like the MAX7221 but the
-	// serial interface is more or less the same like a SPI connection
-
-	SPI.begin();
-
-	// Disable the decode mode because at the moment i dont use 7-Segment displays
-	SetDecodeMode(false);
-	// Set the number of digits; start to count at 0
-	SetScanLimit(7);
-	// Set the intensity between 0 and 15. Attention 0 is not off!
-	SetIntensity(0);
-	// Disable shutdown mode
-	SetShutDown(false);
-
-
-	// Write some patterns
-	SetData(Digit0, 0b01111000, 1);
-	SetData(Digit1, 0b11111000, 1);
-	SetData(Digit2, 0b11011000, 1);
-	SetData(Digit3, 0b11011000, 1);
-	SetData(Digit4, 0b00011000, 1);
-	SetData(Digit5, 0b00011000, 1);
-	SetData(Digit6, 0b11111111, 1);
-	SetData(Digit7, 0b11111111, 1);
-
-	SetData(Digit0, 0b00111000, 2);
-	SetData(Digit1, 0b11111110, 2);
-	SetData(Digit2, 0b11000110, 2);
-	SetData(Digit3, 0b11000110, 2);
-	SetData(Digit4, 0b00001100, 2);
-	SetData(Digit5, 0b00001100, 2);
-	SetData(Digit6, 0b11111111, 2);
-	SetData(Digit7, 0b11111111, 2);
-
-	SetData(Digit0, 0b11111111, 3);
-	SetData(Digit1, 0b01011010, 3);
-	SetData(Digit2, 0b01011010, 3);
-	SetData(Digit3, 0b01011010, 3);
-	SetData(Digit4, 0b01011010, 3);
-	SetData(Digit5, 0b01011010, 3);
-	SetData(Digit6, 0b01011010, 3);
-	SetData(Digit7, 0b11111111, 3);
-
-	SetData(Digit0, 0b11111111, 4);
-	SetData(Digit1, 0b10100101, 4);
-	SetData(Digit2, 0b10100101, 4);
-	SetData(Digit3, 0b10100101, 4);
-	SetData(Digit4, 0b10100101, 4);
-	SetData(Digit5, 0b10100101, 4);
-	SetData(Digit6, 0b10100101, 4);
-	SetData(Digit7, 0b11111111, 4);
-
-	/*
-		Расположение дисплеев
-		1 | 2
-		4 | 3
-	*/
-
-	// Ожидание 3000 мс
-	delay(3000);
-
-}
-/******************************************************************************
-***   Loop                                                                  ***
-******************************************************************************/
-
 // Первый кадр бабочки
 void one_cadr()
 {
@@ -354,69 +285,179 @@ void three_cadr()
 	// Доделать
 
 	// Первый монитор
-	SetData(Digit0, 0b11000000, 1);
-	SetData(Digit1, 0b10110000, 1);
-	SetData(Digit2, 0b10001000, 1);
-	SetData(Digit3, 0b10000100, 1);
-	SetData(Digit4, 0b01000010, 1);
-	SetData(Digit5, 0b01000010, 1);
-	SetData(Digit6, 0b01000010, 1);
-	SetData(Digit7, 0b00111001, 1);
+	SetData(Digit0, 0b00001000, 1);
+	SetData(Digit1, 0b00000100, 1);
+	SetData(Digit2, 0b00001100, 1);
+	SetData(Digit3, 0b00000100, 1);
+	SetData(Digit4, 0b00000100, 1);
+	SetData(Digit5, 0b00000010, 1);
+	SetData(Digit6, 0b00000010, 1);
+	SetData(Digit7, 0b00000101, 1);
 
 	// Второй монитор
-	SetData(Digit0, 0b00000011, 2);
-	SetData(Digit1, 0b00001101, 2);
-	SetData(Digit2, 0b00010001, 2);
-	SetData(Digit3, 0b00100001, 2);
-	SetData(Digit4, 0b01000010, 2);
-	SetData(Digit5, 0b01000010, 2);
-	SetData(Digit6, 0b01000010, 2);
-	SetData(Digit7, 0b10011100, 2);
+	SetData(Digit0, 0b00010000, 2);
+	SetData(Digit1, 0b00100000, 2);
+	SetData(Digit2, 0b00110000, 2);
+	SetData(Digit3, 0b00100000, 2);
+	SetData(Digit4, 0b00100000, 2);
+	SetData(Digit5, 0b01000000, 2);
+	SetData(Digit6, 0b01000000, 2);
+	SetData(Digit7, 0b10100000, 2);
 
 	// Третий монитор
-	SetData(Digit0, 0b01100000, 3);
-	SetData(Digit1, 0b00011000, 3);
-	SetData(Digit2, 0b00000111, 3);
-	SetData(Digit3, 0b10000001, 3);
-	SetData(Digit4, 0b01000010, 3);
-	SetData(Digit5, 0b00110100, 3);
-	SetData(Digit6, 0b00001010, 3);
-	SetData(Digit7, 0b00000001, 3);
+	SetData(Digit0, 0b00100000, 3);
+	SetData(Digit1, 0b01010000, 3);
+	SetData(Digit2, 0b00010000, 3);
+	SetData(Digit3, 0b11010000, 3);
+	SetData(Digit4, 0b00110000, 3);
+	SetData(Digit5, 0b00000000, 3);
+	SetData(Digit6, 0b00010000, 3);
+	SetData(Digit7, 0b00000000, 3);
 
 	// Четвёртый монитор
-	SetData(Digit0, 0b00000110, 4);
-	SetData(Digit1, 0b00011000, 4);
-	SetData(Digit2, 0b11100000, 4);
-	SetData(Digit3, 0b10000001, 4);
-	SetData(Digit4, 0b01000010, 4);
-	SetData(Digit5, 0b00101100, 4);
-	SetData(Digit6, 0b01010000, 4);
-	SetData(Digit7, 0b10000000, 4);
+	SetData(Digit0, 0b00000100, 4);
+	SetData(Digit1, 0b00001010, 4);
+	SetData(Digit2, 0b00001000, 4);
+	SetData(Digit3, 0b00001011, 4);
+	SetData(Digit4, 0b00001100, 4);
+	SetData(Digit5, 0b00000000, 4);
+	SetData(Digit6, 0b00001000, 4);
+	SetData(Digit7, 0b00000000, 4);
 }
 
 // Функция анимации
 void animation()
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		one_cadr();
 
-		delay(1000);
+		delay(300);
 
 		two_cadr();
 
-		delay(1000);
+		delay(300);
 
 		three_cadr();
 
-		delay(1000);
+		delay(300);
 
 		two_cadr();
 
-		delay(1000);
+		delay(300);
 	}
+        
+        // One Screen
+        SetData(Digit0, 0b11111111, 1);
+        SetData(Digit1, 0b10000000, 1);
+        SetData(Digit2, 0b10111101, 1);
+        SetData(Digit3, 0b10100000, 1);
+        SetData(Digit4, 0b10010000, 1);
+        SetData(Digit5, 0b10001000, 1);
+        SetData(Digit6, 0b10111100, 1);
+        SetData(Digit7, 0b10000000, 1);
+        
+        // Two Screen
+        SetData(Digit0, 0b11111111, 2);
+        SetData(Digit1, 0b00000001, 2);
+        SetData(Digit2, 0b11110001, 2);
+        SetData(Digit3, 0b01000001, 2);
+        SetData(Digit4, 0b01000001, 2);
+        SetData(Digit5, 0b01000001, 2);
+        SetData(Digit6, 0b01000001, 2);
+        SetData(Digit7, 0b00000001, 2);
+        
+        // Three Screen
+        SetData(Digit0, 0b00000001, 3);
+        SetData(Digit1, 0b11001111, 3);
+        SetData(Digit2, 0b10100101, 3);
+        SetData(Digit3, 0b11100101, 3);
+        SetData(Digit4, 0b10100101, 3);
+        SetData(Digit5, 0b10100101, 3);
+        SetData(Digit6, 0b00000001, 3);
+        SetData(Digit7, 0b11111111, 3);
+        
+        // Four Screen
+        SetData(Digit0, 0b10000000, 4);
+        SetData(Digit1, 0b10001000, 4);
+        SetData(Digit2, 0b10010100, 4);
+        SetData(Digit3, 0b10010100, 4);
+        SetData(Digit4, 0b10101010, 4);
+        SetData(Digit5, 0b10100010, 4);
+        SetData(Digit6, 0b10000000, 4);
+        SetData(Digit7, 0b11111111, 4);
+        
+        delay(10000);
 }
 
+void setup()
+{
+	// The MAX7219 has officially no SPI / Microwire support like the MAX7221 but the
+	// serial interface is more or less the same like a SPI connection
+
+	SPI.begin();
+
+	// Disable the decode mode because at the moment i dont use 7-Segment displays
+	SetDecodeMode(false);
+	// Set the number of digits; start to count at 0
+	SetScanLimit(7);
+	// Set the intensity between 0 and 15. Attention 0 is not off!
+	SetIntensity(0);
+	// Disable shutdown mode
+	SetShutDown(false);
+
+	// Write some patterns
+	SetData(Digit0, 0b01111000, 1);
+	SetData(Digit1, 0b11111000, 1);
+	SetData(Digit2, 0b11011000, 1);
+	SetData(Digit3, 0b11011000, 1);
+	SetData(Digit4, 0b00011000, 1);
+	SetData(Digit5, 0b00011000, 1);
+	SetData(Digit6, 0b11111111, 1);
+	SetData(Digit7, 0b11111111, 1);
+
+	SetData(Digit0, 0b00111000, 2);
+	SetData(Digit1, 0b11111110, 2);
+	SetData(Digit2, 0b11000110, 2);
+	SetData(Digit3, 0b11000110, 2);
+	SetData(Digit4, 0b00001100, 2);
+	SetData(Digit5, 0b00001100, 2);
+	SetData(Digit6, 0b11111111, 2);
+	SetData(Digit7, 0b11111111, 2);
+
+	SetData(Digit0, 0b11111111, 3);
+	SetData(Digit1, 0b01011010, 3);
+	SetData(Digit2, 0b01011010, 3);
+	SetData(Digit3, 0b01011010, 3);
+	SetData(Digit4, 0b01011010, 3);
+	SetData(Digit5, 0b01011010, 3);
+	SetData(Digit6, 0b01011010, 3);
+	SetData(Digit7, 0b11111111, 3);
+
+	SetData(Digit0, 0b11111111, 4);
+	SetData(Digit1, 0b10100101, 4);
+	SetData(Digit2, 0b10100101, 4);
+	SetData(Digit3, 0b10100101, 4);
+	SetData(Digit4, 0b10100101, 4);
+	SetData(Digit5, 0b10100101, 4);
+	SetData(Digit6, 0b10100101, 4);
+	SetData(Digit7, 0b11111111, 4);
+
+	/*
+		Расположение дисплеев
+		1 | 2
+		4 | 3
+	*/
+
+	// Ожидание 1000 мс
+	delay(1000);
+        
+        animation();
+
+}
+/******************************************************************************
+***   Loop                                                                  ***
+******************************************************************************/
 // width - столбцы, ширина
 // height - строки, высота
 #define width 16
@@ -428,8 +469,6 @@ char display[height][width];
 // Очистка экрана
 void clean() 
 {
-	system("clear");
-
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
 			display[i][j] = 0;
@@ -439,7 +478,7 @@ void clean()
 void SetMatrix()
 {
 	// Предварительная очистка виртуального экрана
-	//clean();
+	clean();
 
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
@@ -510,20 +549,10 @@ void loop()
     static bool plus(false);// Увеличение масштаба
     static bool minus(false);// Уменьшение масштаба
     static bool select(false);// Смена режима ввода комманд
-	static bool start(false);// Начать "игру"
+    static bool start(false);// Начать "игру"
 
-	// Преобразования куба
-	Compute();
-
-	// Отрисовка куба
-	DrawPix();
-
-	// Заполнение виртуальной матрицы
-	SetMatrix();
-
-	// Вывод виртуального экранчика на светодиоды
-	show();
-    
+    do
+    {
 	if(joystick.sample(&event))
 		if ((event.isButton() || event.isAxis()) && (event.value!=0))
 			{                        
@@ -598,6 +627,24 @@ void loop()
 
                         break;
 					}
+                                        
+                                        case 8:
+                                        {
+                                            if (event.value == 1)
+                                            {
+                                                (select) ? (select = false) : (select = true);
+                                                
+                                                cout << endl << "Activate console" << endl;
+                                            }
+                                            
+                                            break;
+                                        }
+                                        
+                                        case 9:
+                                        {
+                                            if (event.value == 1 && !start)
+                                               start = true;
+                                        }
 				}
 				
 		}
@@ -606,13 +653,31 @@ void loop()
 		{
 			left = right = up = down = rotx = roty = rotz = plus = minus = false;
 		}
+        
+        } while(!start);
+        
+	// Преобразования куба
+	Compute();
+
+	// Отрисовка куба
+	DrawPix();
+
+	// Заполнение виртуальной матрицы
+	SetMatrix();
+
+	// Вывод виртуального экранчика на светодиоды
+	show();
             
 	int ch;
-	char message[100] = "\0";
+        static const int sizeMessage = 100;
+	char message[sizeMessage] = "\0";
     
 	if (select)
+        {
+                cout << endl << "Enter command: ";
 		cin >> message;
-
+        }
+        
 	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")) || left)
 		ch = LEFT;
 
@@ -667,9 +732,12 @@ void loop()
 	else if ((GLOBAL::comparison(message, (char*)"rotz_inf") || GLOBAL::comparison(message, (char*)"Rotz_inf") || GLOBAL::comparison(message, (char*)"ROTZ_INF")))
 		ch = ROTZ_INF;
 
-	else if ((GLOBAL::comparison(message, (char*)"esc") || GLOBAL::comparison(message, (char*)"Esc") || GLOBAL::comparison(message, (char*)"ESC")))
+	else if ((GLOBAL::comparison(message, (char*)"esc") || GLOBAL::comparison(message, (char*)"Esc") || GLOBAL::comparison(message, (char*)"ESC")) || GLOBAL::comparison(message, (char*)"!consol") || GLOBAL::comparison(message, (char*)"!console"))
 		ch = ESC;
-    else 
+        else if (GLOBAL::comparison(message, (char*)"restart"))
+            ch = 100;
+
+        else
         ch = -1;
 
 	switch (ch)
@@ -876,5 +944,25 @@ void loop()
 
 			break;
 		}
+                
+                case ESC:
+                {
+                    select = false;
+                    
+                    cout << endl << "Activate joystick" << endl;
+                    
+                    break;
+                }
+                
+                case 100:
+                {
+                    start = false;
+                    
+                    setup();
+                    
+                    system("clear");
+                    
+                    break;
+                }
 	}
 }
