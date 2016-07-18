@@ -7,6 +7,11 @@
 #define CEIL(X) ((int)(X + 0.5))
 #define ABS(X) (((X) > 0) ? ((X)) : (-(X)))
 
+// width - столбцы, ширина
+// height - строки, высота
+#define width 16
+#define height 16
+
 // Перечисление с доступными типами команд
 enum MessageID
 {
@@ -47,7 +52,7 @@ namespace Turov_Vitaly
 	};
 }
 
-extern bool matrix[16][16];
+extern bool matrix[height][width];
 
 // Глобальное пространство имён со всеми функциями построения
 namespace GLOBAL 

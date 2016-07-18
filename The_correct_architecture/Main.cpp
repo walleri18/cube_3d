@@ -1,6 +1,6 @@
 ﻿/*
 * max7219.cpp
-* Author: Thomas 
+* Author: Thomas <- Он автор лишь RasberriPI
 * Copyright 2013 Thomas
 */
 
@@ -210,22 +210,22 @@ void setup()
 
 
 	// Write some patterns
-	SetData(Digit0, 0b11111111, 1);
-	SetData(Digit1, 0b00011000, 1);
-	SetData(Digit2, 0b00011000, 1);
-	SetData(Digit3, 0b00011000, 1);
+	SetData(Digit0, 0b01111000, 1);
+	SetData(Digit1, 0b11111000, 1);
+	SetData(Digit2, 0b11011000, 1);
+	SetData(Digit3, 0b11011000, 1);
 	SetData(Digit4, 0b00011000, 1);
 	SetData(Digit5, 0b00011000, 1);
-	SetData(Digit6, 0b00011000, 1);
+	SetData(Digit6, 0b11111111, 1);
 	SetData(Digit7, 0b11111111, 1);
 
-	SetData(Digit0, 0b11111111, 2);
-	SetData(Digit1, 0b00100100, 2);
-	SetData(Digit2, 0b00100100, 2);
-	SetData(Digit3, 0b00100100, 2);
-	SetData(Digit4, 0b00100100, 2);
-	SetData(Digit5, 0b00100100, 2);
-	SetData(Digit6, 0b00100100, 2);
+	SetData(Digit0, 0b00111000, 2);
+	SetData(Digit1, 0b11111110, 2);
+	SetData(Digit2, 0b11000110, 2);
+	SetData(Digit3, 0b11000110, 2);
+	SetData(Digit4, 0b00001100, 2);
+	SetData(Digit5, 0b00001100, 2);
+	SetData(Digit6, 0b11111111, 2);
 	SetData(Digit7, 0b11111111, 2);
 
 	SetData(Digit0, 0b11111111, 3);
@@ -252,13 +252,170 @@ void setup()
 		4 | 3
 	*/
 
-	// Ожидание 1000 мс
-	delay(1000);
+	// Ожидание 3000 мс
+	delay(3000);
 
 }
 /******************************************************************************
 ***   Loop                                                                  ***
 ******************************************************************************/
+
+// Первый кадр бабочки
+void one_cadr()
+{
+	// Первый монитор
+	SetData(Digit0, 0b11000000, 1);
+	SetData(Digit1, 0b10110000, 1);
+	SetData(Digit2, 0b10001000, 1);
+	SetData(Digit3, 0b10000100, 1);
+	SetData(Digit4, 0b01000010, 1);
+	SetData(Digit5, 0b01000010, 1);
+	SetData(Digit6, 0b01000010, 1);
+	SetData(Digit7, 0b00111001, 1);
+
+	// Второй монитор
+	SetData(Digit0, 0b00000011, 2);
+	SetData(Digit1, 0b00001101, 2);
+	SetData(Digit2, 0b00010001, 2);
+	SetData(Digit3, 0b00100001, 2);
+	SetData(Digit4, 0b01000010, 2);
+	SetData(Digit5, 0b01000010, 2);
+	SetData(Digit6, 0b01000010, 2);
+	SetData(Digit7, 0b10011100, 2);
+
+	// Третий монитор
+	SetData(Digit0, 0b01100000, 3);
+	SetData(Digit1, 0b00011000, 3);
+	SetData(Digit2, 0b00000111, 3);
+	SetData(Digit3, 0b10000001, 3);
+	SetData(Digit4, 0b01000010, 3);
+	SetData(Digit5, 0b00110100, 3);
+	SetData(Digit6, 0b00001010, 3);
+	SetData(Digit7, 0b00000001, 3);
+
+	// Четвёртый монитор
+	SetData(Digit0, 0b00000110, 4);
+	SetData(Digit1, 0b00011000, 4);
+	SetData(Digit2, 0b11100000, 4);
+	SetData(Digit3, 0b10000001, 4);
+	SetData(Digit4, 0b01000010, 4);
+	SetData(Digit5, 0b00101100, 4);
+	SetData(Digit6, 0b01010000, 4);
+	SetData(Digit7, 0b10000000, 4);
+}
+
+// Второй кадр бабочки
+void two_cadr()
+{
+	// Первый монитор
+	SetData(Digit0, 0b00110000, 1);
+	SetData(Digit1, 0b00110000, 1);
+	SetData(Digit2, 0b00101000, 1);
+	SetData(Digit3, 0b00100100, 1);
+	SetData(Digit4, 0b00010010, 1);
+	SetData(Digit5, 0b00010010, 1);
+	SetData(Digit6, 0b00001010, 1);
+	SetData(Digit7, 0b00000101, 1);
+
+	// Второй монитор
+	SetData(Digit0, 0b00001100, 2);
+	SetData(Digit1, 0b00001100, 2);
+	SetData(Digit2, 0b00010100, 2);
+	SetData(Digit3, 0b00100100, 2);
+	SetData(Digit4, 0b01001000, 2);
+	SetData(Digit5, 0b01001000, 2);
+	SetData(Digit6, 0b01010000, 2);
+	SetData(Digit7, 0b10100000, 2);
+
+	// Третий монитор
+	SetData(Digit0, 0b01000000, 3);
+	SetData(Digit1, 0b00110000, 3);
+	SetData(Digit2, 0b00001100, 3);
+	SetData(Digit3, 0b10000100, 3);
+	SetData(Digit4, 0b01001000, 3);
+	SetData(Digit5, 0b00101000, 3);
+	SetData(Digit6, 0b00011000, 3);
+	SetData(Digit7, 0b00000001, 3);
+
+	// Четвёртый монитор
+	SetData(Digit0, 0b00000010, 4);
+	SetData(Digit1, 0b00001100, 4);
+	SetData(Digit2, 0b00110000, 4);
+	SetData(Digit3, 0b00100001, 4);
+	SetData(Digit4, 0b00010010, 4);
+	SetData(Digit5, 0b00010100, 4);
+	SetData(Digit6, 0b00011000, 4);
+	SetData(Digit7, 0b00100000, 4);
+}
+
+// Третий кадр бабочки
+void three_cadr()
+{
+	// Доделать
+
+	// Первый монитор
+	SetData(Digit0, 0b11000000, 1);
+	SetData(Digit1, 0b10110000, 1);
+	SetData(Digit2, 0b10001000, 1);
+	SetData(Digit3, 0b10000100, 1);
+	SetData(Digit4, 0b01000010, 1);
+	SetData(Digit5, 0b01000010, 1);
+	SetData(Digit6, 0b01000010, 1);
+	SetData(Digit7, 0b00111001, 1);
+
+	// Второй монитор
+	SetData(Digit0, 0b00000011, 2);
+	SetData(Digit1, 0b00001101, 2);
+	SetData(Digit2, 0b00010001, 2);
+	SetData(Digit3, 0b00100001, 2);
+	SetData(Digit4, 0b01000010, 2);
+	SetData(Digit5, 0b01000010, 2);
+	SetData(Digit6, 0b01000010, 2);
+	SetData(Digit7, 0b10011100, 2);
+
+	// Третий монитор
+	SetData(Digit0, 0b01100000, 3);
+	SetData(Digit1, 0b00011000, 3);
+	SetData(Digit2, 0b00000111, 3);
+	SetData(Digit3, 0b10000001, 3);
+	SetData(Digit4, 0b01000010, 3);
+	SetData(Digit5, 0b00110100, 3);
+	SetData(Digit6, 0b00001010, 3);
+	SetData(Digit7, 0b00000001, 3);
+
+	// Четвёртый монитор
+	SetData(Digit0, 0b00000110, 4);
+	SetData(Digit1, 0b00011000, 4);
+	SetData(Digit2, 0b11100000, 4);
+	SetData(Digit3, 0b10000001, 4);
+	SetData(Digit4, 0b01000010, 4);
+	SetData(Digit5, 0b00101100, 4);
+	SetData(Digit6, 0b01010000, 4);
+	SetData(Digit7, 0b10000000, 4);
+}
+
+// Функция анимации
+void animation()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		one_cadr();
+
+		delay(1000);
+
+		two_cadr();
+
+		delay(1000);
+
+		three_cadr();
+
+		delay(1000);
+
+		two_cadr();
+
+		delay(1000);
+	}
+}
 
 // width - столбцы, ширина
 // height - строки, высота
@@ -320,6 +477,7 @@ void show()
 		SetData(rowCounter + 1, row[2], 3);
 		SetData(rowCounter + 1, row[3], 4);
 	}
+
     /*
     // Show console
     for (int i = 0; i < height; i++)
@@ -339,7 +497,21 @@ void show()
 using namespace GLOBAL;
 
 void loop()
-{
+{        
+    // Button and Axis
+    // botton joystick
+    static bool left(false);// Сдвиг куба влево
+    static bool right(false);// Сдвиг куба вправо
+    static bool up(false);// Сдвиг куба вверх
+    static bool down(false);// Сдвиг куба вниз
+    static bool rotx(false);// Поворот вокруг оси X
+    static bool roty(false);// Поворот вокруг оси Y
+    static bool rotz(false);// Поворот воруг оси Z
+    static bool plus(false);// Увеличение масштаба
+    static bool minus(false);// Уменьшение масштаба
+    static bool select(false);// Смена режима ввода комманд
+	static bool start(false);// Начать "игру"
+
 	// Преобразования куба
 	Compute();
 
@@ -351,101 +523,80 @@ void loop()
 
 	// Вывод виртуального экранчика на светодиоды
 	show();
-        
-    // Button and Axis
-    // botton joystick
-    static bool left(false);
-    static bool right(false);
-    static bool up(false);
-    static bool down(false);
-    static bool rotx(false);
-    static bool roty(false);
-    static bool rotz(false);
-    static bool plus(false);
-    static bool minus(false);
-    static bool start(false);
     
 	if(joystick.sample(&event))
 		if ((event.isButton() || event.isAxis()) && (event.value!=0))
-			{
-                        cout << "Number: " << event.number << " is value: " << event.value << endl;
-                        
+			{                        
 				switch (event.number)
 				{
 					case 0:
 					{
-                                        cout << "Number 0 ";
 						switch (event.value)
 						{
 							case -32767:
-                                                        {
+                            {
 								left = true;
-                                                                cout << "is value -32767" << endl;
 								break;
-                                                        }
+                            }
 							case 32767:
-                                                        {
+                            {
 								right = true;
-                                                                cout << "is value 32767" << endl;
 								break;
-                                                        }
+                            }
 							case 1:
-                                                        {
+                            {
 								rotx = true;
-                                                                cout << "is value 1" << endl;
-                                                        }
+                            }
 						}
-                                                break;
+
+                        break;
 					}
 
 					case 1:
 					{
-                                        cout << "Number 1 ";
 						switch (event.value)
 						{
-						case -32767:
-                                                {
-							up = true;
-                                                        cout << "is value -32767" << endl;
-							break;
-                                                }
-						case 32767:
-                                                {
-							down = true;
-                                                        cout << "is value 32767" << endl;
-							break;
-                                                }
-						case 1:
-                                                {
-							rotz = true;
-                                                        cout << "is value 1" << endl;
-						}
-                                                }
-                                                break;
+							case -32767:
+							{
+								up = true;
+								break;
+							}
+							case 32767:
+							{
+								down = true;
+								break;
+							}
+							case 1:
+							{
+								rotz = true;
+							}
+                        }
+
+                    break;
 					}
 
 					case 3:
 					{
-                                        cout << "Number 3 ";
 						if (event.value == 1)
-							{roty = true; cout << "is value 1" << endl;}
-                                        break;
+							roty = true;
+                        
+						break;
 					}
 
 					case 4:
 					{
-                                        cout << "Number 4 ";
 						if (event.value == 1)
-							{minus = true; cout << "is value 1" << endl;}
-                                        break;
+							minus = true;
+
+                        break;
 					}
 
 					case 5:
 					{
-                                        cout << "Number 5 ";
 						if (event.value == 1)
-							{plus = true; cout << "is value 1" << endl;}
-                                        break;
+							plus = true;
+
+                        break;
 					}
 				}
 				
@@ -453,14 +604,14 @@ void loop()
 
 		else
 		{
-                cout << "Value 0" << endl;
 			left = right = up = down = rotx = roty = rotz = plus = minus = false;
 		}
             
 	int ch;
 	char message[100] = "\0";
     
-	//cin >> message;
+	if (select)
+		cin >> message;
 
 	if ((GLOBAL::comparison(message, (char*)"left") || GLOBAL::comparison(message, (char*)"Left") || GLOBAL::comparison(message, (char*)"LEFT")) || left)
 		ch = LEFT;
