@@ -230,6 +230,9 @@ namespace GLOBAL
 
 		int x(x0), y(y0);
 
+		// Счётчики ограничители
+		long visitor_one(0), visitor_two(0);
+
 		if (sign == -1)
 			do
 			{
@@ -246,6 +249,11 @@ namespace GLOBAL
 
 				if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
 					Turov_Vitaly::matrix[y][x] = true;
+
+				if (visitor_one > sqrt(pow(Turov_Vitaly::height, 2) + pow(Turov_Vitaly::width, 2)))
+					exit(0);
+
+				visitor_one++;
 
 			} while (x != sX || y != sY);
 
@@ -265,6 +273,14 @@ namespace GLOBAL
 
 				if ((y >= 0) && (y < Turov_Vitaly::height) && (x >= 0) && (x < Turov_Vitaly::width))
 					Turov_Vitaly::matrix[y][x] = true;
+
+				// Если количество итераций больше чем максимальная длина линии, а это диагональ прямоугольника,
+				// то выходим из программы либо делаем что-то ещё.
+				// Например выкидываем исключение
+				if (visitor_two > sqrt(pow(Turov_Vitaly::height, 2) + pow(Turov_Vitaly::width, 2)))
+					exit(0);
+
+				visitor_two++;
 
 			} while (x != sX || y != sY);
 	}
