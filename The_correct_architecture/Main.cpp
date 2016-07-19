@@ -1,6 +1,6 @@
-﻿/*
+ï»¿/*
 * max7219.cpp
-* Author: Thomas <- Он автор лишь RasberriPI
+* Author: Thomas <- ÐÐ½ Ð°Ð²ÑÐ¾Ñ Ð»Ð¸ÑÑ RasberriPI
 * Copyright 2013 Thomas
 */
 
@@ -191,10 +191,10 @@ void SetDecodeMode(char Mode) {
 /******************************************************************************
 ***   Setup                                                                 ***
 ******************************************************************************/
-// Первый кадр бабочки
+// ÐÐµÑÐ²ÑÐ¹ ÐºÐ°Ð´Ñ Ð±Ð°Ð±Ð¾ÑÐºÐ¸
 void one_cadr()
 {
-	// Первый монитор
+	// ÐÐµÑÐ²ÑÐ¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b11000000, 1);
 	SetData(Digit1, 0b10110000, 1);
 	SetData(Digit2, 0b10001000, 1);
@@ -204,7 +204,7 @@ void one_cadr()
 	SetData(Digit6, 0b01000010, 1);
 	SetData(Digit7, 0b00111001, 1);
 
-	// Второй монитор
+	// ÐÑÐ¾ÑÐ¾Ð¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00000011, 2);
 	SetData(Digit1, 0b00001101, 2);
 	SetData(Digit2, 0b00010001, 2);
@@ -214,7 +214,7 @@ void one_cadr()
 	SetData(Digit6, 0b01000010, 2);
 	SetData(Digit7, 0b10011100, 2);
 
-	// Третий монитор
+	// Ð¢ÑÐµÑÐ¸Ð¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b01100000, 3);
 	SetData(Digit1, 0b00011000, 3);
 	SetData(Digit2, 0b00000111, 3);
@@ -224,7 +224,7 @@ void one_cadr()
 	SetData(Digit6, 0b00001010, 3);
 	SetData(Digit7, 0b00000001, 3);
 
-	// Четвёртый монитор
+	// Ð§ÐµÑÐ²ÑÑÑÑÐ¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00000110, 4);
 	SetData(Digit1, 0b00011000, 4);
 	SetData(Digit2, 0b11100000, 4);
@@ -235,10 +235,10 @@ void one_cadr()
 	SetData(Digit7, 0b10000000, 4);
 }
 
-// Второй кадр бабочки
+// ÐÑÐ¾ÑÐ¾Ð¹ ÐºÐ°Ð´Ñ Ð±Ð°Ð±Ð¾ÑÐºÐ¸
 void two_cadr()
 {
-	// Первый монитор
+	// ÐÐµÑÐ²ÑÐ¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00110000, 1);
 	SetData(Digit1, 0b00110000, 1);
 	SetData(Digit2, 0b00101000, 1);
@@ -248,7 +248,7 @@ void two_cadr()
 	SetData(Digit6, 0b00001010, 1);
 	SetData(Digit7, 0b00000101, 1);
 
-	// Второй монитор
+	// ÐÑÐ¾ÑÐ¾Ð¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00001100, 2);
 	SetData(Digit1, 0b00001100, 2);
 	SetData(Digit2, 0b00010100, 2);
@@ -258,7 +258,7 @@ void two_cadr()
 	SetData(Digit6, 0b01010000, 2);
 	SetData(Digit7, 0b10100000, 2);
 
-	// Третий монитор
+	// Ð¢ÑÐµÑÐ¸Ð¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b01000000, 3);
 	SetData(Digit1, 0b00110000, 3);
 	SetData(Digit2, 0b00001100, 3);
@@ -268,7 +268,7 @@ void two_cadr()
 	SetData(Digit6, 0b00011000, 3);
 	SetData(Digit7, 0b00000001, 3);
 
-	// Четвёртый монитор
+	// Ð§ÐµÑÐ²ÑÑÑÑÐ¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00000010, 4);
 	SetData(Digit1, 0b00001100, 4);
 	SetData(Digit2, 0b00110000, 4);
@@ -279,12 +279,12 @@ void two_cadr()
 	SetData(Digit7, 0b00100000, 4);
 }
 
-// Третий кадр бабочки
+// Ð¢ÑÐµÑÐ¸Ð¹ ÐºÐ°Ð´Ñ Ð±Ð°Ð±Ð¾ÑÐºÐ¸
 void three_cadr()
 {
-	// Доделать
+	// ÐÐ¾Ð´ÐµÐ»Ð°ÑÑ
 
-	// Первый монитор
+	// ÐÐµÑÐ²ÑÐ¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00001000, 1);
 	SetData(Digit1, 0b00000100, 1);
 	SetData(Digit2, 0b00001100, 1);
@@ -294,7 +294,7 @@ void three_cadr()
 	SetData(Digit6, 0b00000010, 1);
 	SetData(Digit7, 0b00000101, 1);
 
-	// Второй монитор
+	// ÐÑÐ¾ÑÐ¾Ð¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00010000, 2);
 	SetData(Digit1, 0b00100000, 2);
 	SetData(Digit2, 0b00110000, 2);
@@ -304,7 +304,7 @@ void three_cadr()
 	SetData(Digit6, 0b01000000, 2);
 	SetData(Digit7, 0b10100000, 2);
 
-	// Третий монитор
+	// Ð¢ÑÐµÑÐ¸Ð¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00100000, 3);
 	SetData(Digit1, 0b01010000, 3);
 	SetData(Digit2, 0b00010000, 3);
@@ -314,7 +314,7 @@ void three_cadr()
 	SetData(Digit6, 0b00010000, 3);
 	SetData(Digit7, 0b00000000, 3);
 
-	// Четвёртый монитор
+	// Ð§ÐµÑÐ²ÑÑÑÑÐ¹ Ð¼Ð¾Ð½Ð¸ÑÐ¾Ñ
 	SetData(Digit0, 0b00000100, 4);
 	SetData(Digit1, 0b00001010, 4);
 	SetData(Digit2, 0b00001000, 4);
@@ -325,10 +325,10 @@ void three_cadr()
 	SetData(Digit7, 0b00000000, 4);
 }
 
-// Функция анимации
+// Ð¤ÑÐ½ÐºÑÐ¸Ñ Ð°Ð½Ð¸Ð¼Ð°ÑÐ¸Ð¸
 void animation()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		one_cadr();
 
@@ -444,12 +444,12 @@ void setup()
 	SetData(Digit7, 0b11111111, 4);
 
 	/*
-		Расположение дисплеев
+		Ð Ð°ÑÐ¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð´Ð¸ÑÐ¿Ð»ÐµÐµÐ²
 		1 | 2
 		4 | 3
 	*/
 
-	// Ожидание 1000 мс
+	// ÐÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ 1000 Ð¼Ñ
 	delay(1000);
         
     animation();
@@ -458,15 +458,15 @@ void setup()
 /******************************************************************************
 ***   Loop                                                                  ***
 ******************************************************************************/
-// width - столбцы, ширина
-// height - строки, высота
+// width - ÑÑÐ¾Ð»Ð±ÑÑ, ÑÐ¸ÑÐ¸Ð½Ð°
+// height - ÑÑÑÐ¾ÐºÐ¸, Ð²ÑÑÐ¾ÑÐ°
 #define width 16
 #define height 16
 
-// дисплей для дальнейшего отображения
+// Ð´Ð¸ÑÐ¿Ð»ÐµÐ¹ Ð´Ð»Ñ Ð´Ð°Ð»ÑÐ½ÐµÐ¹ÑÐµÐ³Ð¾ Ð¾ÑÐ¾Ð±ÑÐ°Ð¶ÐµÐ½Ð¸Ñ
 char display[height][width];
 
-// Очистка экрана
+// ÐÑÐ¸ÑÑÐºÐ° ÑÐºÑÐ°Ð½Ð°
 void clean() 
 {
 	for (int i = 0; i < height; i++)
@@ -474,10 +474,10 @@ void clean()
 			display[i][j] = 0;
 }
 
-// Функция заполнения матрицы
+// Ð¤ÑÐ½ÐºÑÐ¸Ñ Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð¼Ð°ÑÑÐ¸ÑÑ
 void SetMatrix()
 {
-	// Предварительная очистка виртуального экрана
+	// ÐÑÐµÐ´Ð²Ð°ÑÐ¸ÑÐµÐ»ÑÐ½Ð°Ñ Ð¾ÑÐ¸ÑÑÐºÐ° Ð²Ð¸ÑÑÑÐ°Ð»ÑÐ½Ð¾Ð³Ð¾ ÑÐºÑÐ°Ð½Ð°
 	clean();
 
 	for (int i = 0; i < height; i++)
@@ -485,7 +485,7 @@ void SetMatrix()
 			display[i][j] = (int)(matrix[i][j]);
 }
 
-// Функция вывода
+// Ð¤ÑÐ½ÐºÑÐ¸Ñ Ð²ÑÐ²Ð¾Ð´Ð°
 void show() 
 {
 	// we have 4 displays, this is row buffer for each cycle
@@ -524,19 +524,19 @@ namespace GLOBAL
 {
 	// Button and Axis
 	// botton joystick
-	bool left(false);// Сдвиг куба влево
-	bool right(false);// Сдвиг куба вправо
-	bool up(false);// Сдвиг куба вверх
-	bool down(false);// Сдвиг куба вниз
-	bool rotx(false);// Поворот вокруг оси X
-	bool roty(false);// Поворот вокруг оси Y
-	bool rotz(false);// Поворот воруг оси Z
-	bool plus(false);// Увеличение масштаба
-	bool minus(false);// Уменьшение масштаба
-	bool select(false);// Смена режима ввода комманд
-	bool start(false);// Начать "игру"
+	bool left(false);// Ð¡Ð´Ð²Ð¸Ð³ ÐºÑÐ±Ð° Ð²Ð»ÐµÐ²Ð¾
+	bool right(false);// Ð¡Ð´Ð²Ð¸Ð³ ÐºÑÐ±Ð° Ð²Ð¿ÑÐ°Ð²Ð¾
+	bool up(false);// Ð¡Ð´Ð²Ð¸Ð³ ÐºÑÐ±Ð° Ð²Ð²ÐµÑÑ
+	bool down(false);// Ð¡Ð´Ð²Ð¸Ð³ ÐºÑÐ±Ð° Ð²Ð½Ð¸Ð·
+	bool rotx(false);// ÐÐ¾Ð²Ð¾ÑÐ¾Ñ Ð²Ð¾ÐºÑÑÐ³ Ð¾ÑÐ¸ X
+	bool roty(false);// ÐÐ¾Ð²Ð¾ÑÐ¾Ñ Ð²Ð¾ÐºÑÑÐ³ Ð¾ÑÐ¸ Y
+	bool rotz(false);// ÐÐ¾Ð²Ð¾ÑÐ¾Ñ Ð²Ð¾ÑÑÐ³ Ð¾ÑÐ¸ Z
+	bool plus(false);// Ð£Ð²ÐµÐ»Ð¸ÑÐµÐ½Ð¸Ðµ Ð¼Ð°ÑÑÑÐ°Ð±Ð°
+	bool minus(false);// Ð£Ð¼ÐµÐ½ÑÑÐµÐ½Ð¸Ðµ Ð¼Ð°ÑÑÑÐ°Ð±Ð°
+	bool select(false);// Ð¡Ð¼ÐµÐ½Ð° ÑÐµÐ¶Ð¸Ð¼Ð° Ð²Ð²Ð¾Ð´Ð° ÐºÐ¾Ð¼Ð¼Ð°Ð½Ð´
+	bool start(false);// ÐÐ°ÑÐ°ÑÑ "Ð¸Ð³ÑÑ"
 
-	void restart()
+	void RESTART()
 	{
 		start = false;
 
@@ -544,7 +544,7 @@ namespace GLOBAL
 
 		system("clear");
 
-		// Возврат к первоначальным параметрам
+		// ÐÐ¾Ð·Ð²ÑÐ°Ñ Ðº Ð¿ÐµÑÐ²Ð¾Ð½Ð°ÑÐ°Ð»ÑÐ½ÑÐ¼ Ð¿Ð°ÑÐ°Ð¼ÐµÑÑÐ°Ð¼
 		GLOBAL::restart();
 	}
 }
@@ -656,25 +656,25 @@ void loop()
         
         } while(!GLOBAL::start);
         
-	// Преобразования куба
+	// ÐÑÐµÐ¾Ð±ÑÐ°Ð·Ð¾Ð²Ð°Ð½Ð¸Ñ ÐºÑÐ±Ð°
 	Compute();
 
-	// Отрисовка куба
+	// ÐÑÑÐ¸ÑÐ¾Ð²ÐºÐ° ÐºÑÐ±Ð°
 	try
 	{
 		DrawPix();
 	}
 	catch (...)
 	{
-		restart();
+		GLOBAL::RESTART();
 
 		return;
 	}
 
-	// Заполнение виртуальной матрицы
+	// ÐÐ°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð²Ð¸ÑÑÑÐ°Ð»ÑÐ½Ð¾Ð¹ Ð¼Ð°ÑÑÐ¸ÑÑ
 	SetMatrix();
 
-	// Вывод виртуального экранчика на светодиоды
+	// ÐÑÐ²Ð¾Ð´ Ð²Ð¸ÑÑÑÐ°Ð»ÑÐ½Ð¾Ð³Ð¾ ÑÐºÑÐ°Ð½ÑÐ¸ÐºÐ° Ð½Ð° ÑÐ²ÐµÑÐ¾Ð´Ð¸Ð¾Ð´Ñ
 	show();
             
 	int ch;
@@ -814,7 +814,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -840,7 +840,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -866,7 +866,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -892,7 +892,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -918,7 +918,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -944,7 +944,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -970,7 +970,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -996,7 +996,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -1022,7 +1022,7 @@ void loop()
 				}
 				catch (...)
 				{
-					restart();
+					GLOBAL::RESTART();
 
 					return;
 				}
@@ -1037,7 +1037,7 @@ void loop()
                 
         case ESC:
         {
-            select = false;
+            GLOBAL::select = false;
                     
             cout << endl << "Activate joystick" << endl;
                     
@@ -1046,7 +1046,7 @@ void loop()
                 
         case 100:
         {
-			restart();
+			GLOBAL::RESTART();
                     
             break;
         }
