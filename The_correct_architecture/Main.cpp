@@ -328,23 +328,23 @@ void three_cadr()
 // Ð¤ÑÐ½ÐºÑÐ¸Ñ Ð°Ð½Ð¸Ð¼Ð°ÑÐ¸Ð¸
 void animation()
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		one_cadr();
 
-		delay(300);
+		delay(100);
 
 		two_cadr();
 
-		delay(300);
+		delay(100);
 
 		three_cadr();
 
-		delay(300);
+		delay(100);
 
 		two_cadr();
 
-		delay(300);
+		delay(100);
 	}
         
         // One Screen
@@ -555,7 +555,7 @@ void loop()
     {
 	if(joystick.sample(&event))
 		if ((event.isButton() || event.isAxis()) && (event.value!=0))
-			{                        
+			{                  
 				switch (event.number)
 				{
 					case 0:
@@ -603,6 +603,18 @@ void loop()
 
                     break;
 					}
+                                        
+                                        case 2:
+                                        {
+                                            if (event.value == 1 && start)
+                                            {
+                                                GLOBAL::RESTART();
+                                                
+                                                return;
+                                            }
+                                            
+                                            break;
+                                        }
 
 					case 3:
 					{
@@ -632,7 +644,7 @@ void loop()
                     {
                         if (event.value == 1)
                         {
-                            (GLOBAL::select) ? (GLOBAL::select = false) : (GLOBAL::select = true);
+                            (GLOBAL::select && GLOBAL::start) ? (GLOBAL::select = false) : (GLOBAL::select = true);
                                                 
                             cout << endl << "Activate console" << endl;
                         }
